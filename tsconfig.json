@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "outDir": "./build",
+    "target": "es6",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "lib": [
+      "ES2015",
+      "ES2016",
+      "ES2016.Array.Include",
+      "ES2017",
+      "ES2015.Promise",
+      "ESNext.AsyncIterable"
+    ],
+    "strict": true,
+    "noImplicitAny": true
+  },
+  "include": ["./server/**/*", "./client/**/*"]
+}
