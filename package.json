@@ -1,0 +1,31 @@
+{
+  "name": "simulated",
+  "version": "0.0.1",
+  "description": "API simulator and mocking tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-type/simulated.git"
+  },
+  "keywords": [
+    "mock",
+    "api",
+    "simulator",
+    "rest",
+    "graphql",
+    "tool"
+  ],
+  "author": "Grant Forrest <gaforres@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/a-type/simulated/issues"
+  },
+  "homepage": "https://github.com/a-type/simulated#readme",
+  "devDependencies": {
+    "@types/node": "^13.1.4",
+    "typescript": "^3.7.4"
+  }
+}
