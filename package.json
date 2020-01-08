@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "dev": "ts-node-dev --respawn --no-deps --prefer-ts --inspect -r dotenv/config -- server/server.ts",
+    "dev": "ts-node-dev --respawn --no-deps --prefer-ts --inspect -r dotenv/config -- server/entry.ts",
     "build:clean": "rimraf build",
     "build:transpile": "tsc",
     "build": "run-s build:*",
-    "start": "cross-env NODE_ENV=production node -r dotenv/config build/server.js"
+    "start": "cross-env NODE_ENV=production node -r dotenv/config build/entry.js"
   },
   "repository": {
     "type": "git",
@@ -43,6 +43,7 @@
   "dependencies": {
     "apollo-server": "^2.9.15",
     "apollo-server-express": "^2.9.15",
+    "chalk": "^3.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "graphql": "^14.5.8"
