@@ -1,0 +1,14 @@
+overwrite: true
+schema: 'http://localhost:8091/graphql'
+documents: null
+generates:
+  server/admin/schema/generated/graphql.ts:
+    config:
+      contextType: ../../context#Context
+      useIndexSignature: true # apollo compat
+    plugins:
+      - 'typescript'
+      - 'typescript-resolvers'
+  ./graphql.schema.json:
+    plugins:
+      - 'introspection'

@@ -1,10 +1,17 @@
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
 import { logger } from '../logger';
+import { getContext } from './context';
+import typeDefs from './schema/typeDefs';
+import resolvers from './schema/resolvers';
 
 const app = express();
 
-const apolloServer = new ApolloServer({});
+const apolloServer = new ApolloServer({
+  context: getContext,
+  typeDefs,
+  resolvers,
+});
 
 apolloServer.applyMiddleware({ app });
 

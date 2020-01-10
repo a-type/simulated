@@ -1,13 +1,6 @@
 import { gql } from 'apollo-server-express';
 
-const typeDefs = gql`
-  interface PageInfo {
-    hasNextPage: Boolean!
-    hasPreviousPage: Boolean!
-    startCursor: String!
-    endCursor: String!
-  }
-
+export default gql`
   interface Node {
     id: ID!
   }
@@ -26,7 +19,7 @@ const typeDefs = gql`
     cursor: String!
   }
 
-  type ScenarioPageInfo implements PageInfo {
+  type ScenarioPageInfo {
     hasNextPage: Boolean!
     hasPreviousPage: Boolean!
     startCursor: String!
@@ -60,6 +53,14 @@ const typeDefs = gql`
     requests.
     """
     disabled: Boolean!
+    """
+    UTC formatted string
+    """
+    createdAt: String!
+    """
+    UTC formatted string
+    """
+    updatedAt: String!
   }
 
   type ScenarioStateConnection {
@@ -72,7 +73,7 @@ const typeDefs = gql`
     cursor: String!
   }
 
-  type ScenarioStatePageInfo implements PageInfo {
+  type ScenarioStatePageInfo {
     hasNextPage: Boolean!
     hasPreviousPage: Boolean!
     startCursor: String!
@@ -83,6 +84,14 @@ const typeDefs = gql`
     id: ID!
     name: String!
     mappings: StateMappingConnection!
+    """
+    UTC formatted string
+    """
+    createdAt: String!
+    """
+    UTC formatted string
+    """
+    updatedAt: String!
   }
 
   type StateMappingConnection {
@@ -95,7 +104,7 @@ const typeDefs = gql`
     cursor: String!
   }
 
-  type StateMappingPageInfo implements PageInfo {
+  type StateMappingPageInfo {
     hasNextPage: Boolean!
     hasPreviousPage: Boolean!
     startCursor: String!
@@ -107,13 +116,21 @@ const typeDefs = gql`
     pathMatch: Matcher
     response: Response
     trigger: Trigger
+    """
+    UTC formatted string
+    """
+    createdAt: String!
+    """
+    UTC formatted string
+    """
+    updatedAt: String!
   }
 
-  interface Matcher implements Node {
+  interface Matcher {
     id: ID!
   }
 
-  type LiteralMatcher implements Matcher {
+  type LiteralMatcher implements Node & Matcher {
     id: ID!
     value: String!
   }
@@ -121,11 +138,27 @@ const typeDefs = gql`
   type Response implements Node {
     id: ID!
     body: String
+    """
+    UTC formatted string
+    """
+    createdAt: String!
+    """
+    UTC formatted string
+    """
+    updatedAt: String!
   }
 
   type Trigger implements Node {
     id: ID!
     targetState: ID!
+    """
+    UTC formatted string
+    """
+    createdAt: String!
+    """
+    UTC formatted string
+    """
+    updatedAt: String!
   }
 
   type Mutation {
@@ -137,12 +170,16 @@ const typeDefs = gql`
     Changes the default state of a scenario, which it will return to
     upon expiration or when the service initializes on startup
     """
-    setScenarioDefaultState(input: SetScenarioDefaultStateInput!): SetScenarioDefaultStateResult!
+    setScenarioDefaultState(
+      input: SetScenarioDefaultStateInput!
+    ): SetScenarioDefaultStateResult!
     """
     Changes the expiration time of a scenario, at which point it will
     reset back to its default state
     """
-    setScenarioExpiration(input: SetScenarioExpirationInput!): SetScenarioExpirationResult!
+    setScenarioExpiration(
+      input: SetScenarioExpirationInput!
+    ): SetScenarioExpirationResult!
     """
     Removes the scenario from consideration for future simulated requests. Idempotent.
     """
@@ -158,15 +195,21 @@ const typeDefs = gql`
     """
     Adds a state to a scenario. Every scenario has a default "Initial" state
     """
-    createScenarioState(input: CreateScenarioStateInput!): CreateScenarioStateResult!
+    createScenarioState(
+      input: CreateScenarioStateInput!
+    ): CreateScenarioStateResult!
     """
     Adds a request mapping to a scenario state
     """
-    createStateMapping(input: CreateStateMappingInput!): CreateStateMappingResult!
+    createStateMapping(
+      input: CreateStateMappingInput!
+    ): CreateStateMappingResult!
     """
     Configures a mapping with a simulated response to send back to the client
     """
-    setMappingResponse(input: SetMappingResponseInput!): SetMappingResponseResult!
+    setMappingResponse(
+      input: SetMappingResponseInput!
+    ): SetMappingResponseResult!
     """
     Sets a trigger to change scenario state on a particular request mapping. When
     the request mapping is executed, the trigger will transition the parent scenario
