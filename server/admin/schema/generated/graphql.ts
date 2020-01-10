@@ -1,5 +1,6 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { Context } from '../../context';
+import { Normalized } from '../../../utils/utilityTypes';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -32,6 +33,10 @@ export type CreateMatcherInput = {
 
 export type CreateResponseInput = {
   body: Scalars['String'],
+};
+
+export type CreateScenarioInput = {
+  name: Scalars['String'],
 };
 
 export type CreateScenarioResult = {
@@ -135,6 +140,11 @@ export type Mutation = {
 };
 
 
+export type MutationCreateScenarioArgs = {
+  input: CreateScenarioInput
+};
+
+
 export type MutationSetScenarioDefaultStateArgs = {
   input: SetScenarioDefaultStateInput
 };
@@ -205,6 +215,7 @@ export type Response = Node & {
 export type Scenario = Node & {
    __typename?: 'Scenario',
   id: Scalars['ID'],
+  name: Scalars['String'],
   possibleStates: Array<State>,
   currentState: State,
   defaultState: State,
@@ -230,8 +241,8 @@ export type ScenarioPageInfo = {
    __typename?: 'ScenarioPageInfo',
   hasNextPage: Scalars['Boolean'],
   hasPreviousPage: Scalars['Boolean'],
-  startCursor: Scalars['String'],
-  endCursor: Scalars['String'],
+  startCursor?: Maybe<Scalars['String']>,
+  endCursor?: Maybe<Scalars['String']>,
 };
 
 export type ScenarioStateConnection = {
@@ -250,8 +261,8 @@ export type ScenarioStatePageInfo = {
    __typename?: 'ScenarioStatePageInfo',
   hasNextPage: Scalars['Boolean'],
   hasPreviousPage: Scalars['Boolean'],
-  startCursor: Scalars['String'],
-  endCursor: Scalars['String'],
+  startCursor?: Maybe<Scalars['String']>,
+  endCursor?: Maybe<Scalars['String']>,
 };
 
 export type SetMappingResponseInput = {
@@ -319,8 +330,8 @@ export type StateMappingPageInfo = {
    __typename?: 'StateMappingPageInfo',
   hasNextPage: Scalars['Boolean'],
   hasPreviousPage: Scalars['Boolean'],
-  startCursor: Scalars['String'],
-  endCursor: Scalars['String'],
+  startCursor?: Maybe<Scalars['String']>,
+  endCursor?: Maybe<Scalars['String']>,
 };
 
 export type Trigger = Node & {
@@ -405,111 +416,113 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>,
-  Int: ResolverTypeWrapper<Scalars['Int']>,
-  String: ResolverTypeWrapper<Scalars['String']>,
-  ScenarioConnection: ResolverTypeWrapper<ScenarioConnection>,
-  ScenarioEdge: ResolverTypeWrapper<ScenarioEdge>,
-  Scenario: ResolverTypeWrapper<Scenario>,
-  Node: ResolverTypeWrapper<Node>,
-  ID: ResolverTypeWrapper<Scalars['ID']>,
-  State: ResolverTypeWrapper<State>,
-  StateMappingConnection: ResolverTypeWrapper<StateMappingConnection>,
-  StateMappingEdge: ResolverTypeWrapper<StateMappingEdge>,
-  Mapping: ResolverTypeWrapper<Mapping>,
-  Matcher: ResolverTypeWrapper<Matcher>,
-  Response: ResolverTypeWrapper<Response>,
-  Trigger: ResolverTypeWrapper<Trigger>,
-  StateMappingPageInfo: ResolverTypeWrapper<StateMappingPageInfo>,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  Float: ResolverTypeWrapper<Scalars['Float']>,
-  ScenarioPageInfo: ResolverTypeWrapper<ScenarioPageInfo>,
+  Int: ResolverTypeWrapper<Normalized<Scalars['Int']>>,
+  String: ResolverTypeWrapper<Normalized<Scalars['String']>>,
+  ScenarioConnection: ResolverTypeWrapper<Normalized<ScenarioConnection>>,
+  ScenarioEdge: ResolverTypeWrapper<Normalized<ScenarioEdge>>,
+  Scenario: ResolverTypeWrapper<Normalized<Scenario>>,
+  Node: ResolverTypeWrapper<Normalized<Node>>,
+  ID: ResolverTypeWrapper<Normalized<Scalars['ID']>>,
+  State: ResolverTypeWrapper<Normalized<State>>,
+  StateMappingConnection: ResolverTypeWrapper<Normalized<StateMappingConnection>>,
+  StateMappingEdge: ResolverTypeWrapper<Normalized<StateMappingEdge>>,
+  Mapping: ResolverTypeWrapper<Normalized<Mapping>>,
+  Matcher: ResolverTypeWrapper<Normalized<Matcher>>,
+  Response: ResolverTypeWrapper<Normalized<Response>>,
+  Trigger: ResolverTypeWrapper<Normalized<Trigger>>,
+  StateMappingPageInfo: ResolverTypeWrapper<Normalized<StateMappingPageInfo>>,
+  Boolean: ResolverTypeWrapper<Normalized<Scalars['Boolean']>>,
+  Float: ResolverTypeWrapper<Normalized<Scalars['Float']>>,
+  ScenarioPageInfo: ResolverTypeWrapper<Normalized<ScenarioPageInfo>>,
   Mutation: ResolverTypeWrapper<{}>,
-  CreateScenarioResult: ResolverTypeWrapper<CreateScenarioResult>,
-  SetScenarioDefaultStateInput: SetScenarioDefaultStateInput,
-  SetScenarioDefaultStateResult: ResolverTypeWrapper<SetScenarioDefaultStateResult>,
-  SetScenarioExpirationInput: SetScenarioExpirationInput,
-  SetScenarioExpirationResult: ResolverTypeWrapper<SetScenarioExpirationResult>,
-  DisableScenarioInput: DisableScenarioInput,
-  DisableScenarioResult: ResolverTypeWrapper<DisableScenarioResult>,
-  EnableScenarioInput: EnableScenarioInput,
-  EnableScenarioResult: ResolverTypeWrapper<EnableScenarioResult>,
-  DeleteScenarioInput: DeleteScenarioInput,
-  DeleteScenarioResult: ResolverTypeWrapper<DeleteScenarioResult>,
-  CreateScenarioStateInput: CreateScenarioStateInput,
-  CreateStateInput: CreateStateInput,
-  CreateScenarioStateResult: ResolverTypeWrapper<CreateScenarioStateResult>,
-  ScenarioStateEdge: ResolverTypeWrapper<ScenarioStateEdge>,
-  CreateStateMappingInput: CreateStateMappingInput,
-  CreateMappingInput: CreateMappingInput,
-  CreateMatcherInput: CreateMatcherInput,
-  CreateLiteralMatcherInput: CreateLiteralMatcherInput,
-  CreateStateMappingResult: ResolverTypeWrapper<CreateStateMappingResult>,
-  SetMappingResponseInput: SetMappingResponseInput,
-  CreateResponseInput: CreateResponseInput,
-  SetMappingResponseResult: ResolverTypeWrapper<SetMappingResponseResult>,
-  SetMappingTriggerInput: SetMappingTriggerInput,
-  CreateTriggerInput: CreateTriggerInput,
-  SetMappingTriggerResult: ResolverTypeWrapper<SetMappingTriggerResult>,
-  CacheControlScope: CacheControlScope,
-  LiteralMatcher: ResolverTypeWrapper<LiteralMatcher>,
-  ScenarioStateConnection: ResolverTypeWrapper<ScenarioStateConnection>,
-  ScenarioStatePageInfo: ResolverTypeWrapper<ScenarioStatePageInfo>,
-  Upload: ResolverTypeWrapper<Scalars['Upload']>,
+  CreateScenarioInput: ResolverTypeWrapper<Normalized<CreateScenarioInput>>,
+  CreateScenarioResult: ResolverTypeWrapper<Normalized<CreateScenarioResult>>,
+  SetScenarioDefaultStateInput: ResolverTypeWrapper<Normalized<SetScenarioDefaultStateInput>>,
+  SetScenarioDefaultStateResult: ResolverTypeWrapper<Normalized<SetScenarioDefaultStateResult>>,
+  SetScenarioExpirationInput: ResolverTypeWrapper<Normalized<SetScenarioExpirationInput>>,
+  SetScenarioExpirationResult: ResolverTypeWrapper<Normalized<SetScenarioExpirationResult>>,
+  DisableScenarioInput: ResolverTypeWrapper<Normalized<DisableScenarioInput>>,
+  DisableScenarioResult: ResolverTypeWrapper<Normalized<DisableScenarioResult>>,
+  EnableScenarioInput: ResolverTypeWrapper<Normalized<EnableScenarioInput>>,
+  EnableScenarioResult: ResolverTypeWrapper<Normalized<EnableScenarioResult>>,
+  DeleteScenarioInput: ResolverTypeWrapper<Normalized<DeleteScenarioInput>>,
+  DeleteScenarioResult: ResolverTypeWrapper<Normalized<DeleteScenarioResult>>,
+  CreateScenarioStateInput: ResolverTypeWrapper<Normalized<CreateScenarioStateInput>>,
+  CreateStateInput: ResolverTypeWrapper<Normalized<CreateStateInput>>,
+  CreateScenarioStateResult: ResolverTypeWrapper<Normalized<CreateScenarioStateResult>>,
+  ScenarioStateEdge: ResolverTypeWrapper<Normalized<ScenarioStateEdge>>,
+  CreateStateMappingInput: ResolverTypeWrapper<Normalized<CreateStateMappingInput>>,
+  CreateMappingInput: ResolverTypeWrapper<Normalized<CreateMappingInput>>,
+  CreateMatcherInput: ResolverTypeWrapper<Normalized<CreateMatcherInput>>,
+  CreateLiteralMatcherInput: ResolverTypeWrapper<Normalized<CreateLiteralMatcherInput>>,
+  CreateStateMappingResult: ResolverTypeWrapper<Normalized<CreateStateMappingResult>>,
+  SetMappingResponseInput: ResolverTypeWrapper<Normalized<SetMappingResponseInput>>,
+  CreateResponseInput: ResolverTypeWrapper<Normalized<CreateResponseInput>>,
+  SetMappingResponseResult: ResolverTypeWrapper<Normalized<SetMappingResponseResult>>,
+  SetMappingTriggerInput: ResolverTypeWrapper<Normalized<SetMappingTriggerInput>>,
+  CreateTriggerInput: ResolverTypeWrapper<Normalized<CreateTriggerInput>>,
+  SetMappingTriggerResult: ResolverTypeWrapper<Normalized<SetMappingTriggerResult>>,
+  CacheControlScope: ResolverTypeWrapper<Normalized<CacheControlScope>>,
+  LiteralMatcher: ResolverTypeWrapper<Normalized<LiteralMatcher>>,
+  ScenarioStateConnection: ResolverTypeWrapper<Normalized<ScenarioStateConnection>>,
+  ScenarioStatePageInfo: ResolverTypeWrapper<Normalized<ScenarioStatePageInfo>>,
+  Upload: ResolverTypeWrapper<Normalized<Scalars['Upload']>>,
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Query: {},
-  Int: Scalars['Int'],
-  String: Scalars['String'],
-  ScenarioConnection: ScenarioConnection,
-  ScenarioEdge: ScenarioEdge,
-  Scenario: Scenario,
-  Node: Node,
-  ID: Scalars['ID'],
-  State: State,
-  StateMappingConnection: StateMappingConnection,
-  StateMappingEdge: StateMappingEdge,
-  Mapping: Mapping,
-  Matcher: Matcher,
-  Response: Response,
-  Trigger: Trigger,
-  StateMappingPageInfo: StateMappingPageInfo,
-  Boolean: Scalars['Boolean'],
-  Float: Scalars['Float'],
-  ScenarioPageInfo: ScenarioPageInfo,
+  Int: Normalized<Scalars['Int']>,
+  String: Normalized<Scalars['String']>,
+  ScenarioConnection: Normalized<ScenarioConnection>,
+  ScenarioEdge: Normalized<ScenarioEdge>,
+  Scenario: Normalized<Scenario>,
+  Node: Normalized<Node>,
+  ID: Normalized<Scalars['ID']>,
+  State: Normalized<State>,
+  StateMappingConnection: Normalized<StateMappingConnection>,
+  StateMappingEdge: Normalized<StateMappingEdge>,
+  Mapping: Normalized<Mapping>,
+  Matcher: Normalized<Matcher>,
+  Response: Normalized<Response>,
+  Trigger: Normalized<Trigger>,
+  StateMappingPageInfo: Normalized<StateMappingPageInfo>,
+  Boolean: Normalized<Scalars['Boolean']>,
+  Float: Normalized<Scalars['Float']>,
+  ScenarioPageInfo: Normalized<ScenarioPageInfo>,
   Mutation: {},
-  CreateScenarioResult: CreateScenarioResult,
-  SetScenarioDefaultStateInput: SetScenarioDefaultStateInput,
-  SetScenarioDefaultStateResult: SetScenarioDefaultStateResult,
-  SetScenarioExpirationInput: SetScenarioExpirationInput,
-  SetScenarioExpirationResult: SetScenarioExpirationResult,
-  DisableScenarioInput: DisableScenarioInput,
-  DisableScenarioResult: DisableScenarioResult,
-  EnableScenarioInput: EnableScenarioInput,
-  EnableScenarioResult: EnableScenarioResult,
-  DeleteScenarioInput: DeleteScenarioInput,
-  DeleteScenarioResult: DeleteScenarioResult,
-  CreateScenarioStateInput: CreateScenarioStateInput,
-  CreateStateInput: CreateStateInput,
-  CreateScenarioStateResult: CreateScenarioStateResult,
-  ScenarioStateEdge: ScenarioStateEdge,
-  CreateStateMappingInput: CreateStateMappingInput,
-  CreateMappingInput: CreateMappingInput,
-  CreateMatcherInput: CreateMatcherInput,
-  CreateLiteralMatcherInput: CreateLiteralMatcherInput,
-  CreateStateMappingResult: CreateStateMappingResult,
-  SetMappingResponseInput: SetMappingResponseInput,
-  CreateResponseInput: CreateResponseInput,
-  SetMappingResponseResult: SetMappingResponseResult,
-  SetMappingTriggerInput: SetMappingTriggerInput,
-  CreateTriggerInput: CreateTriggerInput,
-  SetMappingTriggerResult: SetMappingTriggerResult,
-  CacheControlScope: CacheControlScope,
-  LiteralMatcher: LiteralMatcher,
-  ScenarioStateConnection: ScenarioStateConnection,
-  ScenarioStatePageInfo: ScenarioStatePageInfo,
-  Upload: Scalars['Upload'],
+  CreateScenarioInput: Normalized<CreateScenarioInput>,
+  CreateScenarioResult: Normalized<CreateScenarioResult>,
+  SetScenarioDefaultStateInput: Normalized<SetScenarioDefaultStateInput>,
+  SetScenarioDefaultStateResult: Normalized<SetScenarioDefaultStateResult>,
+  SetScenarioExpirationInput: Normalized<SetScenarioExpirationInput>,
+  SetScenarioExpirationResult: Normalized<SetScenarioExpirationResult>,
+  DisableScenarioInput: Normalized<DisableScenarioInput>,
+  DisableScenarioResult: Normalized<DisableScenarioResult>,
+  EnableScenarioInput: Normalized<EnableScenarioInput>,
+  EnableScenarioResult: Normalized<EnableScenarioResult>,
+  DeleteScenarioInput: Normalized<DeleteScenarioInput>,
+  DeleteScenarioResult: Normalized<DeleteScenarioResult>,
+  CreateScenarioStateInput: Normalized<CreateScenarioStateInput>,
+  CreateStateInput: Normalized<CreateStateInput>,
+  CreateScenarioStateResult: Normalized<CreateScenarioStateResult>,
+  ScenarioStateEdge: Normalized<ScenarioStateEdge>,
+  CreateStateMappingInput: Normalized<CreateStateMappingInput>,
+  CreateMappingInput: Normalized<CreateMappingInput>,
+  CreateMatcherInput: Normalized<CreateMatcherInput>,
+  CreateLiteralMatcherInput: Normalized<CreateLiteralMatcherInput>,
+  CreateStateMappingResult: Normalized<CreateStateMappingResult>,
+  SetMappingResponseInput: Normalized<SetMappingResponseInput>,
+  CreateResponseInput: Normalized<CreateResponseInput>,
+  SetMappingResponseResult: Normalized<SetMappingResponseResult>,
+  SetMappingTriggerInput: Normalized<SetMappingTriggerInput>,
+  CreateTriggerInput: Normalized<CreateTriggerInput>,
+  SetMappingTriggerResult: Normalized<SetMappingTriggerResult>,
+  CacheControlScope: Normalized<CacheControlScope>,
+  LiteralMatcher: Normalized<LiteralMatcher>,
+  ScenarioStateConnection: Normalized<ScenarioStateConnection>,
+  ScenarioStatePageInfo: Normalized<ScenarioStatePageInfo>,
+  Upload: Normalized<Scalars['Upload']>,
 }>;
 
 export type CacheControlDirectiveResolver<Result, Parent, ContextType = Context, Args = {   maxAge?: Maybe<Maybe<Scalars['Int']>>,
@@ -565,7 +578,7 @@ export type MatcherResolvers<ContextType = Context, ParentType extends Resolvers
 }>;
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  createScenario?: Resolver<ResolversTypes['CreateScenarioResult'], ParentType, ContextType>,
+  createScenario?: Resolver<ResolversTypes['CreateScenarioResult'], ParentType, ContextType, RequireFields<MutationCreateScenarioArgs, 'input'>>,
   setScenarioDefaultState?: Resolver<ResolversTypes['SetScenarioDefaultStateResult'], ParentType, ContextType, RequireFields<MutationSetScenarioDefaultStateArgs, 'input'>>,
   setScenarioExpiration?: Resolver<ResolversTypes['SetScenarioExpirationResult'], ParentType, ContextType, RequireFields<MutationSetScenarioExpirationArgs, 'input'>>,
   disableScenario?: Resolver<ResolversTypes['DisableScenarioResult'], ParentType, ContextType, RequireFields<MutationDisableScenarioArgs, 'input'>>,
@@ -595,6 +608,7 @@ export type ResponseResolvers<ContextType = Context, ParentType extends Resolver
 
 export type ScenarioResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Scenario'] = ResolversParentTypes['Scenario']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   possibleStates?: Resolver<Array<ResolversTypes['State']>, ParentType, ContextType>,
   currentState?: Resolver<ResolversTypes['State'], ParentType, ContextType>,
   defaultState?: Resolver<ResolversTypes['State'], ParentType, ContextType>,
@@ -617,8 +631,8 @@ export type ScenarioEdgeResolvers<ContextType = Context, ParentType extends Reso
 export type ScenarioPageInfoResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ScenarioPageInfo'] = ResolversParentTypes['ScenarioPageInfo']> = ResolversObject<{
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   hasPreviousPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
-  startCursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  endCursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  startCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  endCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 }>;
 
 export type ScenarioStateConnectionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ScenarioStateConnection'] = ResolversParentTypes['ScenarioStateConnection']> = ResolversObject<{
@@ -634,8 +648,8 @@ export type ScenarioStateEdgeResolvers<ContextType = Context, ParentType extends
 export type ScenarioStatePageInfoResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ScenarioStatePageInfo'] = ResolversParentTypes['ScenarioStatePageInfo']> = ResolversObject<{
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   hasPreviousPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
-  startCursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  endCursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  startCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  endCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 }>;
 
 export type SetMappingResponseResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SetMappingResponseResult'] = ResolversParentTypes['SetMappingResponseResult']> = ResolversObject<{
@@ -675,8 +689,8 @@ export type StateMappingEdgeResolvers<ContextType = Context, ParentType extends 
 export type StateMappingPageInfoResolvers<ContextType = Context, ParentType extends ResolversParentTypes['StateMappingPageInfo'] = ResolversParentTypes['StateMappingPageInfo']> = ResolversObject<{
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   hasPreviousPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
-  startCursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  endCursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  startCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  endCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 }>;
 
 export type TriggerResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Trigger'] = ResolversParentTypes['Trigger']> = ResolversObject<{

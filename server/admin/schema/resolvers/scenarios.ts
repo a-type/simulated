@@ -1,32 +1,110 @@
 import { Resolvers } from '../generated/graphql';
+import { toCursor } from '../../../storage/cursors';
 
 const resolvers: Resolvers = {
   Query: {
-    scenarios: (parent, args, ctx, info) => {
+    scenarios: async (parent, { first, after }, ctx) => {
+      const {
+        scenarios,
+        hasNextPage,
+        hasPreviousPage,
+      } = await ctx.storage.getScenarios({ first, after });
+      const startCursor = toCursor(scenarios[0].id);
+      const endCursor = toCursor(scenarios.pop()?.id || '');
+
       return {
-        edges: [],
-        pageInfo: {},
-      } as any;
+        edges: scenarios.map(scenario => ({
+          node: scenario,
+          cursor: toCursor(scenario.id),
+        })),
+        pageInfo: {
+          startCursor,
+          endCursor,
+          hasNextPage,
+          hasPreviousPage,
+        },
+      };
     },
   },
   Mutation: {
-    createScenario: (parent, args, ctx, info) => {
-      return null as any;
+    createScenario: async (parent, { input }, ctx) => {
+      const scenario = await ctx.storage.createScenario({ data: input });
+      return {
+        scenario,
+        scenarioEdge: {
+          node: scenario,
+          cursor: toCursor(scenario.id),
+        },
+      };
     },
-    setScenarioDefaultState: (parent, args, ctx, info) => {
-      return null as any;
+    setScenarioDefaultState: async (
+      parent,
+      { input: { scenarioId, stateId } },
+      ctx,
+    ) => {
+      const scenario = await ctx.storage.updateScenario({
+        id: scenarioId,
+        data: {
+          defaultState: stateId,
+        },
+      });
+
+      return {
+        scenario,
+      };
     },
-    setScenarioExpiration: (parent, args, ctx, info) => {
-      return null as any;
+    setScenarioExpiration: async (
+      parent,
+      { input: { scenarioId, expirationDurationSeconds } },
+      ctx,
+    ) => {
+      const scenario = await ctx.storage.updateScenario({
+        id: scenarioId,
+        data: {
+          expirationDurationSeconds,
+        },
+      });
+
+      return {
+        scenario,
+      };
     },
-    disableScenario: (parent, args, ctx, info) => {
-      return null as any;
+    disableScenario: async (parent, { input: { scenarioId } }, ctx) => {
+      const scenario = await ctx.storage.updateScenario({
+        id: scenarioId,
+        data: {
+          disabled: true,
+        },
+      });
+
+      return {
+        scenario,
+      };
     },
-    enableScenario: (parent, args, ctx, info) => {
-      return null as any;
+    enableScenario: async (parent, { input: { scenarioId } }, ctx) => {
+      const scenario = await ctx.storage.updateScenario({
+        id: scenarioId,
+        data: {
+          disabled: false,
+        },
+      });
+
+      return {
+        scenario,
+      };
     },
-    deleteScenario: (parent, args, ctx, info) => {
-      return null as any;
+    deleteScenario: async (parent, { input: { scenarioId } }, ctx) => {
+      const scenario = await ctx.storage.deleteScenario({
+        id: scenarioId,
+      });
+
+      return {
+        scenario,
+        scenarioEdge: {
+          node: scenario,
+          cursor: toCursor(scenario.id),
+        },
+      };
     },
   },
 };

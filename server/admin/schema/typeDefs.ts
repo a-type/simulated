@@ -22,12 +22,16 @@ export default gql`
   type ScenarioPageInfo {
     hasNextPage: Boolean!
     hasPreviousPage: Boolean!
-    startCursor: String!
-    endCursor: String!
+    startCursor: String
+    endCursor: String
   }
 
   type Scenario implements Node {
     id: ID!
+    """
+    Friendly name to quickly identify the purpose of the scenario
+    """
+    name: String!
     """
     List of possible states the scenario can be in. States are exclusive.
     """
@@ -76,8 +80,8 @@ export default gql`
   type ScenarioStatePageInfo {
     hasNextPage: Boolean!
     hasPreviousPage: Boolean!
-    startCursor: String!
-    endCursor: String!
+    startCursor: String
+    endCursor: String
   }
 
   type State implements Node {
@@ -107,8 +111,8 @@ export default gql`
   type StateMappingPageInfo {
     hasNextPage: Boolean!
     hasPreviousPage: Boolean!
-    startCursor: String!
-    endCursor: String!
+    startCursor: String
+    endCursor: String
   }
 
   type Mapping implements Node {
@@ -165,7 +169,7 @@ export default gql`
     """
     Creates a new, empty scenario
     """
-    createScenario: CreateScenarioResult!
+    createScenario(input: CreateScenarioInput!): CreateScenarioResult!
     """
     Changes the default state of a scenario, which it will return to
     upon expiration or when the service initializes on startup
@@ -216,6 +220,10 @@ export default gql`
     into the target state
     """
     setMappingTrigger(input: SetMappingTriggerInput!): SetMappingTriggerResult!
+  }
+
+  input CreateScenarioInput {
+    name: String!
   }
 
   type CreateScenarioResult {

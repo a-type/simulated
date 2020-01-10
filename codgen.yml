@@ -6,6 +6,7 @@ generates:
     config:
       contextType: ../../context#Context
       useIndexSignature: true # apollo compat
+      defaultMapper: ../../../utils/utilityTypes#Normalized<{T}>
     plugins:
       - 'typescript'
       - 'typescript-resolvers'
