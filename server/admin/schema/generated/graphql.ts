@@ -216,13 +216,19 @@ export type Scenario = Node & {
    __typename?: 'Scenario',
   id: Scalars['ID'],
   name: Scalars['String'],
-  possibleStates: Array<State>,
+  possibleStates: ScenarioStateConnection,
   currentState: State,
   defaultState: State,
   expirationDurationSeconds: Scalars['Float'],
   disabled: Scalars['Boolean'],
   createdAt: Scalars['String'],
   updatedAt: Scalars['String'],
+};
+
+
+export type ScenarioPossibleStatesArgs = {
+  first?: Maybe<Scalars['Int']>,
+  after?: Maybe<Scalars['String']>
 };
 
 export type ScenarioConnection = {
@@ -312,6 +318,12 @@ export type State = Node & {
   mappings: StateMappingConnection,
   createdAt: Scalars['String'],
   updatedAt: Scalars['String'],
+};
+
+
+export type StateMappingsArgs = {
+  first?: Maybe<Scalars['Int']>,
+  after?: Maybe<Scalars['String']>
 };
 
 export type StateMappingConnection = {
@@ -423,6 +435,8 @@ export type ResolversTypes = ResolversObject<{
   Scenario: ResolverTypeWrapper<Normalized<Scenario>>,
   Node: ResolverTypeWrapper<Normalized<Node>>,
   ID: ResolverTypeWrapper<Normalized<Scalars['ID']>>,
+  ScenarioStateConnection: ResolverTypeWrapper<Normalized<ScenarioStateConnection>>,
+  ScenarioStateEdge: ResolverTypeWrapper<Normalized<ScenarioStateEdge>>,
   State: ResolverTypeWrapper<Normalized<State>>,
   StateMappingConnection: ResolverTypeWrapper<Normalized<StateMappingConnection>>,
   StateMappingEdge: ResolverTypeWrapper<Normalized<StateMappingEdge>>,
@@ -432,6 +446,7 @@ export type ResolversTypes = ResolversObject<{
   Trigger: ResolverTypeWrapper<Normalized<Trigger>>,
   StateMappingPageInfo: ResolverTypeWrapper<Normalized<StateMappingPageInfo>>,
   Boolean: ResolverTypeWrapper<Normalized<Scalars['Boolean']>>,
+  ScenarioStatePageInfo: ResolverTypeWrapper<Normalized<ScenarioStatePageInfo>>,
   Float: ResolverTypeWrapper<Normalized<Scalars['Float']>>,
   ScenarioPageInfo: ResolverTypeWrapper<Normalized<ScenarioPageInfo>>,
   Mutation: ResolverTypeWrapper<{}>,
@@ -450,7 +465,6 @@ export type ResolversTypes = ResolversObject<{
   CreateScenarioStateInput: ResolverTypeWrapper<Normalized<CreateScenarioStateInput>>,
   CreateStateInput: ResolverTypeWrapper<Normalized<CreateStateInput>>,
   CreateScenarioStateResult: ResolverTypeWrapper<Normalized<CreateScenarioStateResult>>,
-  ScenarioStateEdge: ResolverTypeWrapper<Normalized<ScenarioStateEdge>>,
   CreateStateMappingInput: ResolverTypeWrapper<Normalized<CreateStateMappingInput>>,
   CreateMappingInput: ResolverTypeWrapper<Normalized<CreateMappingInput>>,
   CreateMatcherInput: ResolverTypeWrapper<Normalized<CreateMatcherInput>>,
@@ -464,8 +478,6 @@ export type ResolversTypes = ResolversObject<{
   SetMappingTriggerResult: ResolverTypeWrapper<Normalized<SetMappingTriggerResult>>,
   CacheControlScope: ResolverTypeWrapper<Normalized<CacheControlScope>>,
   LiteralMatcher: ResolverTypeWrapper<Normalized<LiteralMatcher>>,
-  ScenarioStateConnection: ResolverTypeWrapper<Normalized<ScenarioStateConnection>>,
-  ScenarioStatePageInfo: ResolverTypeWrapper<Normalized<ScenarioStatePageInfo>>,
   Upload: ResolverTypeWrapper<Normalized<Scalars['Upload']>>,
 }>;
 
@@ -479,6 +491,8 @@ export type ResolversParentTypes = ResolversObject<{
   Scenario: Normalized<Scenario>,
   Node: Normalized<Node>,
   ID: Normalized<Scalars['ID']>,
+  ScenarioStateConnection: Normalized<ScenarioStateConnection>,
+  ScenarioStateEdge: Normalized<ScenarioStateEdge>,
   State: Normalized<State>,
   StateMappingConnection: Normalized<StateMappingConnection>,
   StateMappingEdge: Normalized<StateMappingEdge>,
@@ -488,6 +502,7 @@ export type ResolversParentTypes = ResolversObject<{
   Trigger: Normalized<Trigger>,
   StateMappingPageInfo: Normalized<StateMappingPageInfo>,
   Boolean: Normalized<Scalars['Boolean']>,
+  ScenarioStatePageInfo: Normalized<ScenarioStatePageInfo>,
   Float: Normalized<Scalars['Float']>,
   ScenarioPageInfo: Normalized<ScenarioPageInfo>,
   Mutation: {},
@@ -506,7 +521,6 @@ export type ResolversParentTypes = ResolversObject<{
   CreateScenarioStateInput: Normalized<CreateScenarioStateInput>,
   CreateStateInput: Normalized<CreateStateInput>,
   CreateScenarioStateResult: Normalized<CreateScenarioStateResult>,
-  ScenarioStateEdge: Normalized<ScenarioStateEdge>,
   CreateStateMappingInput: Normalized<CreateStateMappingInput>,
   CreateMappingInput: Normalized<CreateMappingInput>,
   CreateMatcherInput: Normalized<CreateMatcherInput>,
@@ -520,8 +534,6 @@ export type ResolversParentTypes = ResolversObject<{
   SetMappingTriggerResult: Normalized<SetMappingTriggerResult>,
   CacheControlScope: Normalized<CacheControlScope>,
   LiteralMatcher: Normalized<LiteralMatcher>,
-  ScenarioStateConnection: Normalized<ScenarioStateConnection>,
-  ScenarioStatePageInfo: Normalized<ScenarioStatePageInfo>,
   Upload: Normalized<Scalars['Upload']>,
 }>;
 
@@ -609,7 +621,7 @@ export type ResponseResolvers<ContextType = Context, ParentType extends Resolver
 export type ScenarioResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Scenario'] = ResolversParentTypes['Scenario']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  possibleStates?: Resolver<Array<ResolversTypes['State']>, ParentType, ContextType>,
+  possibleStates?: Resolver<ResolversTypes['ScenarioStateConnection'], ParentType, ContextType, RequireFields<ScenarioPossibleStatesArgs, 'first'>>,
   currentState?: Resolver<ResolversTypes['State'], ParentType, ContextType>,
   defaultState?: Resolver<ResolversTypes['State'], ParentType, ContextType>,
   expirationDurationSeconds?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,
@@ -671,7 +683,7 @@ export type SetScenarioExpirationResultResolvers<ContextType = Context, ParentTy
 export type StateResolvers<ContextType = Context, ParentType extends ResolversParentTypes['State'] = ResolversParentTypes['State']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  mappings?: Resolver<ResolversTypes['StateMappingConnection'], ParentType, ContextType>,
+  mappings?: Resolver<ResolversTypes['StateMappingConnection'], ParentType, ContextType, RequireFields<StateMappingsArgs, 'first'>>,
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 }>;

@@ -2,8 +2,13 @@ import lowdb from 'lowdb';
 import FileAsync from 'lowdb/adapters/FileAsync';
 import * as fs from 'fs';
 import * as path from 'path';
-import { toCursor } from './cursors';
-import { StorageSchema, StorageScenario } from './types';
+import { toCursor, fromCursor } from './cursors';
+import {
+  StorageSchema,
+  StorageScenario,
+  StorageState,
+  StorageMapping,
+} from './types';
 import { createId } from './ids';
 import { timestamp } from './dates';
 
@@ -114,6 +119,18 @@ export default class Storage {
     return scenario;
   }
 
+  async addScenarioState({ id, stateId }: { id: string; stateId: string }) {
+    const scenario = await (await db)
+      .get('scenarios', [])
+      .find(s => s.id === id)
+      .update('possibleStates', states =>
+        states.filter((i: string) => i !== stateId).push(stateId),
+      )
+      .write();
+
+    return scenario;
+  }
+
   async deleteScenario({ id }: { id: string }) {
     const scenario = (await db)
       .get('scenarios', [])
@@ -128,5 +145,81 @@ export default class Storage {
       .write();
 
     return scenario;
+  }
+
+  async getScenarioPossibleStates({
+    id,
+    first = 10,
+    after,
+  }: {
+    id: string;
+    first?: number;
+    after?: string | null;
+  }) {
+    const scenario = (await db)
+      .get('scenarios', [])
+      .find(s => s.id === id)
+      .value();
+
+    const states = (await db).get('states', []).value();
+
+    const startIndex = after
+      ? scenario.possibleStates.indexOf(fromCursor(after))
+      : 0;
+    const slice = scenario.possibleStates
+      .slice(startIndex, startIndex + first)
+      .map((stateId: string) => states.find(s => s.id === stateId))
+      .filter(Boolean) as StorageState[];
+
+    return {
+      states: slice,
+      hasNextPage: startIndex + first < scenario.possibleStates.length,
+      hasPreviousPage: startIndex > 0,
+    };
+  }
+
+  async createState({ data }: { data: { name: string } }) {
+    const state: StorageState = {
+      id: createId('State'),
+      name: data.name,
+      createdAt: timestamp(),
+      updatedAt: timestamp(),
+      mappings: [],
+    };
+
+    await (await db)
+      .get('states', [])
+      .push(state)
+      .write();
+
+    return state;
+  }
+
+  async getStateMappings({
+    id,
+    first = 10,
+    after,
+  }: {
+    id: string;
+    first?: number;
+    after?: string | null;
+  }) {
+    const state = (await db)
+      .get('states', [])
+      .find(s => s.id === id)
+      .value();
+    const mappings = (await db).get('mappings', []).value();
+
+    const startIndex = after ? state.mappings.indexOf(fromCursor(after)) : 0;
+    const slice = state.mappings
+      .slice(startIndex, startIndex + first)
+      .map(mappingId => mappings.find(m => m.id === mappingId))
+      .filter(Boolean) as StorageMapping[];
+
+    return {
+      mappings: slice,
+      hasNextPage: startIndex + first < state.mappings.length,
+      hasPreviousPage: startIndex > 0,
+    };
   }
 }

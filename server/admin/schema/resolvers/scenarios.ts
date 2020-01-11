@@ -1,5 +1,6 @@
 import { Resolvers } from '../generated/graphql';
 import { toCursor } from '../../../storage/cursors';
+import { relayConnection } from './relay';
 
 const resolvers: Resolvers = {
   Query: {
@@ -9,26 +10,14 @@ const resolvers: Resolvers = {
         hasNextPage,
         hasPreviousPage,
       } = await ctx.storage.getScenarios({ first, after });
-      const startCursor = toCursor(scenarios[0].id);
-      const endCursor = toCursor(scenarios.pop()?.id || '');
 
-      return {
-        edges: scenarios.map(scenario => ({
-          node: scenario,
-          cursor: toCursor(scenario.id),
-        })),
-        pageInfo: {
-          startCursor,
-          endCursor,
-          hasNextPage,
-          hasPreviousPage,
-        },
-      };
+      return relayConnection(scenarios, hasNextPage, hasPreviousPage);
     },
   },
   Mutation: {
     createScenario: async (parent, { input }, ctx) => {
       const scenario = await ctx.storage.createScenario({ data: input });
+
       return {
         scenario,
         scenarioEdge: {
@@ -105,6 +94,21 @@ const resolvers: Resolvers = {
           cursor: toCursor(scenario.id),
         },
       };
+    },
+  },
+  Scenario: {
+    possibleStates: async (parent, { first, after }, ctx) => {
+      const {
+        states,
+        hasNextPage,
+        hasPreviousPage,
+      } = await ctx.storage.getScenarioPossibleStates({
+        id: parent.id,
+        first,
+        after,
+      });
+
+      return relayConnection(states, hasNextPage, hasPreviousPage);
     },
   },
 };

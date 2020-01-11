@@ -35,7 +35,7 @@ export default gql`
     """
     List of possible states the scenario can be in. States are exclusive.
     """
-    possibleStates: [State!]!
+    possibleStates(first: Int = 10, after: String): ScenarioStateConnection!
     """
     The currently valid state of this scenario.
     """
@@ -87,7 +87,7 @@ export default gql`
   type State implements Node {
     id: ID!
     name: String!
-    mappings: StateMappingConnection!
+    mappings(first: Int = 10, after: String): StateMappingConnection!
     """
     UTC formatted string
     """
