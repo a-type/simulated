@@ -1,21 +1,19 @@
 {
   "compilerOptions": {
-    "outDir": "./build",
+    "outDir": "../build",
     "target": "es6",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
-    "module": "esnext",
+    "module": "commonjs",
     "lib": [
       "ES2015",
       "ES2016",
       "ES2016.Array.Include",
       "ES2017",
       "ES2015.Promise",
-      "ESNext.AsyncIterable",
-      "DOM"
+      "ESNext.AsyncIterable"
     ],
-    "jsx": "preserve",
     "strict": true,
     "noImplicitAny": true,
     "allowJs": true,
@@ -25,11 +23,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": [
-    "./server/**/*",
-    "./client/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["./**/*"],
+  "exclude": ["node_modules"]
 }
