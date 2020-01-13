@@ -25,11 +25,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": [
-    "./server/**/*",
-    "./client/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["./server/**/*", "./client/**/*", "./next-env.d.ts"],
+  "exclude": ["node_modules"]
 }
