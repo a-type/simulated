@@ -1,16 +1,16 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 2e389d8e3e15f41d1bc2731c05446de6 */
+/* @relayHash 850ff70a99fff34e56aae09890d36487 */
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type ScenarioIdQueryVariables = {
     scenarioId: string;
 };
 export type ScenarioIdQueryResponse = {
     readonly viewer: {
         readonly scenario: {
-            readonly id: string;
-            readonly name: string;
+            readonly " $fragmentRefs": FragmentRefs<"ScenarioDetails_scenario">;
         } | null;
     };
 };
@@ -27,11 +27,18 @@ query ScenarioIdQuery(
 ) {
   viewer {
     scenario(id: $scenarioId) {
+      ...ScenarioDetails_scenario
       id
-      name
     }
     id
   }
+}
+
+fragment ScenarioDetails_scenario on Scenario {
+  id
+  name
+  createdAt
+  updatedAt
 }
 */
 
@@ -43,36 +50,18 @@ const node: ConcreteRequest = (function () {
             "type": "ID!",
             "defaultValue": null
         } as any)
-    ], v1 = ({
+    ], v1 = [
+        ({
+            "kind": "Variable",
+            "name": "id",
+            "variableName": "scenarioId"
+        } as any)
+    ], v2 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "id",
         "args": null,
         "storageKey": null
-    } as any), v2 = ({
-        "kind": "LinkedField",
-        "alias": null,
-        "name": "scenario",
-        "storageKey": null,
-        "args": [
-            {
-                "kind": "Variable",
-                "name": "id",
-                "variableName": "scenarioId"
-            }
-        ],
-        "concreteType": "Scenario",
-        "plural": false,
-        "selections": [
-            (v1 /*: any*/),
-            {
-                "kind": "ScalarField",
-                "alias": null,
-                "name": "name",
-                "args": null,
-                "storageKey": null
-            }
-        ]
     } as any);
     return {
         "kind": "Request",
@@ -92,7 +81,22 @@ const node: ConcreteRequest = (function () {
                     "concreteType": "Viewer",
                     "plural": false,
                     "selections": [
-                        (v2 /*: any*/)
+                        {
+                            "kind": "LinkedField",
+                            "alias": null,
+                            "name": "scenario",
+                            "storageKey": null,
+                            "args": (v1 /*: any*/),
+                            "concreteType": "Scenario",
+                            "plural": false,
+                            "selections": [
+                                {
+                                    "kind": "FragmentSpread",
+                                    "name": "ScenarioDetails_scenario",
+                                    "args": null
+                                }
+                            ]
+                        }
                     ]
                 }
             ]
@@ -111,8 +115,40 @@ const node: ConcreteRequest = (function () {
                     "concreteType": "Viewer",
                     "plural": false,
                     "selections": [
-                        (v2 /*: any*/),
-                        (v1 /*: any*/)
+                        {
+                            "kind": "LinkedField",
+                            "alias": null,
+                            "name": "scenario",
+                            "storageKey": null,
+                            "args": (v1 /*: any*/),
+                            "concreteType": "Scenario",
+                            "plural": false,
+                            "selections": [
+                                (v2 /*: any*/),
+                                {
+                                    "kind": "ScalarField",
+                                    "alias": null,
+                                    "name": "name",
+                                    "args": null,
+                                    "storageKey": null
+                                },
+                                {
+                                    "kind": "ScalarField",
+                                    "alias": null,
+                                    "name": "createdAt",
+                                    "args": null,
+                                    "storageKey": null
+                                },
+                                {
+                                    "kind": "ScalarField",
+                                    "alias": null,
+                                    "name": "updatedAt",
+                                    "args": null,
+                                    "storageKey": null
+                                }
+                            ]
+                        },
+                        (v2 /*: any*/)
                     ]
                 }
             ]
@@ -121,10 +157,10 @@ const node: ConcreteRequest = (function () {
             "operationKind": "query",
             "name": "ScenarioIdQuery",
             "id": null,
-            "text": "query ScenarioIdQuery(\n  $scenarioId: ID!\n) {\n  viewer {\n    scenario(id: $scenarioId) {\n      id\n      name\n    }\n    id\n  }\n}\n",
+            "text": "query ScenarioIdQuery(\n  $scenarioId: ID!\n) {\n  viewer {\n    scenario(id: $scenarioId) {\n      ...ScenarioDetails_scenario\n      id\n    }\n    id\n  }\n}\n\nfragment ScenarioDetails_scenario on Scenario {\n  id\n  name\n  createdAt\n  updatedAt\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = '82b409847ad5c0dcae1b274235ffa809';
+(node as any).hash = 'd4f778ed0a0846a09036208d09492f36';
 export default node;

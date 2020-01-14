@@ -134,7 +134,10 @@ export default class Storage {
     const scenario = await (await db)
       .get('scenarios', [])
       .find(s => s.id === id)
-      .assign(data)
+      .assign({
+        ...data,
+        updatedAt: timestamp(),
+      })
       .write();
 
     return scenario;
@@ -147,6 +150,9 @@ export default class Storage {
       .update('possibleStates', states =>
         states.filter((i: string) => i !== stateId).push(stateId),
       )
+      .assign({
+        updatedAt: timestamp(),
+      })
       .write();
 
     return scenario;

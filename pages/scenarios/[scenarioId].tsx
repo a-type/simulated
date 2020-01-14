@@ -1,13 +1,14 @@
 import { useQuery, graphql } from 'relay-hooks';
 import { useRouter } from 'next/router';
 import { ScenarioIdQuery } from './__generated__/ScenarioIdQuery.graphql';
+import { Container } from '@material-ui/core';
+import ScenarioDetails from '../../components/ScenarioDetails';
 
 const query = graphql`
   query ScenarioIdQuery($scenarioId: ID!) {
     viewer {
       scenario(id: $scenarioId) {
-        id
-        name
+        ...ScenarioDetails_scenario
       }
     }
   }
@@ -28,9 +29,9 @@ function ScenarioPage() {
   if (!props) return <div>Loading...</div>;
 
   return (
-    <div>
-      Scenario: {scenarioId}, {props.viewer.scenario.name}
-    </div>
+    <Container>
+      <ScenarioDetails scenario={props.viewer.scenario} />
+    </Container>
   );
 }
 
