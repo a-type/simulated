@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "dev": "ts-node-dev --respawn --no-deps --prefer-ts --inspect -r dotenv/config -- server/entry.ts",
+    "dev": "ts-node-dev --respawn --no-deps --prefer-ts --ignore-watch=node_modules --ignore-watch .next --inspect -r dotenv/config --project ./tsconfig.server.json -- server/entry.ts",
     "build:clean": "rimraf build",
     "build:transpile": "tsc",
     "build": "run-s build:*",
     "start": "cross-env NODE_ENV=production node -r dotenv/config build/entry.js",
-    "codegen": "graphql-codegen --config codgen.yml"
+    "codegen": "graphql-codegen --config codgen.yml",
+    "relay": "relay-compiler --language typescript "
   },
   "repository": {
     "type": "git",
@@ -40,22 +41,40 @@
     "@types/lowdb": "^1.0.9",
     "@types/node": "^13.1.4",
     "@types/node-fetch": "^2.5.4",
+    "@types/react": "^16.9.17",
+    "@types/react-dom": "^16.9.4",
+    "@types/react-relay": "^7.0.3",
+    "@types/relay-runtime": "^8.0.0",
     "@types/shortid": "0.0.29",
+    "babel-plugin-relay": "^8.0.0",
     "cross-env": "^6.0.3",
     "jest": "^24.9.0",
     "npm-run-all": "^4.1.5",
+    "relay-compiler-language-typescript": "^10.1.4",
+    "relay-config": "^8.0.0",
     "rimraf": "^3.0.0",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.4"
   },
   "dependencies": {
+    "@material-ui/core": "^4.8.3",
     "apollo-server": "^2.9.15",
     "apollo-server-express": "^2.9.15",
     "chalk": "^3.0.0",
     "dotenv": "^8.2.0",
+    "dotenv-webpack": "^1.7.0",
     "express": "^4.17.1",
     "graphql": "^14.5.8",
+    "isomorphic-unfetch": "^3.0.0",
     "lowdb": "^1.0.0",
+    "next": "^9.1.7",
+    "notistack": "^0.9.7",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-relay": "^8.0.0",
+    "relay-compiler-webpack-plugin": "^8.0.2",
+    "relay-hooks": "^3.0.0-rc.1",
+    "relay-runtime": "^8.0.0",
     "shortid": "^2.2.15"
   }
 }
