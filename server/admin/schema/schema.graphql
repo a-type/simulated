@@ -3,7 +3,13 @@ interface Node {
 }
 
 type Query {
+  viewer: Viewer!
+}
+
+type Viewer implements Node {
+  id: ID!
   scenarios(first: Int = 10, after: String): ScenarioConnection!
+  scenario(id: ID!): Scenario
 }
 
 type ScenarioConnection {

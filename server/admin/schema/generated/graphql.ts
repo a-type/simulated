@@ -218,13 +218,7 @@ export type Node = {
 
 export type Query = {
    __typename?: 'Query',
-  scenarios: ScenarioConnection,
-};
-
-
-export type QueryScenariosArgs = {
-  first?: Maybe<Scalars['Int']>,
-  after?: Maybe<Scalars['String']>
+  viewer: Viewer,
 };
 
 export type Response = Node & {
@@ -412,6 +406,24 @@ export type Trigger = Node & {
   updatedAt: Scalars['String'],
 };
 
+export type Viewer = Node & {
+   __typename?: 'Viewer',
+  id: Scalars['ID'],
+  scenarios: ScenarioConnection,
+  scenario?: Maybe<Scenario>,
+};
+
+
+export type ViewerScenariosArgs = {
+  first?: Maybe<Scalars['Int']>,
+  after?: Maybe<Scalars['String']>
+};
+
+
+export type ViewerScenarioArgs = {
+  id: Scalars['ID']
+};
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -485,13 +497,14 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>,
+  Viewer: ResolverTypeWrapper<Normalized<Viewer>>,
+  Node: ResolverTypeWrapper<Normalized<Node>>,
+  ID: ResolverTypeWrapper<Normalized<Scalars['ID']>>,
   Int: ResolverTypeWrapper<Normalized<Scalars['Int']>>,
   String: ResolverTypeWrapper<Normalized<Scalars['String']>>,
   ScenarioConnection: ResolverTypeWrapper<Normalized<ScenarioConnection>>,
   ScenarioEdge: ResolverTypeWrapper<Normalized<ScenarioEdge>>,
   Scenario: ResolverTypeWrapper<Normalized<Scenario>>,
-  Node: ResolverTypeWrapper<Normalized<Node>>,
-  ID: ResolverTypeWrapper<Normalized<Scalars['ID']>>,
   ScenarioStateConnection: ResolverTypeWrapper<Normalized<ScenarioStateConnection>>,
   ScenarioStateEdge: ResolverTypeWrapper<Normalized<ScenarioStateEdge>>,
   State: ResolverTypeWrapper<Normalized<State>>,
@@ -541,13 +554,14 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Query: {},
+  Viewer: Normalized<Viewer>,
+  Node: Normalized<Node>,
+  ID: Normalized<Scalars['ID']>,
   Int: Normalized<Scalars['Int']>,
   String: Normalized<Scalars['String']>,
   ScenarioConnection: Normalized<ScenarioConnection>,
   ScenarioEdge: Normalized<ScenarioEdge>,
   Scenario: Normalized<Scenario>,
-  Node: Normalized<Node>,
-  ID: Normalized<Scalars['ID']>,
   ScenarioStateConnection: Normalized<ScenarioStateConnection>,
   ScenarioStateEdge: Normalized<ScenarioStateEdge>,
   State: Normalized<State>,
@@ -658,12 +672,12 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
 }>;
 
 export type NodeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = ResolversObject<{
-  __resolveType: TypeResolveFn<'Scenario' | 'State' | 'Mapping' | 'Response' | 'Trigger' | 'LiteralMatcher', ParentType, ContextType>,
+  __resolveType: TypeResolveFn<'Viewer' | 'Scenario' | 'State' | 'Mapping' | 'Response' | 'Trigger' | 'LiteralMatcher', ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  scenarios?: Resolver<ResolversTypes['ScenarioConnection'], ParentType, ContextType, RequireFields<QueryScenariosArgs, 'first'>>,
+  viewer?: Resolver<ResolversTypes['Viewer'], ParentType, ContextType>,
 }>;
 
 export type ResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Response'] = ResolversParentTypes['Response']> = ResolversObject<{
@@ -771,6 +785,12 @@ export type TriggerResolvers<ContextType = Context, ParentType extends Resolvers
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 }>;
 
+export type ViewerResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Viewer'] = ResolversParentTypes['Viewer']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  scenarios?: Resolver<ResolversTypes['ScenarioConnection'], ParentType, ContextType, RequireFields<ViewerScenariosArgs, 'first'>>,
+  scenario?: Resolver<Maybe<ResolversTypes['Scenario']>, ParentType, ContextType, RequireFields<ViewerScenarioArgs, 'id'>>,
+}>;
+
 export type Resolvers<ContextType = Context> = ResolversObject<{
   CreateScenarioResult?: CreateScenarioResultResolvers<ContextType>,
   CreateScenarioStateResult?: CreateScenarioStateResultResolvers<ContextType>,
@@ -802,6 +822,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   StateMappingEdge?: StateMappingEdgeResolvers<ContextType>,
   StateMappingPageInfo?: StateMappingPageInfoResolvers<ContextType>,
   Trigger?: TriggerResolvers<ContextType>,
+  Viewer?: ViewerResolvers<ContextType>,
 }>;
 
 

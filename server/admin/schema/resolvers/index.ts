@@ -1,4 +1,5 @@
 import nodes from './nodes';
+import viewer from './viewer';
 import scenarios from './scenarios';
 import states from './states';
 import mappings from './mappings';
@@ -25,4 +26,11 @@ const combineResolvers = (maps: Resolvers[]) =>
     },
   );
 
-export default combineResolvers([nodes, scenarios, states, mappings, matchers]);
+export default combineResolvers([
+  nodes,
+  viewer,
+  scenarios,
+  states,
+  mappings,
+  matchers,
+]);

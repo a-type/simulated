@@ -3,7 +3,7 @@ import { toCursor } from '../../../storage/cursors';
 import { relayConnection } from './relay';
 
 const resolvers: Resolvers = {
-  Query: {
+  Viewer: {
     scenarios: async (parent, { first, after }, ctx) => {
       const {
         scenarios,
@@ -13,6 +13,9 @@ const resolvers: Resolvers = {
 
       const data = relayConnection(scenarios, hasNextPage, hasPreviousPage);
       return data;
+    },
+    scenario: async (parent, { id }, ctx) => {
+      return ctx.storage.getScenario({ id });
     },
   },
   Mutation: {

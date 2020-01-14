@@ -65,6 +65,14 @@ export default class Storage {
     };
   }
 
+  async getScenario({ id }: { id: string }) {
+    const scenario = (await db)
+      .get('scenarios', [])
+      .find(s => s.id === id)
+      .value();
+    return scenario;
+  }
+
   /**
    * Creates a new scenario with a default state
    */

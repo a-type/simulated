@@ -1,0 +1,7 @@
+projects:
+  app:
+    schemaPath: server/admin/schema/schema.graphql
+    includes: ['**/*.graphql']
+    extensions:
+      endpoints:
+        default: http://localhost:8091
