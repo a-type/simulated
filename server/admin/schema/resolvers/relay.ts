@@ -4,13 +4,14 @@ export type RelayNode = {
   id: string;
 };
 
-export const relayConnection = (
-  list: RelayNode[],
+export const relayConnection = <T extends RelayNode>(
+  list: T[],
   hasNextPage: boolean,
   hasPreviousPage: boolean,
 ) => {
-  const startCursor = list.length > 0 ? toCursor(list.shift()?.id || '') : null;
-  const endCursor = list.length > 0 ? toCursor(list.pop()?.id || '') : null;
+  const startCursor = list.length > 0 ? toCursor(list[0]?.id || '') : null;
+  const endCursor =
+    list.length > 0 ? toCursor(list[list.length - 1]?.id || '') : null;
 
   return {
     edges: list.map(state => ({

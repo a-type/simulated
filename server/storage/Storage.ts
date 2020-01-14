@@ -17,15 +17,28 @@ const databaseFilePath =
 
 // ensure existence of containing directory
 if (!fs.existsSync(databaseFilePath)) {
-  fs.mkdirSync(
-    databaseFilePath
-      .split(/\/|\\/)
-      .slice(0, -1)
-      .join(path.sep),
-  );
+  try {
+    fs.mkdirSync(
+      databaseFilePath
+        .split(/\/|\\/)
+        .slice(0, -1)
+        .join(path.sep),
+    );
+  } catch (err) {
+    // idk.
+  }
 }
 
-const adapter = new FileAsync<StorageSchema>(databaseFilePath);
+const adapter = new FileAsync<StorageSchema>(databaseFilePath, {
+  defaultValue: {
+    scenarios: [],
+    states: [],
+    mappings: [],
+    matchers: [],
+    responses: [],
+    triggers: [],
+  },
+});
 const db = lowdb(adapter);
 
 export default class Storage {
@@ -59,7 +72,7 @@ export default class Storage {
     data,
   }: {
     data: {
-      name?: string;
+      name?: string | null;
       expirationDurationSeconds?: number;
       disabled?: boolean;
     };
@@ -78,7 +91,6 @@ export default class Storage {
 
     const scenario = {
       id: createId('Scenario'),
-      name: 'New Scenario',
       createdAt: timestamp(),
       updatedAt: timestamp(),
       expirationDurationSeconds: 600,
@@ -87,6 +99,7 @@ export default class Storage {
       currentState: defaultStateId,
       disabled: false,
       ...data,
+      name: data.name || 'New Scenario',
     };
 
     await (await db)
@@ -103,7 +116,7 @@ export default class Storage {
   }: {
     id: string;
     data: {
-      name?: string;
+      name?: string | null;
       expirationDurationSeconds?: number;
       disabled?: boolean;
       defaultState?: string;

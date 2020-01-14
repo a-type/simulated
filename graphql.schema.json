@@ -193,7 +193,7 @@
           },
           {
             "name": "name",
-            "description": "",
+            "description": "Friendly name to quickly identify the purpose of the scenario",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -209,7 +209,7 @@
           },
           {
             "name": "possibleStates",
-            "description": "",
+            "description": "List of possible states the scenario can be in. States are exclusive.",
             "args": [
               {
                 "name": "first",
@@ -246,7 +246,7 @@
           },
           {
             "name": "currentState",
-            "description": "",
+            "description": "The currently valid state of this scenario.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -262,7 +262,7 @@
           },
           {
             "name": "defaultState",
-            "description": "",
+            "description": "The default state is selected on simulator startup and will be reverted to\nautomatically if expirationDurationSeconds is used.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -278,7 +278,7 @@
           },
           {
             "name": "expirationDurationSeconds",
-            "description": "",
+            "description": "After the specified number of seconds, the scenario will revert to the default\nstate. If 0, the scenario will never revert. For 0 expiration values, ensure\nyour state machine is cyclical so that the scenario does not enter an irreversible\nstate, if so desired.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -294,7 +294,7 @@
           },
           {
             "name": "disabled",
-            "description": "",
+            "description": "If disabled, no mappings related to scenario states will be tested for any incoming\nrequests.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -310,7 +310,7 @@
           },
           {
             "name": "createdAt",
-            "description": "",
+            "description": "UTC formatted string",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -326,7 +326,7 @@
           },
           {
             "name": "updatedAt",
-            "description": "",
+            "description": "UTC formatted string",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -590,7 +590,7 @@
           },
           {
             "name": "createdAt",
-            "description": "",
+            "description": "UTC formatted string",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -606,7 +606,7 @@
           },
           {
             "name": "updatedAt",
-            "description": "",
+            "description": "UTC formatted string",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -785,7 +785,7 @@
           },
           {
             "name": "createdAt",
-            "description": "",
+            "description": "UTC formatted string",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -801,7 +801,7 @@
           },
           {
             "name": "updatedAt",
-            "description": "",
+            "description": "UTC formatted string",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -895,7 +895,7 @@
           },
           {
             "name": "createdAt",
-            "description": "",
+            "description": "UTC formatted string",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -911,7 +911,7 @@
           },
           {
             "name": "updatedAt",
-            "description": "",
+            "description": "UTC formatted string",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -976,7 +976,7 @@
           },
           {
             "name": "createdAt",
-            "description": "",
+            "description": "UTC formatted string",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -992,7 +992,7 @@
           },
           {
             "name": "updatedAt",
-            "description": "",
+            "description": "UTC formatted string",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -1246,7 +1246,7 @@
         "fields": [
           {
             "name": "createScenario",
-            "description": "",
+            "description": "Creates a new, empty scenario",
             "args": [
               {
                 "name": "input",
@@ -1276,8 +1276,39 @@
             "deprecationReason": null
           },
           {
+            "name": "setScenarioDetails",
+            "description": "Updates the basic information of a scenario",
+            "args": [
+              {
+                "name": "input",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "SetScenarioDetailsInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "SetScenarioDetailsResult",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "setScenarioDefaultState",
-            "description": "",
+            "description": "Changes the default state of a scenario, which it will return to\nupon expiration or when the service initializes on startup",
             "args": [
               {
                 "name": "input",
@@ -1308,7 +1339,7 @@
           },
           {
             "name": "setScenarioExpiration",
-            "description": "",
+            "description": "Changes the expiration time of a scenario, at which point it will\nreset back to its default state",
             "args": [
               {
                 "name": "input",
@@ -1339,7 +1370,7 @@
           },
           {
             "name": "disableScenario",
-            "description": "",
+            "description": "Removes the scenario from consideration for future simulated requests. Idempotent.",
             "args": [
               {
                 "name": "input",
@@ -1370,7 +1401,7 @@
           },
           {
             "name": "enableScenario",
-            "description": "",
+            "description": "Enables the scenario for consideration for future simulated requests. Idempotent.",
             "args": [
               {
                 "name": "input",
@@ -1401,7 +1432,7 @@
           },
           {
             "name": "deleteScenario",
-            "description": "",
+            "description": "Deletes a particular scenario",
             "args": [
               {
                 "name": "input",
@@ -1432,7 +1463,7 @@
           },
           {
             "name": "createScenarioState",
-            "description": "",
+            "description": "Adds a state to a scenario. Every scenario has a default \"Initial\" state",
             "args": [
               {
                 "name": "input",
@@ -1463,7 +1494,7 @@
           },
           {
             "name": "createStateMapping",
-            "description": "",
+            "description": "Adds a request mapping to a scenario state",
             "args": [
               {
                 "name": "input",
@@ -1494,7 +1525,7 @@
           },
           {
             "name": "setMappingResponse",
-            "description": "",
+            "description": "Configures a mapping with a simulated response to send back to the client",
             "args": [
               {
                 "name": "input",
@@ -1525,7 +1556,7 @@
           },
           {
             "name": "setMappingTrigger",
-            "description": "",
+            "description": "Sets a trigger to change scenario state on a particular request mapping. When\nthe request mapping is executed, the trigger will transition the parent scenario\ninto the target state",
             "args": [
               {
                 "name": "input",
@@ -1570,13 +1601,9 @@
             "name": "name",
             "description": "",
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "defaultValue": null
           }
@@ -1616,6 +1643,68 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "ScenarioEdge",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "SetScenarioDetailsInput",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "scenarioId",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "name",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "SetScenarioDetailsResult",
+        "description": "",
+        "fields": [
+          {
+            "name": "scenario",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Scenario",
                 "ofType": null
               }
             },
@@ -2118,7 +2207,7 @@
       {
         "kind": "INPUT_OBJECT",
         "name": "CreateMatcherInput",
-        "description": "",
+        "description": "All fields are exclusive; choose one",
         "fields": null,
         "inputFields": [
           {
@@ -3199,29 +3288,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "ENUM",
-        "name": "CacheControlScope",
-        "description": "",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "PUBLIC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PRIVATE",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
         "kind": "OBJECT",
         "name": "LiteralMatcher",
         "description": "",
@@ -3274,50 +3340,9 @@
         ],
         "enumValues": null,
         "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "Upload",
-        "description": "The `Upload` scalar type represents a file upload.",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
       }
     ],
     "directives": [
-      {
-        "name": "cacheControl",
-        "description": "",
-        "locations": [
-          "FIELD_DEFINITION",
-          "OBJECT",
-          "INTERFACE"
-        ],
-        "args": [
-          {
-            "name": "maxAge",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "scope",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "CacheControlScope",
-              "ofType": null
-            },
-            "defaultValue": null
-          }
-        ]
-      },
       {
         "name": "skip",
         "description": "Directs the executor to skip this field or fragment when the `if` argument is true.",

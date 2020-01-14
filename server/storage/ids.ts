@@ -1,5 +1,7 @@
 import shortid from 'shortid';
 
+const ID_SEPARATOR = '~';
+
 export type NodeType =
   | 'Scenario'
   | 'State'
@@ -8,9 +10,10 @@ export type NodeType =
   | 'Trigger'
   | 'Response';
 
-export const createId = (nodeType: NodeType) => `${nodeType}-${shortid()}`;
+export const createId = (nodeType: NodeType) =>
+  `${nodeType}${ID_SEPARATOR}${shortid()}`;
 
 export const parseId = (id: string) => {
-  const [nodeType, key] = id.split('-');
-  return { nodeType: nodeType as NodeType, key };
+  const [nodeType, ...key] = id.split(ID_SEPARATOR);
+  return { nodeType: nodeType as NodeType, key: key.join() };
 };

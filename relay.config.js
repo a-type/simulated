@@ -1,6 +1,6 @@
 module.exports = {
   src: './',
-  schema: './schema.graphql',
+  schema: './server/admin/schema/schema.graphql',
   exclude: [
     '**/node_modules/**',
     '**/__mocks__/**',

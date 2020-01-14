@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { GraphQLResolveInfo } from 'graphql';
 import { Context } from '../../context';
 import { Normalized } from '../../../utils/utilityTypes';
 export type Maybe<T> = T | null;
@@ -10,14 +10,7 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
-  Upload: any,
 };
-
-
-export enum CacheControlScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE'
-}
 
 export type CreateLiteralMatcherInput = {
   value: Scalars['String'],
@@ -27,6 +20,7 @@ export type CreateMappingInput = {
   pathMatch?: Maybe<CreateMatcherInput>,
 };
 
+/** All fields are exclusive; choose one */
 export type CreateMatcherInput = {
   literal?: Maybe<CreateLiteralMatcherInput>,
 };
@@ -36,7 +30,7 @@ export type CreateResponseInput = {
 };
 
 export type CreateScenarioInput = {
-  name: Scalars['String'],
+  name?: Maybe<Scalars['String']>,
 };
 
 export type CreateScenarioResult = {
@@ -117,7 +111,9 @@ export type Mapping = Node & {
   pathMatch?: Maybe<Matcher>,
   response?: Maybe<Response>,
   trigger?: Maybe<Trigger>,
+  /** UTC formatted string */
   createdAt: Scalars['String'],
+  /** UTC formatted string */
   updatedAt: Scalars['String'],
 };
 
@@ -127,21 +123,48 @@ export type Matcher = {
 
 export type Mutation = {
    __typename?: 'Mutation',
+  /** Creates a new, empty scenario */
   createScenario: CreateScenarioResult,
+  /** Updates the basic information of a scenario */
+  setScenarioDetails: SetScenarioDetailsResult,
+  /** 
+ * Changes the default state of a scenario, which it will return to
+   * upon expiration or when the service initializes on startup
+ */
   setScenarioDefaultState: SetScenarioDefaultStateResult,
+  /** 
+ * Changes the expiration time of a scenario, at which point it will
+   * reset back to its default state
+ */
   setScenarioExpiration: SetScenarioExpirationResult,
+  /** Removes the scenario from consideration for future simulated requests. Idempotent. */
   disableScenario: DisableScenarioResult,
+  /** Enables the scenario for consideration for future simulated requests. Idempotent. */
   enableScenario: EnableScenarioResult,
+  /** Deletes a particular scenario */
   deleteScenario: DeleteScenarioResult,
+  /** Adds a state to a scenario. Every scenario has a default "Initial" state */
   createScenarioState: CreateScenarioStateResult,
+  /** Adds a request mapping to a scenario state */
   createStateMapping: CreateStateMappingResult,
+  /** Configures a mapping with a simulated response to send back to the client */
   setMappingResponse: SetMappingResponseResult,
+  /** 
+ * Sets a trigger to change scenario state on a particular request mapping. When
+   * the request mapping is executed, the trigger will transition the parent scenario
+   * into the target state
+ */
   setMappingTrigger: SetMappingTriggerResult,
 };
 
 
 export type MutationCreateScenarioArgs = {
   input: CreateScenarioInput
+};
+
+
+export type MutationSetScenarioDetailsArgs = {
+  input: SetScenarioDetailsInput
 };
 
 
@@ -208,20 +231,41 @@ export type Response = Node & {
    __typename?: 'Response',
   id: Scalars['ID'],
   body?: Maybe<Scalars['String']>,
+  /** UTC formatted string */
   createdAt: Scalars['String'],
+  /** UTC formatted string */
   updatedAt: Scalars['String'],
 };
 
 export type Scenario = Node & {
    __typename?: 'Scenario',
   id: Scalars['ID'],
+  /** Friendly name to quickly identify the purpose of the scenario */
   name: Scalars['String'],
+  /** List of possible states the scenario can be in. States are exclusive. */
   possibleStates: ScenarioStateConnection,
+  /** The currently valid state of this scenario. */
   currentState: State,
+  /** 
+ * The default state is selected on simulator startup and will be reverted to
+   * automatically if expirationDurationSeconds is used.
+ */
   defaultState: State,
+  /** 
+ * After the specified number of seconds, the scenario will revert to the default
+   * state. If 0, the scenario will never revert. For 0 expiration values, ensure
+   * your state machine is cyclical so that the scenario does not enter an irreversible
+   * state, if so desired.
+ */
   expirationDurationSeconds: Scalars['Float'],
+  /** 
+ * If disabled, no mappings related to scenario states will be tested for any incoming
+   * requests.
+ */
   disabled: Scalars['Boolean'],
+  /** UTC formatted string */
   createdAt: Scalars['String'],
+  /** UTC formatted string */
   updatedAt: Scalars['String'],
 };
 
@@ -301,6 +345,16 @@ export type SetScenarioDefaultStateResult = {
   scenario: Scenario,
 };
 
+export type SetScenarioDetailsInput = {
+  scenarioId: Scalars['ID'],
+  name?: Maybe<Scalars['String']>,
+};
+
+export type SetScenarioDetailsResult = {
+   __typename?: 'SetScenarioDetailsResult',
+  scenario: Scenario,
+};
+
 export type SetScenarioExpirationInput = {
   scenarioId: Scalars['ID'],
   expirationDurationSeconds: Scalars['Float'],
@@ -316,7 +370,9 @@ export type State = Node & {
   id: Scalars['ID'],
   name: Scalars['String'],
   mappings: StateMappingConnection,
+  /** UTC formatted string */
   createdAt: Scalars['String'],
+  /** UTC formatted string */
   updatedAt: Scalars['String'],
 };
 
@@ -350,10 +406,11 @@ export type Trigger = Node & {
    __typename?: 'Trigger',
   id: Scalars['ID'],
   targetState: Scalars['ID'],
+  /** UTC formatted string */
   createdAt: Scalars['String'],
+  /** UTC formatted string */
   updatedAt: Scalars['String'],
 };
-
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -452,6 +509,8 @@ export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>,
   CreateScenarioInput: ResolverTypeWrapper<Normalized<CreateScenarioInput>>,
   CreateScenarioResult: ResolverTypeWrapper<Normalized<CreateScenarioResult>>,
+  SetScenarioDetailsInput: ResolverTypeWrapper<Normalized<SetScenarioDetailsInput>>,
+  SetScenarioDetailsResult: ResolverTypeWrapper<Normalized<SetScenarioDetailsResult>>,
   SetScenarioDefaultStateInput: ResolverTypeWrapper<Normalized<SetScenarioDefaultStateInput>>,
   SetScenarioDefaultStateResult: ResolverTypeWrapper<Normalized<SetScenarioDefaultStateResult>>,
   SetScenarioExpirationInput: ResolverTypeWrapper<Normalized<SetScenarioExpirationInput>>,
@@ -476,9 +535,7 @@ export type ResolversTypes = ResolversObject<{
   SetMappingTriggerInput: ResolverTypeWrapper<Normalized<SetMappingTriggerInput>>,
   CreateTriggerInput: ResolverTypeWrapper<Normalized<CreateTriggerInput>>,
   SetMappingTriggerResult: ResolverTypeWrapper<Normalized<SetMappingTriggerResult>>,
-  CacheControlScope: ResolverTypeWrapper<Normalized<CacheControlScope>>,
   LiteralMatcher: ResolverTypeWrapper<Normalized<LiteralMatcher>>,
-  Upload: ResolverTypeWrapper<Normalized<Scalars['Upload']>>,
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -508,6 +565,8 @@ export type ResolversParentTypes = ResolversObject<{
   Mutation: {},
   CreateScenarioInput: Normalized<CreateScenarioInput>,
   CreateScenarioResult: Normalized<CreateScenarioResult>,
+  SetScenarioDetailsInput: Normalized<SetScenarioDetailsInput>,
+  SetScenarioDetailsResult: Normalized<SetScenarioDetailsResult>,
   SetScenarioDefaultStateInput: Normalized<SetScenarioDefaultStateInput>,
   SetScenarioDefaultStateResult: Normalized<SetScenarioDefaultStateResult>,
   SetScenarioExpirationInput: Normalized<SetScenarioExpirationInput>,
@@ -532,13 +591,8 @@ export type ResolversParentTypes = ResolversObject<{
   SetMappingTriggerInput: Normalized<SetMappingTriggerInput>,
   CreateTriggerInput: Normalized<CreateTriggerInput>,
   SetMappingTriggerResult: Normalized<SetMappingTriggerResult>,
-  CacheControlScope: Normalized<CacheControlScope>,
   LiteralMatcher: Normalized<LiteralMatcher>,
-  Upload: Normalized<Scalars['Upload']>,
 }>;
-
-export type CacheControlDirectiveResolver<Result, Parent, ContextType = Context, Args = {   maxAge?: Maybe<Maybe<Scalars['Int']>>,
-  scope?: Maybe<Maybe<CacheControlScope>> }> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type CreateScenarioResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CreateScenarioResult'] = ResolversParentTypes['CreateScenarioResult']> = ResolversObject<{
   scenario?: Resolver<ResolversTypes['Scenario'], ParentType, ContextType>,
@@ -591,6 +645,7 @@ export type MatcherResolvers<ContextType = Context, ParentType extends Resolvers
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createScenario?: Resolver<ResolversTypes['CreateScenarioResult'], ParentType, ContextType, RequireFields<MutationCreateScenarioArgs, 'input'>>,
+  setScenarioDetails?: Resolver<ResolversTypes['SetScenarioDetailsResult'], ParentType, ContextType, RequireFields<MutationSetScenarioDetailsArgs, 'input'>>,
   setScenarioDefaultState?: Resolver<ResolversTypes['SetScenarioDefaultStateResult'], ParentType, ContextType, RequireFields<MutationSetScenarioDefaultStateArgs, 'input'>>,
   setScenarioExpiration?: Resolver<ResolversTypes['SetScenarioExpirationResult'], ParentType, ContextType, RequireFields<MutationSetScenarioExpirationArgs, 'input'>>,
   disableScenario?: Resolver<ResolversTypes['DisableScenarioResult'], ParentType, ContextType, RequireFields<MutationDisableScenarioArgs, 'input'>>,
@@ -676,6 +731,10 @@ export type SetScenarioDefaultStateResultResolvers<ContextType = Context, Parent
   scenario?: Resolver<ResolversTypes['Scenario'], ParentType, ContextType>,
 }>;
 
+export type SetScenarioDetailsResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SetScenarioDetailsResult'] = ResolversParentTypes['SetScenarioDetailsResult']> = ResolversObject<{
+  scenario?: Resolver<ResolversTypes['Scenario'], ParentType, ContextType>,
+}>;
+
 export type SetScenarioExpirationResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SetScenarioExpirationResult'] = ResolversParentTypes['SetScenarioExpirationResult']> = ResolversObject<{
   scenario?: Resolver<ResolversTypes['Scenario'], ParentType, ContextType>,
 }>;
@@ -712,10 +771,6 @@ export type TriggerResolvers<ContextType = Context, ParentType extends Resolvers
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 }>;
 
-export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
-  name: 'Upload'
-}
-
 export type Resolvers<ContextType = Context> = ResolversObject<{
   CreateScenarioResult?: CreateScenarioResultResolvers<ContextType>,
   CreateScenarioStateResult?: CreateScenarioStateResultResolvers<ContextType>,
@@ -740,13 +795,13 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   SetMappingResponseResult?: SetMappingResponseResultResolvers<ContextType>,
   SetMappingTriggerResult?: SetMappingTriggerResultResolvers<ContextType>,
   SetScenarioDefaultStateResult?: SetScenarioDefaultStateResultResolvers<ContextType>,
+  SetScenarioDetailsResult?: SetScenarioDetailsResultResolvers<ContextType>,
   SetScenarioExpirationResult?: SetScenarioExpirationResultResolvers<ContextType>,
   State?: StateResolvers<ContextType>,
   StateMappingConnection?: StateMappingConnectionResolvers<ContextType>,
   StateMappingEdge?: StateMappingEdgeResolvers<ContextType>,
   StateMappingPageInfo?: StateMappingPageInfoResolvers<ContextType>,
   Trigger?: TriggerResolvers<ContextType>,
-  Upload?: GraphQLScalarType,
 }>;
 
 
@@ -755,13 +810,3 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
 */
 export type IResolvers<ContextType = Context> = Resolvers<ContextType>;
-export type DirectiveResolvers<ContextType = Context> = ResolversObject<{
-  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>,
-}>;
-
-
-/**
-* @deprecated
-* Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
-*/
-export type IDirectiveResolvers<ContextType = Context> = DirectiveResolvers<ContextType>;

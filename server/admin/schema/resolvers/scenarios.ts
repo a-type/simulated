@@ -11,7 +11,8 @@ const resolvers: Resolvers = {
         hasPreviousPage,
       } = await ctx.storage.getScenarios({ first, after });
 
-      return relayConnection(scenarios, hasNextPage, hasPreviousPage);
+      const data = relayConnection(scenarios, hasNextPage, hasPreviousPage);
+      return data;
     },
   },
   Mutation: {
@@ -24,6 +25,18 @@ const resolvers: Resolvers = {
           node: scenario,
           cursor: toCursor(scenario.id),
         },
+      };
+    },
+    setScenarioDetails: async (parent, { input }, ctx) => {
+      const scenario = await ctx.storage.updateScenario({
+        id: input.scenarioId,
+        data: {
+          name: input.name,
+        },
+      });
+
+      return {
+        scenario,
       };
     },
     setScenarioDefaultState: async (
