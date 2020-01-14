@@ -1,0 +1,258 @@
+directive @cacheControl(
+  maxAge: Int
+  scope: CacheControlScope
+) on FIELD_DEFINITION | OBJECT | INTERFACE
+
+enum CacheControlScope {
+  PUBLIC
+  PRIVATE
+}
+
+input CreateLiteralMatcherInput {
+  value: String!
+}
+
+input CreateMappingInput {
+  pathMatch: CreateMatcherInput
+}
+
+input CreateMatcherInput {
+  literal: CreateLiteralMatcherInput
+}
+
+input CreateResponseInput {
+  body: String!
+}
+
+input CreateScenarioInput {
+  name: String!
+}
+
+type CreateScenarioResult {
+  scenario: Scenario!
+  scenarioEdge: ScenarioEdge!
+}
+
+input CreateScenarioStateInput {
+  scenarioId: ID!
+  state: CreateStateInput!
+}
+
+type CreateScenarioStateResult {
+  scenario: Scenario!
+  state: State!
+  stateEdge: ScenarioStateEdge!
+}
+
+input CreateStateInput {
+  name: String!
+}
+
+input CreateStateMappingInput {
+  stateId: ID!
+  mapping: CreateMappingInput!
+}
+
+type CreateStateMappingResult {
+  state: State!
+  mapping: Mapping!
+  mappingEdge: StateMappingEdge!
+}
+
+input CreateTriggerInput {
+  targetState: ID!
+}
+
+input DeleteScenarioInput {
+  scenarioId: ID!
+}
+
+type DeleteScenarioResult {
+  scenario: Scenario!
+  scenarioEdge: ScenarioEdge!
+}
+
+input DisableScenarioInput {
+  scenarioId: ID!
+}
+
+type DisableScenarioResult {
+  scenario: Scenario!
+}
+
+input EnableScenarioInput {
+  scenarioId: ID!
+}
+
+type EnableScenarioResult {
+  scenario: Scenario!
+}
+
+type LiteralMatcher implements Node & Matcher {
+  id: ID!
+  value: String!
+}
+
+type Mapping implements Node {
+  id: ID!
+  pathMatch: Matcher
+  response: Response
+  trigger: Trigger
+  createdAt: String!
+  updatedAt: String!
+}
+
+interface Matcher {
+  id: ID!
+}
+
+type Mutation {
+  createScenario(input: CreateScenarioInput!): CreateScenarioResult!
+  setScenarioDefaultState(
+    input: SetScenarioDefaultStateInput!
+  ): SetScenarioDefaultStateResult!
+  setScenarioExpiration(
+    input: SetScenarioExpirationInput!
+  ): SetScenarioExpirationResult!
+  disableScenario(input: DisableScenarioInput!): DisableScenarioResult!
+  enableScenario(input: EnableScenarioInput!): EnableScenarioResult!
+  deleteScenario(input: DeleteScenarioInput!): DeleteScenarioResult!
+  createScenarioState(
+    input: CreateScenarioStateInput!
+  ): CreateScenarioStateResult!
+  createStateMapping(input: CreateStateMappingInput!): CreateStateMappingResult!
+  setMappingResponse(input: SetMappingResponseInput!): SetMappingResponseResult!
+  setMappingTrigger(input: SetMappingTriggerInput!): SetMappingTriggerResult!
+}
+
+interface Node {
+  id: ID!
+}
+
+type Query {
+  scenarios(first: Int = 10, after: String): ScenarioConnection!
+}
+
+type Response implements Node {
+  id: ID!
+  body: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Scenario implements Node {
+  id: ID!
+  name: String!
+  possibleStates(first: Int = 10, after: String): ScenarioStateConnection!
+  currentState: State!
+  defaultState: State!
+  expirationDurationSeconds: Float!
+  disabled: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type ScenarioConnection {
+  edges: [ScenarioEdge!]!
+  pageInfo: ScenarioPageInfo!
+}
+
+type ScenarioEdge {
+  node: Scenario!
+  cursor: String!
+}
+
+type ScenarioPageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type ScenarioStateConnection {
+  edges: [ScenarioStateEdge!]!
+  pageInfo: ScenarioStatePageInfo!
+}
+
+type ScenarioStateEdge {
+  node: State!
+  cursor: String!
+}
+
+type ScenarioStatePageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+input SetMappingResponseInput {
+  mappingId: ID!
+  response: CreateResponseInput!
+}
+
+type SetMappingResponseResult {
+  mapping: Mapping!
+}
+
+input SetMappingTriggerInput {
+  mappingId: ID!
+  trigger: CreateTriggerInput!
+}
+
+type SetMappingTriggerResult {
+  mapping: Mapping!
+}
+
+input SetScenarioDefaultStateInput {
+  scenarioId: ID!
+  stateId: ID!
+}
+
+type SetScenarioDefaultStateResult {
+  scenario: Scenario!
+}
+
+input SetScenarioExpirationInput {
+  scenarioId: ID!
+  expirationDurationSeconds: Float!
+}
+
+type SetScenarioExpirationResult {
+  scenario: Scenario!
+}
+
+type State implements Node {
+  id: ID!
+  name: String!
+  mappings(first: Int = 10, after: String): StateMappingConnection!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type StateMappingConnection {
+  edges: [StateMappingEdge!]!
+  pageInfo: StateMappingPageInfo!
+}
+
+type StateMappingEdge {
+  node: Mapping!
+  cursor: String!
+}
+
+type StateMappingPageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Trigger implements Node {
+  id: ID!
+  targetState: ID!
+  createdAt: String!
+  updatedAt: String!
+}
+
+# The `Upload` scalar type represents a file upload.
+scalar Upload
