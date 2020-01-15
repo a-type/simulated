@@ -4,15 +4,18 @@ import { relayConnection } from './relay';
 
 const resolvers: Resolvers = {
   Mutation: {
-    createScenarioState: async (
+    addScenarioState: async (
       parent,
       { input: { scenarioId, state } },
       ctx,
       info,
     ) => {
-      const createdState = await ctx.storage.createState({ data: state });
+      const createdState = await ctx.storage.createState({
+        data: state,
+        scenarioId,
+      });
       const scenario = await ctx.storage.addScenarioState({
-        id: scenarioId,
+        scenarioId: scenarioId,
         stateId: createdState.id,
       });
 
@@ -31,6 +34,24 @@ const resolvers: Resolvers = {
           node: finalState,
           cursor: toCursor(createdState.id),
         },
+      };
+    },
+
+    deleteState: async (parent, { input: { stateId } }, ctx) => {
+      const state = await ctx.storage.deleteState({ stateId });
+
+      let scenario = await ctx.storage.removeScenarioState({
+        scenarioId: state.parentId,
+        stateId,
+      });
+
+      return {
+        state,
+        stateEdge: {
+          node: state,
+          cursor: toCursor(state.id),
+        },
+        scenario,
       };
     },
   },

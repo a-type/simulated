@@ -19,7 +19,7 @@ const resolvers: Resolvers = {
     },
   },
   Mutation: {
-    createScenario: async (parent, { input }, ctx) => {
+    addScenario: async (parent, { input }, ctx) => {
       const scenario = await ctx.storage.createScenario({ data: input });
 
       return {
@@ -100,7 +100,7 @@ const resolvers: Resolvers = {
     },
     deleteScenario: async (parent, { input: { scenarioId } }, ctx) => {
       const scenario = await ctx.storage.deleteScenario({
-        id: scenarioId,
+        scenarioId: scenarioId,
       });
 
       return {

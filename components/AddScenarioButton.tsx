@@ -19,7 +19,7 @@ const useStyles = makeStyles<Theme, AddScenarioButtonProps>(theme => ({
 
 const addScenarioMutation = graphql`
   mutation AddScenarioButton_addScenarioMutation {
-    createScenario(input: {}) {
+    addScenario(input: {}) {
       scenarioEdge {
         node {
           id
@@ -52,13 +52,13 @@ const AddScenarioButton: FC<AddScenarioButtonProps> = props => {
   const [mutate, { loading }] = useMutation<
     AddScenarioButton_addScenarioMutation
   >(addScenarioMutation, {
-    onCompleted: ({ createScenario }) => {
+    onCompleted: ({ addScenario }) => {
       if (!onAdd) return;
-      onAdd(createScenario.scenario.id);
+      onAdd(addScenario.scenario.id);
     },
-    updater: (store, data) => {
+    updater: store => {
       const edge = store
-        .getRootField('createScenario')
+        .getRootField('addScenario')
         .getLinkedRecord('scenarioEdge');
       const viewerProxy = store.get(viewerId);
       const connection = ConnectionHandler.getConnection(

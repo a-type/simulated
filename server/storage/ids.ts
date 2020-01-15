@@ -2,13 +2,7 @@ import shortid from 'shortid';
 
 const ID_SEPARATOR = '~';
 
-export type NodeType =
-  | 'Scenario'
-  | 'State'
-  | 'Mapping'
-  | 'LiteralMatcher'
-  | 'Trigger'
-  | 'Response';
+export type NodeType = 'Scenario' | 'State' | 'Mapping';
 
 export const createId = (nodeType: NodeType) =>
   `${nodeType}${ID_SEPARATOR}${shortid()}`;

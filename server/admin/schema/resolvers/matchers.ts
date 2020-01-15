@@ -1,12 +1,14 @@
-import { Resolvers } from '../generated/graphql';
+import { Resolvers, MatcherKind } from '../generated/graphql';
 
 const resolvers: Resolvers = {
   Matcher: {
     __resolveType: node => {
-      if ((node as any).value) {
-        return 'LiteralMatcher';
+      switch ((node as any).kind) {
+        case MatcherKind.Literal:
+          return 'LiteralMatcher';
+        default:
+          return null;
       }
-      return null;
     },
   },
 };

@@ -11,6 +11,7 @@ import {
 } from './types';
 import { createId } from './ids';
 import { timestamp } from './dates';
+import { StorageMatcher, StorageResponse, StorageTrigger } from './types';
 
 const databaseFilePath =
   process.env.JSON_DB_FILE_PATH || path.join(process.cwd(), './data/db.json');
@@ -90,26 +91,16 @@ export default class Storage {
       disabled?: boolean;
     };
   }) {
-    const defaultStateId = createId('State');
-    await (await db)
-      .get('states', [])
-      .push({
-        id: defaultStateId,
-        name: 'Default',
-        createdAt: timestamp(),
-        updatedAt: timestamp(),
-        mappings: [],
-      })
-      .write();
+    const scenarioId = createId('Scenario');
 
     const scenario = {
-      id: createId('Scenario'),
+      id: scenarioId,
       createdAt: timestamp(),
       updatedAt: timestamp(),
       expirationDurationSeconds: 600,
-      possibleStates: [defaultStateId],
-      defaultState: defaultStateId,
-      currentState: defaultStateId,
+      possibleStates: [],
+      defaultState: null,
+      currentState: null,
       disabled: false,
       ...data,
       name: data.name || 'New Scenario',
@@ -132,8 +123,8 @@ export default class Storage {
       name?: string | null;
       expirationDurationSeconds?: number;
       disabled?: boolean;
-      defaultState?: string;
-      currentState?: string;
+      defaultState?: string | null;
+      currentState?: string | null;
     };
   }) {
     const scenario = await (await db)
@@ -148,13 +139,26 @@ export default class Storage {
     return scenario;
   }
 
-  async addScenarioState({ id, stateId }: { id: string; stateId: string }) {
+  /**
+   * Adds a new state to a scenario. If the scenario doesn't currently
+   * have a default state, the new state will be assigned. If the scenario
+   * doesn't currently have a current state, the new state will be assigned.
+   */
+  async addScenarioState({
+    scenarioId: id,
+    stateId,
+  }: {
+    scenarioId: string;
+    stateId: string;
+  }) {
     const scenario = await (await db)
       .get('scenarios', [])
       .find(s => s.id === id)
       .update('possibleStates', states =>
         states.filter((i: string) => i !== stateId).push(stateId),
       )
+      .update('defaultState', currentDefault => currentDefault || stateId)
+      .update('currentState', currentCurrent => currentCurrent || stateId)
       .assign({
         updatedAt: timestamp(),
       })
@@ -163,7 +167,40 @@ export default class Storage {
     return scenario;
   }
 
-  async deleteScenario({ id }: { id: string }) {
+  async removeScenarioState({
+    scenarioId,
+    stateId,
+  }: {
+    scenarioId: string;
+    stateId: string;
+  }): Promise<StorageScenario> {
+    const scenario = await (await db)
+      .get('scenarios', [])
+      .find(s => s.id === scenarioId)
+      .value();
+
+    scenario.possibleStates = scenario.possibleStates.filter(
+      i => i !== stateId,
+    );
+    scenario.defaultState =
+      scenario.defaultState === stateId
+        ? scenario.possibleStates.length
+          ? scenario.possibleStates[0]
+          : null
+        : scenario.defaultState;
+    scenario.currentState =
+      scenario.currentState === stateId
+        ? scenario.defaultState
+        : scenario.currentState;
+
+    return await (await db)
+      .get('scenarios', [])
+      .find(s => s.id === scenarioId)
+      .assign(scenario)
+      .write();
+  }
+
+  async deleteScenario({ scenarioId: id }: { scenarioId: string }) {
     const scenario = (await db)
       .get('scenarios', [])
       .find(s => s.id === id)
@@ -210,9 +247,16 @@ export default class Storage {
     };
   }
 
-  async createState({ data }: { data: { name: string } }) {
+  async createState({
+    scenarioId: parentId,
+    data,
+  }: {
+    scenarioId: string;
+    data: { name: string };
+  }) {
     const state: StorageState = {
       id: createId('State'),
+      parentId,
       name: data.name,
       createdAt: timestamp(),
       updatedAt: timestamp(),
@@ -222,6 +266,28 @@ export default class Storage {
     await (await db)
       .get('states', [])
       .push(state)
+      .write();
+
+    return state;
+  }
+
+  async getState({ stateId: id }: { stateId: string }) {
+    const state = (await db)
+      .get('states', [])
+      .find(s => s.id === id)
+      .value();
+    return state;
+  }
+
+  async deleteState({ stateId }: { stateId: string }) {
+    const state = (await db)
+      .get('states', [])
+      .find(m => m.id === stateId)
+      .value();
+
+    await (await db)
+      .get('states', [])
+      .filter(s => s.id !== stateId)
       .write();
 
     return state;
@@ -281,5 +347,119 @@ export default class Storage {
         first !== null ? startIndex + first < mappings.length : false,
       hasPreviousPage: first !== null ? startIndex > 0 : false,
     };
+  }
+
+  async getMapping({ mappingId: id }: { mappingId: string }) {
+    const mapping = (await db)
+      .get('mappings', [])
+      .find(m => m.id === id)
+      .value();
+    return mapping;
+  }
+
+  async createMapping({
+    stateId: parentId,
+    data: { pathMatcher = null, response = null, trigger = null },
+  }: {
+    stateId: string;
+    data: {
+      pathMatcher?: StorageMatcher | null;
+      response?: StorageResponse | null;
+      trigger?: StorageTrigger | null;
+    };
+  }) {
+    const mapping: StorageMapping = {
+      id: createId('Mapping'),
+      parentId,
+      createdAt: timestamp(),
+      updatedAt: timestamp(),
+      pathMatcher,
+      response,
+      trigger,
+    };
+
+    await (await db)
+      .get('mappings', [])
+      .push(mapping)
+      .write();
+
+    return mapping;
+  }
+
+  async addStateMapping({
+    stateId,
+    mappingId,
+  }: {
+    stateId: string;
+    mappingId: string;
+  }) {
+    const state = await (await db)
+      .get('states', [])
+      .find(s => s.id === stateId)
+      .update('mappings', mappings =>
+        mappings.filter((i: string) => i !== mappingId).push(mappingId),
+      )
+      .assign({
+        updatedAt: timestamp(),
+      })
+      .write();
+
+    return state as StorageState;
+  }
+
+  async removeStateMapping({
+    stateId,
+    mappingId,
+  }: {
+    stateId: string;
+    mappingId: string;
+  }): Promise<StorageState> {
+    const state = await (await db)
+      .get('states', [])
+      .find(s => s.id === stateId)
+      .value();
+
+    state.mappings = state.mappings.filter(i => i !== mappingId);
+
+    return await (await db)
+      .get('states', [])
+      .find(s => s.id === stateId)
+      .assign(state)
+      .write();
+  }
+
+  async updateMapping({
+    id,
+    data: { pathMatcher = null, response = null, trigger = null },
+  }: {
+    id: string;
+    data: {
+      pathMatcher?: StorageMatcher | null;
+      response?: StorageResponse | null;
+      trigger?: StorageTrigger | null;
+    };
+  }) {
+    const mapping = (await db)
+      .get('mappings', [])
+      .find(m => m.id === id)
+      .assign({
+        ...{
+          pathMatcher,
+          response,
+          trigger,
+        },
+        updatedAt: timestamp(),
+      })
+      .write();
+
+    return mapping as StorageMapping;
+  }
+
+  async deleteMapping({ mappingId: id }: { mappingId: string }) {
+    const mapping = (await db)
+      .get('mappings', [])
+      .find(m => m.id === id)
+      .value();
+    return mapping;
   }
 }

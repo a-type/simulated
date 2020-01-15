@@ -1,11 +1,11 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 16897029e4c7943de6ac3c38624a3d0c */
+/* @relayHash f276f1559e3106c6857e910c5379cd06 */
 
 import { ConcreteRequest } from "relay-runtime";
 export type AddScenarioButton_addScenarioMutationVariables = {};
 export type AddScenarioButton_addScenarioMutationResponse = {
-    readonly createScenario: {
+    readonly addScenario: {
         readonly scenarioEdge: {
             readonly node: {
                 readonly id: string;
@@ -27,7 +27,7 @@ export type AddScenarioButton_addScenarioMutation = {
 
 /*
 mutation AddScenarioButton_addScenarioMutation {
-  createScenario(input: {}) {
+  addScenario(input: {}) {
     scenarioEdge {
       node {
         id
@@ -53,8 +53,8 @@ const node: ConcreteRequest = (function () {
         ({
             "kind": "LinkedField",
             "alias": null,
-            "name": "createScenario",
-            "storageKey": "createScenario(input:{})",
+            "name": "addScenario",
+            "storageKey": "addScenario(input:{})",
             "args": [
                 {
                     "kind": "Literal",
@@ -62,7 +62,7 @@ const node: ConcreteRequest = (function () {
                     "value": {}
                 }
             ],
-            "concreteType": "CreateScenarioResult",
+            "concreteType": "AddScenarioResult",
             "plural": false,
             "selections": [
                 {
@@ -137,10 +137,10 @@ const node: ConcreteRequest = (function () {
             "operationKind": "mutation",
             "name": "AddScenarioButton_addScenarioMutation",
             "id": null,
-            "text": "mutation AddScenarioButton_addScenarioMutation {\n  createScenario(input: {}) {\n    scenarioEdge {\n      node {\n        id\n        name\n      }\n      cursor\n    }\n    scenario {\n      id\n    }\n  }\n}\n",
+            "text": "mutation AddScenarioButton_addScenarioMutation {\n  addScenario(input: {}) {\n    scenarioEdge {\n      node {\n        id\n        name\n      }\n      cursor\n    }\n    scenario {\n      id\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = 'f42e78574055aa1fa23372cc5c23d7bd';
+(node as any).hash = 'f3dfa9b7125b50e166b252905f5fd9c9';
 export default node;

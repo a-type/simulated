@@ -4,6 +4,7 @@ interface Node {
 
 type Query {
   viewer: Viewer!
+  node(id: ID!): Node
 }
 
 type Viewer implements Node {
@@ -42,12 +43,12 @@ type Scenario implements Node {
   """
   The currently valid state of this scenario.
   """
-  currentState: State!
+  currentState: State
   """
   The default state is selected on simulator startup and will be reverted to
   automatically if expirationDurationSeconds is used.
   """
-  defaultState: State!
+  defaultState: State
   """
   After the specified number of seconds, the scenario will revert to the default
   state. If 0, the scenario will never revert. For 0 expiration values, ensure
@@ -120,7 +121,7 @@ type StateMappingPageInfo {
 
 type Mapping implements Node {
   id: ID!
-  pathMatch: Matcher
+  pathMatcher: Matcher
   response: Response
   trigger: Trigger
   """
@@ -133,46 +134,32 @@ type Mapping implements Node {
   updatedAt: String!
 }
 
-interface Matcher {
-  id: ID!
+enum MatcherKind {
+  Literal
 }
 
-type LiteralMatcher implements Node & Matcher {
-  id: ID!
+interface Matcher {
+  kind: MatcherKind!
+}
+
+type LiteralMatcher implements Matcher {
+  kind: MatcherKind!
   value: String!
 }
 
-type Response implements Node {
-  id: ID!
+type Response {
   body: String
-  """
-  UTC formatted string
-  """
-  createdAt: String!
-  """
-  UTC formatted string
-  """
-  updatedAt: String!
 }
 
-type Trigger implements Node {
-  id: ID!
+type Trigger {
   targetState: ID!
-  """
-  UTC formatted string
-  """
-  createdAt: String!
-  """
-  UTC formatted string
-  """
-  updatedAt: String!
 }
 
 type Mutation {
   """
-  Creates a new, empty scenario
+  Adds a new, empty scenario
   """
-  createScenario(input: CreateScenarioInput!): CreateScenarioResult!
+  addScenario(input: AddScenarioInput!): AddScenarioResult!
   """
   Updates the basic information of a scenario
   """
@@ -206,13 +193,15 @@ type Mutation {
   """
   Adds a state to a scenario. Every scenario has a default "Initial" state
   """
-  createScenarioState(
-    input: CreateScenarioStateInput!
-  ): CreateScenarioStateResult!
+  addScenarioState(input: AddScenarioStateInput!): AddScenarioStateResult!
+  """
+  Deletes a particular state, removing it from its parent scenario
+  """
+  deleteState(input: DeleteStateInput!): DeleteStateResult!
   """
   Adds a request mapping to a scenario state
   """
-  createStateMapping(input: CreateStateMappingInput!): CreateStateMappingResult!
+  addStateMapping(input: AddStateMappingInput!): AddStateMappingResult!
   """
   Configures a mapping with a simulated response to send back to the client
   """
@@ -223,13 +212,17 @@ type Mutation {
   into the target state
   """
   setMappingTrigger(input: SetMappingTriggerInput!): SetMappingTriggerResult!
+  """
+  Deletes a particular mapping, removing it from its parent state
+  """
+  deleteMapping(input: DeleteMappingInput!): DeleteMappingResult!
 }
 
-input CreateScenarioInput {
+input AddScenarioInput {
   name: String
 }
 
-type CreateScenarioResult {
+type AddScenarioResult {
   scenario: Scenario!
   scenarioEdge: ScenarioEdge!
 }
@@ -286,42 +279,44 @@ type DeleteScenarioResult {
   scenarioEdge: ScenarioEdge!
 }
 
-input CreateScenarioStateInput {
+input AddScenarioStateInput {
   scenarioId: ID!
-  state: CreateStateInput!
+  state: AddStateInput!
 }
 
-input CreateStateInput {
+input AddStateInput {
   name: String!
 }
 
-type CreateScenarioStateResult {
+type AddScenarioStateResult {
   scenario: Scenario!
   state: State!
   stateEdge: ScenarioStateEdge!
 }
 
-input CreateStateMappingInput {
+input AddStateMappingInput {
   stateId: ID!
-  mapping: CreateMappingInput!
+  mapping: AddMappingInput!
 }
 
-input CreateMappingInput {
-  pathMatch: CreateMatcherInput
+input AddMappingInput {
+  pathMatcher: AddMatcherInput
+  response: AddResponseInput
+  trigger: AddTriggerInput
 }
 
 """
 All fields are exclusive; choose one
 """
-input CreateMatcherInput {
-  literal: CreateLiteralMatcherInput
+input AddMatcherInput {
+  literal: AddLiteralMatcherInput
 }
 
-input CreateLiteralMatcherInput {
+input AddLiteralMatcherInput {
   value: String!
 }
 
-type CreateStateMappingResult {
+type AddStateMappingResult {
   state: State!
   mapping: Mapping!
   mappingEdge: StateMappingEdge!
@@ -329,10 +324,10 @@ type CreateStateMappingResult {
 
 input SetMappingResponseInput {
   mappingId: ID!
-  response: CreateResponseInput!
+  response: AddResponseInput!
 }
 
-input CreateResponseInput {
+input AddResponseInput {
   body: String!
 }
 
@@ -342,13 +337,33 @@ type SetMappingResponseResult {
 
 input SetMappingTriggerInput {
   mappingId: ID!
-  trigger: CreateTriggerInput!
+  trigger: AddTriggerInput!
 }
 
-input CreateTriggerInput {
+input AddTriggerInput {
   targetState: ID!
 }
 
 type SetMappingTriggerResult {
   mapping: Mapping!
+}
+
+input DeleteMappingInput {
+  mappingId: ID!
+}
+
+type DeleteMappingResult {
+  mapping: Mapping!
+  mappingEdge: StateMappingEdge!
+  state: State!
+}
+
+input DeleteStateInput {
+  stateId: ID!
+}
+
+type DeleteStateResult {
+  state: State!
+  stateEdge: ScenarioStateEdge!
+  scenario: Scenario!
 }

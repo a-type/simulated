@@ -8,6 +8,21 @@ const resolvers: Resolvers = {
       return nodeType;
     },
   },
+  Query: {
+    node: async (parent, { id }, ctx) => {
+      const { nodeType } = parseId(id);
+      switch (nodeType) {
+        case 'Mapping':
+          return ctx.storage.getMapping({ mappingId: id });
+        case 'Scenario':
+          return ctx.storage.getScenario({ id });
+        case 'State':
+          return ctx.storage.getState({ stateId: id });
+        default:
+          return null;
+      }
+    },
+  },
 };
 
 export default resolvers;

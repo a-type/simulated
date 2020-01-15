@@ -28,6 +28,33 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "node",
+            "description": "",
+            "args": [
+              {
+                "name": "id",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "INTERFACE",
+              "name": "Node",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -176,21 +203,6 @@
           {
             "kind": "OBJECT",
             "name": "Mapping",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "Response",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "Trigger",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "LiteralMatcher",
             "ofType": null
           }
         ]
@@ -398,13 +410,9 @@
             "description": "The currently valid state of this scenario.",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "State",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "State",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -414,13 +422,9 @@
             "description": "The default state is selected on simulator startup and will be reverted to\nautomatically if expirationDurationSeconds is used.",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "State",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "State",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -829,7 +833,7 @@
             "deprecationReason": null
           },
           {
-            "name": "pathMatch",
+            "name": "pathMatcher",
             "description": "",
             "args": [],
             "type": {
@@ -914,15 +918,15 @@
         "description": "",
         "fields": [
           {
-            "name": "id",
+            "name": "kind",
             "description": "",
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
+                "kind": "ENUM",
+                "name": "MatcherKind",
                 "ofType": null
               }
             },
@@ -942,26 +946,27 @@
         ]
       },
       {
+        "kind": "ENUM",
+        "name": "MatcherKind",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "Literal",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "Response",
         "description": "",
         "fields": [
-          {
-            "name": "id",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
           {
             "name": "body",
             "description": "",
@@ -973,48 +978,10 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "createdAt",
-            "description": "UTC formatted string",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "updatedAt",
-            "description": "UTC formatted string",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
           }
         ],
         "inputFields": null,
-        "interfaces": [
-          {
-            "kind": "INTERFACE",
-            "name": "Node",
-            "ofType": null
-          }
-        ],
+        "interfaces": [],
         "enumValues": null,
         "possibleTypes": null
       },
@@ -1023,22 +990,6 @@
         "name": "Trigger",
         "description": "",
         "fields": [
-          {
-            "name": "id",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
           {
             "name": "targetState",
             "description": "",
@@ -1054,48 +1005,10 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "createdAt",
-            "description": "UTC formatted string",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "updatedAt",
-            "description": "UTC formatted string",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
           }
         ],
         "inputFields": null,
-        "interfaces": [
-          {
-            "kind": "INTERFACE",
-            "name": "Node",
-            "ofType": null
-          }
-        ],
+        "interfaces": [],
         "enumValues": null,
         "possibleTypes": null
       },
@@ -1326,8 +1239,8 @@
         "description": "",
         "fields": [
           {
-            "name": "createScenario",
-            "description": "Creates a new, empty scenario",
+            "name": "addScenario",
+            "description": "Adds a new, empty scenario",
             "args": [
               {
                 "name": "input",
@@ -1337,7 +1250,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "CreateScenarioInput",
+                    "name": "AddScenarioInput",
                     "ofType": null
                   }
                 },
@@ -1349,7 +1262,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "CreateScenarioResult",
+                "name": "AddScenarioResult",
                 "ofType": null
               }
             },
@@ -1543,7 +1456,7 @@
             "deprecationReason": null
           },
           {
-            "name": "createScenarioState",
+            "name": "addScenarioState",
             "description": "Adds a state to a scenario. Every scenario has a default \"Initial\" state",
             "args": [
               {
@@ -1554,7 +1467,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "CreateScenarioStateInput",
+                    "name": "AddScenarioStateInput",
                     "ofType": null
                   }
                 },
@@ -1566,7 +1479,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "CreateScenarioStateResult",
+                "name": "AddScenarioStateResult",
                 "ofType": null
               }
             },
@@ -1574,7 +1487,38 @@
             "deprecationReason": null
           },
           {
-            "name": "createStateMapping",
+            "name": "deleteState",
+            "description": "Deletes a particular state, removing it from its parent scenario",
+            "args": [
+              {
+                "name": "input",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "DeleteStateInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "DeleteStateResult",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "addStateMapping",
             "description": "Adds a request mapping to a scenario state",
             "args": [
               {
@@ -1585,7 +1529,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "CreateStateMappingInput",
+                    "name": "AddStateMappingInput",
                     "ofType": null
                   }
                 },
@@ -1597,7 +1541,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "CreateStateMappingResult",
+                "name": "AddStateMappingResult",
                 "ofType": null
               }
             },
@@ -1665,6 +1609,37 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "deleteMapping",
+            "description": "Deletes a particular mapping, removing it from its parent state",
+            "args": [
+              {
+                "name": "input",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "DeleteMappingInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "DeleteMappingResult",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -1674,7 +1649,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "CreateScenarioInput",
+        "name": "AddScenarioInput",
         "description": "",
         "fields": null,
         "inputFields": [
@@ -1695,7 +1670,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "CreateScenarioResult",
+        "name": "AddScenarioResult",
         "description": "",
         "fields": [
           {
@@ -2104,7 +2079,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "CreateScenarioStateInput",
+        "name": "AddScenarioStateInput",
         "description": "",
         "fields": null,
         "inputFields": [
@@ -2130,7 +2105,7 @@
               "name": null,
               "ofType": {
                 "kind": "INPUT_OBJECT",
-                "name": "CreateStateInput",
+                "name": "AddStateInput",
                 "ofType": null
               }
             },
@@ -2143,7 +2118,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "CreateStateInput",
+        "name": "AddStateInput",
         "description": "",
         "fields": null,
         "inputFields": [
@@ -2168,7 +2143,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "CreateScenarioStateResult",
+        "name": "AddScenarioStateResult",
         "description": "",
         "fields": [
           {
@@ -2227,7 +2202,91 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "CreateStateMappingInput",
+        "name": "DeleteStateInput",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "stateId",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "DeleteStateResult",
+        "description": "",
+        "fields": [
+          {
+            "name": "state",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "State",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "stateEdge",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "ScenarioStateEdge",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "scenario",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Scenario",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "AddStateMappingInput",
         "description": "",
         "fields": null,
         "inputFields": [
@@ -2253,7 +2312,7 @@
               "name": null,
               "ofType": {
                 "kind": "INPUT_OBJECT",
-                "name": "CreateMappingInput",
+                "name": "AddMappingInput",
                 "ofType": null
               }
             },
@@ -2266,16 +2325,36 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "CreateMappingInput",
+        "name": "AddMappingInput",
         "description": "",
         "fields": null,
         "inputFields": [
           {
-            "name": "pathMatch",
+            "name": "pathMatcher",
             "description": "",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "CreateMatcherInput",
+              "name": "AddMatcherInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "response",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "AddResponseInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "trigger",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "AddTriggerInput",
               "ofType": null
             },
             "defaultValue": null
@@ -2287,7 +2366,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "CreateMatcherInput",
+        "name": "AddMatcherInput",
         "description": "All fields are exclusive; choose one",
         "fields": null,
         "inputFields": [
@@ -2296,7 +2375,7 @@
             "description": "",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "CreateLiteralMatcherInput",
+              "name": "AddLiteralMatcherInput",
               "ofType": null
             },
             "defaultValue": null
@@ -2308,7 +2387,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "CreateLiteralMatcherInput",
+        "name": "AddLiteralMatcherInput",
         "description": "",
         "fields": null,
         "inputFields": [
@@ -2332,8 +2411,58 @@
         "possibleTypes": null
       },
       {
+        "kind": "INPUT_OBJECT",
+        "name": "AddResponseInput",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "body",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "AddTriggerInput",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "targetState",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
-        "name": "CreateStateMappingResult",
+        "name": "AddStateMappingResult",
         "description": "",
         "fields": [
           {
@@ -2418,32 +2547,7 @@
               "name": null,
               "ofType": {
                 "kind": "INPUT_OBJECT",
-                "name": "CreateResponseInput",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "CreateResponseInput",
-        "description": "",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "body",
-            "description": "",
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
+                "name": "AddResponseInput",
                 "ofType": null
               }
             },
@@ -2509,32 +2613,7 @@
               "name": null,
               "ofType": {
                 "kind": "INPUT_OBJECT",
-                "name": "CreateTriggerInput",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "CreateTriggerInput",
-        "description": "",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "targetState",
-            "description": "",
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
+                "name": "AddTriggerInput",
                 "ofType": null
               }
             },
@@ -2560,6 +2639,90 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "Mapping",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "DeleteMappingInput",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "mappingId",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "DeleteMappingResult",
+        "description": "",
+        "fields": [
+          {
+            "name": "mapping",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Mapping",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mappingEdge",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "StateMappingEdge",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "state",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "State",
                 "ofType": null
               }
             },
@@ -3374,15 +3537,15 @@
         "description": "",
         "fields": [
           {
-            "name": "id",
+            "name": "kind",
             "description": "",
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
+                "kind": "ENUM",
+                "name": "MatcherKind",
                 "ofType": null
               }
             },
@@ -3408,11 +3571,6 @@
         ],
         "inputFields": null,
         "interfaces": [
-          {
-            "kind": "INTERFACE",
-            "name": "Node",
-            "ofType": null
-          },
           {
             "kind": "INTERFACE",
             "name": "Matcher",
