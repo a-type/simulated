@@ -34,19 +34,20 @@ const adapter = new FileAsync<StorageSchema>(databaseFilePath, {
     scenarios: [],
     states: [],
     mappings: [],
-    matchers: [],
-    responses: [],
-    triggers: [],
   },
 });
 const db = lowdb(adapter);
 
 export default class Storage {
+  /**
+   * Lists all scenarios in the system. 'first' is optional, pass 'null' to get the
+   * full list.
+   */
   async getScenarios({
     first = 10,
     after,
   }: {
-    first: number;
+    first?: number | null;
     after?: string | null;
   }) {
     const allScenarios = (await db)
@@ -57,11 +58,15 @@ export default class Storage {
     const startIndex = after
       ? allScenarios.findIndex(s => s.id === toCursor(after))
       : 0;
-    const slice = allScenarios.slice(startIndex, startIndex + first);
+    const slice =
+      first !== null
+        ? allScenarios.slice(startIndex, startIndex + first)
+        : allScenarios;
     return {
       scenarios: slice,
-      hasPreviousPage: startIndex !== 0,
-      hasNextPage: allScenarios.length > startIndex + first,
+      hasPreviousPage: first !== null ? startIndex !== 0 : false,
+      hasNextPage:
+        first !== null ? allScenarios.length > startIndex + first : false,
     };
   }
 
@@ -247,6 +252,34 @@ export default class Storage {
       mappings: slice,
       hasNextPage: startIndex + first < state.mappings.length,
       hasPreviousPage: startIndex > 0,
+    };
+  }
+
+  /**
+   * Lists mappings in the system. 'first' is optional, passing null will
+   * return all mappings.
+   */
+  async getMappings({
+    first = 10,
+    after,
+  }: {
+    first?: number | null;
+    after?: string | null;
+  }) {
+    const mappings = (await db).get('mappings', []).value();
+
+    const startIndex = after
+      ? mappings.findIndex(m => m.id === fromCursor(after))
+      : 0;
+    const slice = first
+      ? mappings.slice(startIndex, startIndex + first)
+      : mappings;
+
+    return {
+      mappings: slice,
+      hasNextPage:
+        first !== null ? startIndex + first < mappings.length : false,
+      hasPreviousPage: first !== null ? startIndex > 0 : false,
     };
   }
 }
