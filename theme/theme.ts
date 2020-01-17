@@ -4,16 +4,30 @@ export default createMuiTheme({
   palette: {
     type: 'dark',
     primary: {
-      main: '#ffb677',
-      dark: '#ff8364',
+      main: '#f67280',
+      dark: '#c06c84',
     },
     secondary: {
-      main: '#5f6caf',
+      main: '#6c5b7b',
+    },
+    background: {
+      default: '#091724',
+      paper: '#284057',
+    },
+  },
+  overrides: {
+    MuiAppBar: {
+      colorDefault: {
+        backgroundColor: 'transparent',
+      },
     },
   },
   props: {
     MuiTextField: {
       variant: 'outlined',
+    },
+    MuiButton: {
+      color: 'primary',
     },
   },
 });

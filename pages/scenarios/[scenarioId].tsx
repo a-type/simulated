@@ -1,7 +1,7 @@
 import { useQuery, graphql } from 'relay-hooks';
 import { useRouter } from 'next/router';
 import { ScenarioIdQuery } from './__generated__/ScenarioIdQuery.graphql';
-import { Container, makeStyles } from '@material-ui/core';
+import { Container, makeStyles, CircularProgress } from '@material-ui/core';
 import ScenarioDetails from '../../components/ScenarioDetails';
 import ScenarioStates from '../../components/ScenarioStates';
 import AddStateButton from '../../components/AddStateButton';
@@ -51,27 +51,34 @@ function ScenarioPage() {
     Router.push(`/`);
   }, []);
 
-  if (!props) return <div>Loading...</div>;
-
   return (
     <>
       <Navigation />
       <Container className={classes.container}>
-        <ScenarioDetails scenario={props.viewer.scenario} />
-        <DeleteScenarioButton
-          scenario={props.viewer.scenario}
-          viewer={props.viewer}
-          onDelete={handleDeleteScenario}
-        >
-          Delete this scenario
-        </DeleteScenarioButton>
-        <ScenarioStates
-          scenario={props.viewer.scenario}
-          className={classes.states}
-        />
-        <AddStateButton scenario={props.viewer.scenario} variant="contained">
-          Add state
-        </AddStateButton>
+        {props ? (
+          <>
+            <ScenarioDetails scenario={props.viewer.scenario} />
+            <DeleteScenarioButton
+              scenario={props.viewer.scenario}
+              viewer={props.viewer}
+              onDelete={handleDeleteScenario}
+            >
+              Delete this scenario
+            </DeleteScenarioButton>
+            <ScenarioStates
+              scenario={props.viewer.scenario}
+              className={classes.states}
+            />
+            <AddStateButton
+              scenario={props.viewer.scenario}
+              variant="contained"
+            >
+              Add state
+            </AddStateButton>
+          </>
+        ) : (
+          <CircularProgress />
+        )}
       </Container>
     </>
   );

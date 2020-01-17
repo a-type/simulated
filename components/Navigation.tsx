@@ -5,6 +5,7 @@ import {
   AppBar,
   Toolbar,
   Typography,
+  Button,
 } from '@material-ui/core';
 import Link from './Link';
 
@@ -12,7 +13,8 @@ export interface NavigationProps {}
 
 const useStyles = makeStyles<Theme, NavigationProps>(theme => ({
   title: {
-    fontSize: theme.typography.pxToRem(24),
+    fontSize: theme.typography.pxToRem(20),
+    fontWeight: 700,
     marginRight: theme.spacing(2),
   },
 }));
@@ -27,7 +29,9 @@ const Navigation: FC<NavigationProps> = props => {
         <Typography variant="h1" className={classes.title}>
           Simulated
         </Typography>
-        <Link href="/">Home</Link>
+        <Button component={Link} underline="none" href="/">
+          Home
+        </Button>
       </Toolbar>
     </AppBar>
   );
