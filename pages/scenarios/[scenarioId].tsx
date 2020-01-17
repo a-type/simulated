@@ -5,14 +5,20 @@ import { Container, makeStyles } from '@material-ui/core';
 import ScenarioDetails from '../../components/ScenarioDetails';
 import ScenarioStates from '../../components/ScenarioStates';
 import AddStateButton from '../../components/AddStateButton';
+import DeleteScenarioButton from '../../components/DeleteScenarioButton';
+import { useCallback } from 'react';
+import Router from 'next/router';
+import Navigation from '../../components/Navigation';
 
 const query = graphql`
   query ScenarioIdQuery($scenarioId: ID!) {
     viewer {
+      ...DeleteScenarioButton_viewer
       scenario(id: $scenarioId) {
         ...ScenarioDetails_scenario
         ...ScenarioStates_scenario
         ...AddStateButton_scenario
+        ...DeleteScenarioButton_scenario
       }
     }
   }
@@ -41,19 +47,33 @@ function ScenarioPage() {
     {},
   );
 
+  const handleDeleteScenario = useCallback(() => {
+    Router.push(`/`);
+  }, []);
+
   if (!props) return <div>Loading...</div>;
 
   return (
-    <Container className={classes.container}>
-      <ScenarioDetails scenario={props.viewer.scenario} />
-      <ScenarioStates
-        scenario={props.viewer.scenario}
-        className={classes.states}
-      />
-      <AddStateButton scenario={props.viewer.scenario} variant="contained">
-        Add state
-      </AddStateButton>
-    </Container>
+    <>
+      <Navigation />
+      <Container className={classes.container}>
+        <ScenarioDetails scenario={props.viewer.scenario} />
+        <DeleteScenarioButton
+          scenario={props.viewer.scenario}
+          viewer={props.viewer}
+          onDelete={handleDeleteScenario}
+        >
+          Delete this scenario
+        </DeleteScenarioButton>
+        <ScenarioStates
+          scenario={props.viewer.scenario}
+          className={classes.states}
+        />
+        <AddStateButton scenario={props.viewer.scenario} variant="contained">
+          Add state
+        </AddStateButton>
+      </Container>
+    </>
   );
 }
 

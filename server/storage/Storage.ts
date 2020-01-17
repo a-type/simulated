@@ -211,8 +211,9 @@ export default class Storage {
     if (!scenario) return scenario;
 
     await (await db)
-      .get('scenarios', [])
-      .filter(s => s.id !== id)
+      .update('scenarios', scenarios =>
+        scenarios.filter((s: StorageScenario) => s.id !== id),
+      )
       .write();
 
     return scenario;
@@ -288,8 +289,7 @@ export default class Storage {
       .value();
 
     await (await db)
-      .get('states', [])
-      .filter(s => s.id !== stateId)
+      .update('states', states => states.filter((s: any) => s.id !== stateId))
       .write();
 
     return state;
@@ -462,6 +462,11 @@ export default class Storage {
       .get('mappings', [])
       .find(m => m.id === id)
       .value();
+
+    await (await db)
+      .update('mappings', mappings => mappings.filter((m: any) => m.id !== id))
+      .write();
+
     return mapping;
   }
 }

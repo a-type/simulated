@@ -99,7 +99,22 @@ const resolvers: Resolvers = {
       };
     },
     deleteScenario: async (parent, { input: { scenarioId } }, ctx) => {
-      const scenario = await ctx.storage.deleteScenario({
+      const scenario = await ctx.storage.getScenario({ id: scenarioId });
+
+      // clean it all up
+      await Promise.all(
+        scenario.possibleStates.map(async stateId => {
+          const state = await ctx.storage.getState({ stateId });
+          await Promise.all(
+            state.mappings.map(async mappingId => {
+              await ctx.storage.deleteMapping({ mappingId });
+            }),
+          );
+          await ctx.storage.deleteState({ stateId });
+        }),
+      );
+
+      await ctx.storage.deleteScenario({
         scenarioId: scenarioId,
       });
 

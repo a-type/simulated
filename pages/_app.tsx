@@ -27,7 +27,6 @@ class CustomApp extends App<{}> {
             <title>Simulated Admin</title>
           </Head>
           <CssBaseline />
-          <Navigation />
           <Component {...pageProps} />
         </ThemeProvider>
       </RelayEnvironmentProvider>

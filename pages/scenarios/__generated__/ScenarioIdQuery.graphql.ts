@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash a93921d4de7eff29353a193bce462a07 */
+/* @relayHash e113ca43717c208e52e0cdfb5b3146b5 */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -10,8 +10,9 @@ export type ScenarioIdQueryVariables = {
 export type ScenarioIdQueryResponse = {
     readonly viewer: {
         readonly scenario: {
-            readonly " $fragmentRefs": FragmentRefs<"ScenarioDetails_scenario" | "ScenarioStates_scenario" | "AddStateButton_scenario">;
+            readonly " $fragmentRefs": FragmentRefs<"ScenarioDetails_scenario" | "ScenarioStates_scenario" | "AddStateButton_scenario" | "DeleteScenarioButton_scenario">;
         } | null;
+        readonly " $fragmentRefs": FragmentRefs<"DeleteScenarioButton_viewer">;
     };
 };
 export type ScenarioIdQuery = {
@@ -26,10 +27,12 @@ query ScenarioIdQuery(
   $scenarioId: ID!
 ) {
   viewer {
+    ...DeleteScenarioButton_viewer
     scenario(id: $scenarioId) {
       ...ScenarioDetails_scenario
       ...ScenarioStates_scenario
       ...AddStateButton_scenario
+      ...DeleteScenarioButton_scenario
       id
     }
     id
@@ -37,6 +40,15 @@ query ScenarioIdQuery(
 }
 
 fragment AddStateButton_scenario on Scenario {
+  id
+}
+
+fragment DeleteScenarioButton_scenario on Scenario {
+  id
+  name
+}
+
+fragment DeleteScenarioButton_viewer on Viewer {
   id
 }
 
@@ -143,8 +155,18 @@ const node: ConcreteRequest = (function () {
                                     "kind": "FragmentSpread",
                                     "name": "AddStateButton_scenario",
                                     "args": null
+                                },
+                                {
+                                    "kind": "FragmentSpread",
+                                    "name": "DeleteScenarioButton_scenario",
+                                    "args": null
                                 }
                             ]
+                        },
+                        {
+                            "kind": "FragmentSpread",
+                            "name": "DeleteScenarioButton_viewer",
+                            "args": null
                         }
                     ]
                 }
@@ -164,6 +186,7 @@ const node: ConcreteRequest = (function () {
                     "concreteType": "Viewer",
                     "plural": false,
                     "selections": [
+                        (v2 /*: any*/),
                         {
                             "kind": "LinkedField",
                             "alias": null,
@@ -286,8 +309,7 @@ const node: ConcreteRequest = (function () {
                                     "filters": null
                                 }
                             ]
-                        },
-                        (v2 /*: any*/)
+                        }
                     ]
                 }
             ]
@@ -296,10 +318,10 @@ const node: ConcreteRequest = (function () {
             "operationKind": "query",
             "name": "ScenarioIdQuery",
             "id": null,
-            "text": "query ScenarioIdQuery(\n  $scenarioId: ID!\n) {\n  viewer {\n    scenario(id: $scenarioId) {\n      ...ScenarioDetails_scenario\n      ...ScenarioStates_scenario\n      ...AddStateButton_scenario\n      id\n    }\n    id\n  }\n}\n\nfragment AddStateButton_scenario on Scenario {\n  id\n}\n\nfragment ScenarioDetails_scenario on Scenario {\n  id\n  name\n  createdAt\n  updatedAt\n}\n\nfragment ScenarioStates_scenario on Scenario {\n  defaultState {\n    id\n    name\n  }\n  possibleStates(first: 10) {\n    edges {\n      node {\n        id\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
+            "text": "query ScenarioIdQuery(\n  $scenarioId: ID!\n) {\n  viewer {\n    ...DeleteScenarioButton_viewer\n    scenario(id: $scenarioId) {\n      ...ScenarioDetails_scenario\n      ...ScenarioStates_scenario\n      ...AddStateButton_scenario\n      ...DeleteScenarioButton_scenario\n      id\n    }\n    id\n  }\n}\n\nfragment AddStateButton_scenario on Scenario {\n  id\n}\n\nfragment DeleteScenarioButton_scenario on Scenario {\n  id\n  name\n}\n\nfragment DeleteScenarioButton_viewer on Viewer {\n  id\n}\n\nfragment ScenarioDetails_scenario on Scenario {\n  id\n  name\n  createdAt\n  updatedAt\n}\n\nfragment ScenarioStates_scenario on Scenario {\n  defaultState {\n    id\n    name\n  }\n  possibleStates(first: 10) {\n    edges {\n      node {\n        id\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = '11c7d2a7be78bc83dd155077ffb92b30';
+(node as any).hash = '2cd7aa73d7eacfdb5a2b3316f755a2d9';
 export default node;

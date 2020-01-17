@@ -5,6 +5,7 @@ import AddScenarioButton from '../components/AddScenarioButton';
 import { useCallback } from 'react';
 import Router from 'next/router';
 import { Container, Box, makeStyles } from '@material-ui/core';
+import Navigation from '../components/Navigation';
 
 const query = graphql`
   query pages_indexQuery($first: Int = 10) {
@@ -39,14 +40,17 @@ function HomePage() {
   if (!props) return null;
 
   return (
-    <Container className={classes.container}>
-      <Box mb={3}>
-        <ScenarioList viewer={props.viewer} />
-      </Box>
-      <AddScenarioButton viewer={props.viewer} onAdd={handleAddScenario}>
-        Add scenario
-      </AddScenarioButton>
-    </Container>
+    <>
+      <Navigation />
+      <Container className={classes.container}>
+        <Box mb={3}>
+          <ScenarioList viewer={props.viewer} />
+        </Box>
+        <AddScenarioButton viewer={props.viewer} onAdd={handleAddScenario}>
+          Add scenario
+        </AddScenarioButton>
+      </Container>
+    </>
   );
 }
 
