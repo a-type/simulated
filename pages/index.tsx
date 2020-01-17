@@ -4,7 +4,7 @@ import { pages_indexQuery } from './__generated__/pages_indexQuery.graphql';
 import AddScenarioButton from '../components/AddScenarioButton';
 import { useCallback } from 'react';
 import Router from 'next/router';
-import { Container, Box } from '@material-ui/core';
+import { Container, Box, makeStyles } from '@material-ui/core';
 
 const query = graphql`
   query pages_indexQuery($first: Int = 10) {
@@ -15,7 +15,15 @@ const query = graphql`
   }
 `;
 
+const useStyles = makeStyles(theme => ({
+  container: {
+    marginTop: theme.spacing(3),
+  },
+}));
+
 function HomePage() {
+  const classes = useStyles({});
+
   const { props, error, retry, cached } = useQuery<pages_indexQuery>(
     query,
     {},
@@ -31,7 +39,7 @@ function HomePage() {
   if (!props) return null;
 
   return (
-    <Container>
+    <Container className={classes.container}>
       <Box mb={3}>
         <ScenarioList viewer={props.viewer} />
       </Box>

@@ -1,16 +1,19 @@
 import App from 'next/app';
 import Head from 'next/head';
-import { CssBaseline } from '@material-ui/core';
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { RelayEnvironmentProvider } from 'relay-hooks';
 import initEnvironment from '../lib/createRelayEnvironment';
+import Navigation from '../components/Navigation';
+import theme from '../theme/theme';
 
 const environment = initEnvironment();
 
 class CustomApp extends App<{}> {
   componentDidMount() {
+    // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles) {
-      jssStyles.parentNode.removeChild(jssStyles);
+      jssStyles.parentElement.removeChild(jssStyles);
     }
   }
 
@@ -19,11 +22,14 @@ class CustomApp extends App<{}> {
 
     return (
       <RelayEnvironmentProvider environment={environment}>
-        <Head>
-          <title>Simulated Admin</title>
-        </Head>
-        <CssBaseline />
-        <Component {...pageProps} />
+        <ThemeProvider theme={theme}>
+          <Head>
+            <title>Simulated Admin</title>
+          </Head>
+          <CssBaseline />
+          <Navigation />
+          <Component {...pageProps} />
+        </ThemeProvider>
       </RelayEnvironmentProvider>
     );
   }

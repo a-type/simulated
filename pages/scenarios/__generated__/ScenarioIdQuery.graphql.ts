@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 850ff70a99fff34e56aae09890d36487 */
+/* @relayHash a93921d4de7eff29353a193bce462a07 */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -10,7 +10,7 @@ export type ScenarioIdQueryVariables = {
 export type ScenarioIdQueryResponse = {
     readonly viewer: {
         readonly scenario: {
-            readonly " $fragmentRefs": FragmentRefs<"ScenarioDetails_scenario">;
+            readonly " $fragmentRefs": FragmentRefs<"ScenarioDetails_scenario" | "ScenarioStates_scenario" | "AddStateButton_scenario">;
         } | null;
     };
 };
@@ -28,10 +28,16 @@ query ScenarioIdQuery(
   viewer {
     scenario(id: $scenarioId) {
       ...ScenarioDetails_scenario
+      ...ScenarioStates_scenario
+      ...AddStateButton_scenario
       id
     }
     id
   }
+}
+
+fragment AddStateButton_scenario on Scenario {
+  id
 }
 
 fragment ScenarioDetails_scenario on Scenario {
@@ -39,6 +45,27 @@ fragment ScenarioDetails_scenario on Scenario {
   name
   createdAt
   updatedAt
+}
+
+fragment ScenarioStates_scenario on Scenario {
+  defaultState {
+    id
+    name
+  }
+  possibleStates(first: 10) {
+    edges {
+      node {
+        id
+        name
+        __typename
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
 }
 */
 
@@ -62,7 +89,19 @@ const node: ConcreteRequest = (function () {
         "name": "id",
         "args": null,
         "storageKey": null
-    } as any);
+    } as any), v3 = ({
+        "kind": "ScalarField",
+        "alias": null,
+        "name": "name",
+        "args": null,
+        "storageKey": null
+    } as any), v4 = [
+        ({
+            "kind": "Literal",
+            "name": "first",
+            "value": 10
+        } as any)
+    ];
     return {
         "kind": "Request",
         "fragment": {
@@ -93,6 +132,16 @@ const node: ConcreteRequest = (function () {
                                 {
                                     "kind": "FragmentSpread",
                                     "name": "ScenarioDetails_scenario",
+                                    "args": null
+                                },
+                                {
+                                    "kind": "FragmentSpread",
+                                    "name": "ScenarioStates_scenario",
+                                    "args": null
+                                },
+                                {
+                                    "kind": "FragmentSpread",
+                                    "name": "AddStateButton_scenario",
                                     "args": null
                                 }
                             ]
@@ -125,13 +174,7 @@ const node: ConcreteRequest = (function () {
                             "plural": false,
                             "selections": [
                                 (v2 /*: any*/),
-                                {
-                                    "kind": "ScalarField",
-                                    "alias": null,
-                                    "name": "name",
-                                    "args": null,
-                                    "storageKey": null
-                                },
+                                (v3 /*: any*/),
                                 {
                                     "kind": "ScalarField",
                                     "alias": null,
@@ -145,6 +188,102 @@ const node: ConcreteRequest = (function () {
                                     "name": "updatedAt",
                                     "args": null,
                                     "storageKey": null
+                                },
+                                {
+                                    "kind": "LinkedField",
+                                    "alias": null,
+                                    "name": "defaultState",
+                                    "storageKey": null,
+                                    "args": null,
+                                    "concreteType": "State",
+                                    "plural": false,
+                                    "selections": [
+                                        (v2 /*: any*/),
+                                        (v3 /*: any*/)
+                                    ]
+                                },
+                                {
+                                    "kind": "LinkedField",
+                                    "alias": null,
+                                    "name": "possibleStates",
+                                    "storageKey": "possibleStates(first:10)",
+                                    "args": (v4 /*: any*/),
+                                    "concreteType": "ScenarioStateConnection",
+                                    "plural": false,
+                                    "selections": [
+                                        {
+                                            "kind": "LinkedField",
+                                            "alias": null,
+                                            "name": "edges",
+                                            "storageKey": null,
+                                            "args": null,
+                                            "concreteType": "ScenarioStateEdge",
+                                            "plural": true,
+                                            "selections": [
+                                                {
+                                                    "kind": "LinkedField",
+                                                    "alias": null,
+                                                    "name": "node",
+                                                    "storageKey": null,
+                                                    "args": null,
+                                                    "concreteType": "State",
+                                                    "plural": false,
+                                                    "selections": [
+                                                        (v2 /*: any*/),
+                                                        (v3 /*: any*/),
+                                                        {
+                                                            "kind": "ScalarField",
+                                                            "alias": null,
+                                                            "name": "__typename",
+                                                            "args": null,
+                                                            "storageKey": null
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "kind": "ScalarField",
+                                                    "alias": null,
+                                                    "name": "cursor",
+                                                    "args": null,
+                                                    "storageKey": null
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "kind": "LinkedField",
+                                            "alias": null,
+                                            "name": "pageInfo",
+                                            "storageKey": null,
+                                            "args": null,
+                                            "concreteType": "ScenarioStatePageInfo",
+                                            "plural": false,
+                                            "selections": [
+                                                {
+                                                    "kind": "ScalarField",
+                                                    "alias": null,
+                                                    "name": "endCursor",
+                                                    "args": null,
+                                                    "storageKey": null
+                                                },
+                                                {
+                                                    "kind": "ScalarField",
+                                                    "alias": null,
+                                                    "name": "hasNextPage",
+                                                    "args": null,
+                                                    "storageKey": null
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "kind": "LinkedHandle",
+                                    "alias": null,
+                                    "name": "possibleStates",
+                                    "args": (v4 /*: any*/),
+                                    "handle": "connection",
+                                    "key": "ScenarioStates_possibleStates",
+                                    "filters": null
                                 }
                             ]
                         },
@@ -157,10 +296,10 @@ const node: ConcreteRequest = (function () {
             "operationKind": "query",
             "name": "ScenarioIdQuery",
             "id": null,
-            "text": "query ScenarioIdQuery(\n  $scenarioId: ID!\n) {\n  viewer {\n    scenario(id: $scenarioId) {\n      ...ScenarioDetails_scenario\n      id\n    }\n    id\n  }\n}\n\nfragment ScenarioDetails_scenario on Scenario {\n  id\n  name\n  createdAt\n  updatedAt\n}\n",
+            "text": "query ScenarioIdQuery(\n  $scenarioId: ID!\n) {\n  viewer {\n    scenario(id: $scenarioId) {\n      ...ScenarioDetails_scenario\n      ...ScenarioStates_scenario\n      ...AddStateButton_scenario\n      id\n    }\n    id\n  }\n}\n\nfragment AddStateButton_scenario on Scenario {\n  id\n}\n\nfragment ScenarioDetails_scenario on Scenario {\n  id\n  name\n  createdAt\n  updatedAt\n}\n\nfragment ScenarioStates_scenario on Scenario {\n  defaultState {\n    id\n    name\n  }\n  possibleStates(first: 10) {\n    edges {\n      node {\n        id\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = 'd4f778ed0a0846a09036208d09492f36';
+(node as any).hash = '11c7d2a7be78bc83dd155077ffb92b30';
 export default node;

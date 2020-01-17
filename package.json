@@ -5,13 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "dev": "ts-node-dev --respawn --no-deps --prefer-ts --ignore-watch=node_modules --ignore-watch .next --inspect -r dotenv/config --project ./tsconfig.server.json -- server/entry.ts",
     "build:clean": "rimraf build",
     "build:transpile": "tsc",
     "build": "run-s build:*",
     "start": "cross-env NODE_ENV=production node -r dotenv/config build/entry.js",
-    "codegen": "graphql-codegen --config codgen.yml",
-    "relay": "relay-compiler ./relay.config.js"
+    "codegen": "graphql-codegen --config codegen.yml",
+    "codegen:watch": "graphql-codegen --watch --config codegen.yml",
+    "relay": "relay-compiler ./relay.config.js",
+    "relay:watch": "relay-compiler ./relay.config.js --watch",
+    "dev:server": "ts-node-dev --respawn --no-deps --prefer-ts --ignore-watch=node_modules --ignore-watch .next --inspect -r dotenv/config --project ./tsconfig.server.json -- server/entry.ts",
+    "dev": "run-p dev:server relay:watch codegen:watch"
   },
   "repository": {
     "type": "git",
@@ -65,6 +68,7 @@
     "dotenv": "^8.2.0",
     "dotenv-webpack": "^1.7.0",
     "express": "^4.17.1",
+    "fielder": "^1.1.1",
     "graphql": "^14.5.8",
     "graphql-import": "^0.7.1",
     "isomorphic-unfetch": "^3.0.0",

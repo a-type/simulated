@@ -154,9 +154,11 @@ export default class Storage {
     const scenario = await (await db)
       .get('scenarios', [])
       .find(s => s.id === id)
-      .update('possibleStates', states =>
-        states.filter((i: string) => i !== stateId).push(stateId),
-      )
+      .update('possibleStates', states => {
+        const filtered = states.filter((i: string) => i !== stateId);
+        filtered.push(stateId);
+        return filtered;
+      })
       .update('defaultState', currentDefault => currentDefault || stateId)
       .update('currentState', currentCurrent => currentCurrent || stateId)
       .assign({

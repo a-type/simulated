@@ -126,6 +126,14 @@ const resolvers: Resolvers = {
 
       return relayConnection(states, hasNextPage, hasPreviousPage);
     },
+    defaultState: async (parent, args, ctx) => {
+      const state = await ctx.storage.getState(parent.defaultState);
+      return state;
+    },
+    currentState: async (parent, args, ctx) => {
+      const state = await ctx.storage.getState(parent.defaultState);
+      return state;
+    },
   },
 };
 
