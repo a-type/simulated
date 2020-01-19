@@ -56,26 +56,30 @@ function ScenarioPage() {
       <Navigation />
       <Container className={classes.container}>
         {props ? (
-          <>
-            <ScenarioDetails scenario={props.viewer.scenario} />
-            <DeleteScenarioButton
-              scenario={props.viewer.scenario}
-              viewer={props.viewer}
-              onDelete={handleDeleteScenario}
-            >
-              Delete this scenario
-            </DeleteScenarioButton>
-            <ScenarioStates
-              scenario={props.viewer.scenario}
-              className={classes.states}
-            />
-            <AddStateButton
-              scenario={props.viewer.scenario}
-              variant="contained"
-            >
-              Add state
-            </AddStateButton>
-          </>
+          props.viewer?.scenario ? (
+            <>
+              <ScenarioDetails scenario={props.viewer.scenario} />
+              <DeleteScenarioButton
+                scenario={props.viewer.scenario}
+                viewer={props.viewer}
+                onDelete={handleDeleteScenario}
+              >
+                Delete this scenario
+              </DeleteScenarioButton>
+              <ScenarioStates
+                scenario={props.viewer.scenario}
+                className={classes.states}
+              />
+              <AddStateButton
+                scenario={props.viewer.scenario}
+                variant="contained"
+              >
+                Add state
+              </AddStateButton>
+            </>
+          ) : (
+            <div>Scenario does not exist</div>
+          )
         ) : (
           <CircularProgress />
         )}

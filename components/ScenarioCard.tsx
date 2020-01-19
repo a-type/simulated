@@ -9,6 +9,7 @@ import {
 import { useFragment, graphql } from 'relay-hooks';
 import { ScenarioCard_scenario$key } from './__generated__/ScenarioCard_scenario.graphql';
 import Link from './Link';
+import Timestamp from './Timestamp';
 
 export interface ScenarioCardProps {
   scenario: ScenarioCard_scenario$key;
@@ -38,7 +39,11 @@ const ScenarioCard: FC<ScenarioCardProps> = props => {
       >
         <CardHeader
           title={scenario.name}
-          subheader={`Created: ${scenario.createdAt}`}
+          subheader={
+            <>
+              Created: <Timestamp date={scenario.createdAt} />
+            </>
+          }
           subheaderTypographyProps={{ variant: 'caption' }}
         />
         <CardContent>A scenario!</CardContent>

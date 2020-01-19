@@ -17,6 +17,7 @@ import { graphql, useMutation, useFragment } from 'relay-hooks';
 import { ScenarioDetails_scenario$key } from './__generated__/ScenarioDetails_scenario.graphql';
 import { ScenarioDetails_updateScenarioMutation } from './__generated__/ScenarioDetails_updateScenarioMutation.graphql';
 import clsx from 'clsx';
+import Timestamp from './Timestamp';
 
 export interface ScenarioDetailsProps {
   scenario: ScenarioDetails_scenario$key;
@@ -38,7 +39,7 @@ const useStyles = makeStyles<Theme, ScenarioDetailsProps>(theme => ({
     transition: theme.transitions.create('color'),
   },
   timestampLoading: {
-    color: theme.palette.secondary.main,
+    color: theme.palette.primary.light,
   },
 }));
 
@@ -72,12 +73,12 @@ const ScenarioDetails: FC<ScenarioDetailsProps> = props => {
   const scenario = useFragment(scenarioFragment, props.scenario);
 
   // raw input value
-  const [nameValue, setNameValue] = useState(scenario.name);
+  const [nameValue, setNameValue] = useState(scenario?.name);
 
   // synchronize input state with updated api data
   useEffect(() => {
-    setNameValue(scenario.name);
-  }, [scenario.name]);
+    setNameValue(scenario?.name);
+  }, [scenario?.name]);
 
   // tracking when the details were updated by the user
   const [justUpdated, setJustUpdated] = useState(false);
@@ -120,8 +121,12 @@ const ScenarioDetails: FC<ScenarioDetailsProps> = props => {
         },
       });
     },
-    [mutate, nameValue, scenario.id, scenario.name],
+    [mutate, nameValue, scenario?.id, scenario?.name],
   );
+
+  if (!scenario) {
+    return <div>Scenario was deleted or does not exist</div>;
+  }
 
   return (
     <Box display="flex" flexDirection="column" className={classes.root}>
@@ -136,7 +141,7 @@ const ScenarioDetails: FC<ScenarioDetailsProps> = props => {
         variant="filled"
       />
       <Typography variant="caption" className={classes.timestamp}>
-        Created: {scenario.createdAt}
+        Created: <Timestamp date={scenario.createdAt} />
       </Typography>
       <Typography
         variant="caption"
@@ -144,7 +149,7 @@ const ScenarioDetails: FC<ScenarioDetailsProps> = props => {
           [classes.timestampLoading]: justUpdated,
         })}
       >
-        Updated: {scenario.updatedAt}
+        Updated: <Timestamp date={scenario.updatedAt} />
       </Typography>
     </Box>
   );
