@@ -105,7 +105,7 @@ const AddStateButton: FC<AddStateButtonProps> = props => {
       >
         {children}
       </Button>
-      <Dialog open={showModal}>
+      <Dialog open={showModal} onClose={() => setShowModal(false)}>
         <FielderProvider value={form}>
           <form onSubmit={handleSubmit}>
             <DialogTitle>Add state</DialogTitle>

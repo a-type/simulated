@@ -138,7 +138,6 @@ const ScenarioDetails: FC<ScenarioDetailsProps> = props => {
         required
         disabled={loading}
         className={clsx(classes.field, classes.name)}
-        variant="filled"
       />
       <Typography variant="caption" className={classes.timestamp}>
         Created: <Timestamp date={scenario.createdAt} />

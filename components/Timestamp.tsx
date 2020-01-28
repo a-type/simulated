@@ -16,7 +16,7 @@ const Timestamp: FC<TimestampProps> = ({ date }) => {
   }
 
   if (Math.abs(differenceInHours(parsed, new Date())) > 3) {
-    return <span>{format(parsed, 'hh:mm aaaa MMM do, y')}</span>;
+    return <span>{format(parsed, 'hh:mm aa MMM do, yyyy')}</span>;
   }
 
   return <span>{formatDistanceToNow(parsed)} ago</span>;

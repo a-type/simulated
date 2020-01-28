@@ -8,7 +8,7 @@ const basePalette: ThemeOptions['palette'] = {
     dark: '#c06c84',
   },
   secondary: {
-    main: '#6c567b',
+    main: '#f6a672',
   },
   background: {
     default: '#151515',
@@ -31,6 +31,16 @@ export default createMuiTheme({
       root: {
         boxShadow: 'none',
         borderBottom: `1px solid black`,
+      },
+    },
+    MuiPaper: {
+      root: {},
+    },
+    MuiCard: {
+      root: {
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: '#ffffff80',
       },
     },
   },

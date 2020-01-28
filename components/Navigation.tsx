@@ -19,10 +19,9 @@ const Navigation: FC<NavigationProps> = props => {
   return (
     <AppBar position="static" color="default">
       <Toolbar>
-        <Logo component="h1" className={classes.title} />
-        <Button component={Link} underline="none" href="/">
-          Home
-        </Button>
+        <Link underline="none" color="inherit" href="/">
+          <Logo className={classes.title} />
+        </Link>
       </Toolbar>
     </AppBar>
   );
