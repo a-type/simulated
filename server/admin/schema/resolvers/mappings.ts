@@ -3,18 +3,23 @@ import {
   AddMatcherInput,
   LiteralMatcher,
   MatcherKind,
+  ResponseBodyKind,
 } from '../generated/graphql';
 import { toCursor } from '../../../storage/cursors';
 import { StorageMatcher } from '../../../storage/types';
+import { AddResponseBodyInput, ResponseBody } from '../generated/graphql';
 
 const resolvers: Resolvers = {
   Mutation: {
-    addStateMapping: async (parent, { input }, ctx, info) => {
+    addStateMapping: async (_parent, { input }, ctx, info) => {
       const mapping = await ctx.storage.createMapping({
         stateId: input.stateId,
         data: {
           ...input.mapping,
           pathMatcher: getMatcherInput(input.mapping.pathMatcher),
+          response: input.mapping.response && {
+            body: getResponseBodyInput(input.mapping.response.body),
+          },
         },
       });
 
@@ -36,7 +41,9 @@ const resolvers: Resolvers = {
       const mapping = await ctx.storage.updateMapping({
         id: input.mappingId,
         data: {
-          response: input.response,
+          response: {
+            body: getResponseBodyInput(input.response.body),
+          },
         },
       });
 
@@ -49,6 +56,18 @@ const resolvers: Resolvers = {
         id: input.mappingId,
         data: {
           trigger: input.trigger,
+        },
+      });
+
+      return {
+        mapping,
+      };
+    },
+    setMappingPriority: async (_parent, { input }, ctx) => {
+      const mapping = await ctx.storage.updateMapping({
+        id: input.mappingId,
+        data: {
+          priority: input.priority,
         },
       });
 
@@ -91,5 +110,21 @@ const getMatcherInput = (
       kind: MatcherKind.Literal,
     };
   }
-  return null;
+
+  throw new Error(
+    'You must provide one of the available types of matcher input data',
+  );
+};
+
+const getResponseBodyInput = (input: AddResponseBodyInput): ResponseBody => {
+  if (input.template) {
+    return {
+      ...input.template,
+      kind: ResponseBodyKind.Template,
+    };
+  }
+
+  throw new Error(
+    'You must provide one of the available types of response body input data',
+  );
 };

@@ -127,13 +127,33 @@ export default class Storage {
       currentState?: string | null;
     };
   }) {
+    const initial = (await db)
+      .get('scenarios', [])
+      .find(s => s.id === id)
+      .value();
+
+    if (data.name) {
+      initial.name = data.name;
+    }
+    if (data.expirationDurationSeconds) {
+      initial.expirationDurationSeconds = data.expirationDurationSeconds;
+    }
+    if (data.disabled || data.disabled === false) {
+      initial.disabled = data.disabled;
+    }
+    if (data.defaultState) {
+      initial.defaultState = data.defaultState;
+    }
+    if (data.currentState) {
+      initial.currentState = data.currentState;
+    }
+
+    initial.updatedAt = timestamp();
+
     const scenario = await (await db)
       .get('scenarios', [])
       .find(s => s.id === id)
-      .assign({
-        ...data,
-        updatedAt: timestamp(),
-      })
+      .assign(initial)
       .write();
 
     return scenario;
@@ -282,6 +302,35 @@ export default class Storage {
     return state;
   }
 
+  async updateState({
+    id,
+    data,
+  }: {
+    id: string;
+    data: {
+      name?: string | null;
+    };
+  }) {
+    const initial = (await db)
+      .get('states', [])
+      .find(s => s.id === id)
+      .value();
+
+    if (data.name) {
+      initial.name = data.name;
+    }
+
+    initial.updatedAt = timestamp();
+
+    const state = await (await db)
+      .get('states', [])
+      .find(s => s.id === id)
+      .assign(initial)
+      .write();
+
+    return state;
+  }
+
   async deleteState({ stateId }: { stateId: string }) {
     const state = (await db)
       .get('states', [])
@@ -378,6 +427,7 @@ export default class Storage {
       pathMatcher,
       response,
       trigger,
+      priority: 0,
     };
 
     await (await db)
@@ -398,9 +448,11 @@ export default class Storage {
     const state = await (await db)
       .get('states', [])
       .find(s => s.id === stateId)
-      .update('mappings', mappings =>
-        mappings.filter((i: string) => i !== mappingId).push(mappingId),
-      )
+      .update('mappings', mappings => {
+        const filtered = mappings.filter((i: string) => i !== mappingId);
+        filtered.push(mappingId);
+        return filtered;
+      })
       .assign({
         updatedAt: timestamp(),
       })
@@ -432,29 +484,39 @@ export default class Storage {
 
   async updateMapping({
     id,
-    data: { pathMatcher = null, response = null, trigger = null },
+    data: { pathMatcher, response, trigger, priority },
   }: {
     id: string;
     data: {
       pathMatcher?: StorageMatcher | null;
       response?: StorageResponse | null;
       trigger?: StorageTrigger | null;
+      priority?: number;
     };
   }) {
-    const mapping = (await db)
+    const original = (await db)
       .get('mappings', [])
       .find(m => m.id === id)
-      .assign({
-        ...{
-          pathMatcher,
-          response,
-          trigger,
-        },
-        updatedAt: timestamp(),
-      })
+      .value();
+
+    if (pathMatcher !== undefined) {
+      original.pathMatcher = pathMatcher;
+    }
+    if (response !== undefined) {
+      original.response = response;
+    }
+    if (trigger !== undefined) {
+      original.trigger = trigger;
+    }
+    if (priority !== undefined) {
+      original.priority = priority;
+    }
+
+    const mapping = await (await db)
+      .set<StorageMapping>(`mappings[${id}]`, original)
       .write();
 
-    return mapping as StorageMapping;
+    return mapping;
   }
 
   async deleteMapping({ mappingId: id }: { mappingId: string }) {

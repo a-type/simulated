@@ -20,6 +20,7 @@ export type AddMappingInput = {
   pathMatcher?: Maybe<AddMatcherInput>,
   response?: Maybe<AddResponseInput>,
   trigger?: Maybe<AddTriggerInput>,
+  priority: Scalars['Int'],
 };
 
 /** All fields are exclusive; choose one */
@@ -27,8 +28,12 @@ export type AddMatcherInput = {
   literal?: Maybe<AddLiteralMatcherInput>,
 };
 
+export type AddResponseBodyInput = {
+  template?: Maybe<AddTemplateResponseBodyInput>,
+};
+
 export type AddResponseInput = {
-  body: Scalars['String'],
+  body: AddResponseBodyInput,
 };
 
 export type AddScenarioInput = {
@@ -67,6 +72,10 @@ export type AddStateMappingResult = {
   state: State,
   mapping: Mapping,
   mappingEdge: StateMappingEdge,
+};
+
+export type AddTemplateResponseBodyInput = {
+  value: Scalars['String'],
 };
 
 export type AddTriggerInput = {
@@ -135,6 +144,7 @@ export type Mapping = Node & {
   pathMatcher?: Maybe<Matcher>,
   response?: Maybe<Response>,
   trigger?: Maybe<Trigger>,
+  priority: Scalars['Int'],
   /** UTC formatted string */
   createdAt: Scalars['String'],
   /** UTC formatted string */
@@ -173,6 +183,8 @@ export type Mutation = {
   deleteScenario: DeleteScenarioResult,
   /** Adds a state to a scenario. Every scenario has a default "Initial" state */
   addScenarioState: AddScenarioStateResult,
+  /** Updates the basic information of a state */
+  setStateDetails: SetStateDetailsResult,
   /** Deletes a particular state, removing it from its parent scenario */
   deleteState: DeleteStateResult,
   /** Adds a request mapping to a scenario state */
@@ -185,6 +197,8 @@ export type Mutation = {
    * into the target state
  */
   setMappingTrigger: SetMappingTriggerResult,
+  /** Updates the priority level of a mapping */
+  setMappingPriority: SetMappingPriorityResult,
   /** Deletes a particular mapping, removing it from its parent state */
   deleteMapping: DeleteMappingResult,
 };
@@ -230,6 +244,11 @@ export type MutationAddScenarioStateArgs = {
 };
 
 
+export type MutationSetStateDetailsArgs = {
+  input: SetStateDetailsInput
+};
+
+
 export type MutationDeleteStateArgs = {
   input: DeleteStateInput
 };
@@ -247,6 +266,11 @@ export type MutationSetMappingResponseArgs = {
 
 export type MutationSetMappingTriggerArgs = {
   input: SetMappingTriggerInput
+};
+
+
+export type MutationSetMappingPriorityArgs = {
+  input: SetMappingPriorityInput
 };
 
 
@@ -271,8 +295,16 @@ export type QueryNodeArgs = {
 
 export type Response = {
    __typename?: 'Response',
-  body?: Maybe<Scalars['String']>,
+  body: ResponseBody,
 };
+
+export type ResponseBody = {
+  kind: ResponseBodyKind,
+};
+
+export enum ResponseBodyKind {
+  Template = 'Template'
+}
 
 export type Scenario = Node & {
    __typename?: 'Scenario',
@@ -352,6 +384,16 @@ export type ScenarioStatePageInfo = {
   endCursor?: Maybe<Scalars['String']>,
 };
 
+export type SetMappingPriorityInput = {
+  mappingId: Scalars['ID'],
+  priority: Scalars['Int'],
+};
+
+export type SetMappingPriorityResult = {
+   __typename?: 'SetMappingPriorityResult',
+  mapping: Mapping,
+};
+
 export type SetMappingResponseInput = {
   mappingId: Scalars['ID'],
   response: AddResponseInput,
@@ -402,6 +444,16 @@ export type SetScenarioExpirationResult = {
   scenario: Scenario,
 };
 
+export type SetStateDetailsInput = {
+  stateId: Scalars['ID'],
+  name?: Maybe<Scalars['String']>,
+};
+
+export type SetStateDetailsResult = {
+   __typename?: 'SetStateDetailsResult',
+  state: State,
+};
+
 export type State = Node & {
    __typename?: 'State',
   id: Scalars['ID'],
@@ -439,9 +491,15 @@ export type StateMappingPageInfo = {
   endCursor?: Maybe<Scalars['String']>,
 };
 
+export type TemplateResponseBody = ResponseBody & {
+   __typename?: 'TemplateResponseBody',
+  kind: ResponseBodyKind,
+  value: Scalars['String'],
+};
+
 export type Trigger = {
    __typename?: 'Trigger',
-  targetState: Scalars['ID'],
+  targetState: State,
 };
 
 export type Viewer = Node & {
@@ -449,6 +507,7 @@ export type Viewer = Node & {
   id: Scalars['ID'],
   scenarios: ScenarioConnection,
   scenario?: Maybe<Scenario>,
+  state?: Maybe<State>,
 };
 
 
@@ -459,6 +518,11 @@ export type ViewerScenariosArgs = {
 
 
 export type ViewerScenarioArgs = {
+  id: Scalars['ID']
+};
+
+
+export type ViewerStateArgs = {
   id: Scalars['ID']
 };
 
@@ -552,6 +616,8 @@ export type ResolversTypes = ResolversObject<{
   Matcher: ResolverTypeWrapper<Normalized<Matcher>>,
   MatcherKind: ResolverTypeWrapper<Normalized<MatcherKind>>,
   Response: ResolverTypeWrapper<Normalized<Response>>,
+  ResponseBody: ResolverTypeWrapper<Normalized<ResponseBody>>,
+  ResponseBodyKind: ResolverTypeWrapper<Normalized<ResponseBodyKind>>,
   Trigger: ResolverTypeWrapper<Normalized<Trigger>>,
   StateMappingPageInfo: ResolverTypeWrapper<Normalized<StateMappingPageInfo>>,
   Boolean: ResolverTypeWrapper<Normalized<Scalars['Boolean']>>,
@@ -576,6 +642,8 @@ export type ResolversTypes = ResolversObject<{
   AddScenarioStateInput: ResolverTypeWrapper<Normalized<AddScenarioStateInput>>,
   AddStateInput: ResolverTypeWrapper<Normalized<AddStateInput>>,
   AddScenarioStateResult: ResolverTypeWrapper<Normalized<AddScenarioStateResult>>,
+  SetStateDetailsInput: ResolverTypeWrapper<Normalized<SetStateDetailsInput>>,
+  SetStateDetailsResult: ResolverTypeWrapper<Normalized<SetStateDetailsResult>>,
   DeleteStateInput: ResolverTypeWrapper<Normalized<DeleteStateInput>>,
   DeleteStateResult: ResolverTypeWrapper<Normalized<DeleteStateResult>>,
   AddStateMappingInput: ResolverTypeWrapper<Normalized<AddStateMappingInput>>,
@@ -583,15 +651,20 @@ export type ResolversTypes = ResolversObject<{
   AddMatcherInput: ResolverTypeWrapper<Normalized<AddMatcherInput>>,
   AddLiteralMatcherInput: ResolverTypeWrapper<Normalized<AddLiteralMatcherInput>>,
   AddResponseInput: ResolverTypeWrapper<Normalized<AddResponseInput>>,
+  AddResponseBodyInput: ResolverTypeWrapper<Normalized<AddResponseBodyInput>>,
+  AddTemplateResponseBodyInput: ResolverTypeWrapper<Normalized<AddTemplateResponseBodyInput>>,
   AddTriggerInput: ResolverTypeWrapper<Normalized<AddTriggerInput>>,
   AddStateMappingResult: ResolverTypeWrapper<Normalized<AddStateMappingResult>>,
   SetMappingResponseInput: ResolverTypeWrapper<Normalized<SetMappingResponseInput>>,
   SetMappingResponseResult: ResolverTypeWrapper<Normalized<SetMappingResponseResult>>,
   SetMappingTriggerInput: ResolverTypeWrapper<Normalized<SetMappingTriggerInput>>,
   SetMappingTriggerResult: ResolverTypeWrapper<Normalized<SetMappingTriggerResult>>,
+  SetMappingPriorityInput: ResolverTypeWrapper<Normalized<SetMappingPriorityInput>>,
+  SetMappingPriorityResult: ResolverTypeWrapper<Normalized<SetMappingPriorityResult>>,
   DeleteMappingInput: ResolverTypeWrapper<Normalized<DeleteMappingInput>>,
   DeleteMappingResult: ResolverTypeWrapper<Normalized<DeleteMappingResult>>,
   LiteralMatcher: ResolverTypeWrapper<Normalized<LiteralMatcher>>,
+  TemplateResponseBody: ResolverTypeWrapper<Normalized<TemplateResponseBody>>,
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -614,6 +687,8 @@ export type ResolversParentTypes = ResolversObject<{
   Matcher: Normalized<Matcher>,
   MatcherKind: Normalized<MatcherKind>,
   Response: Normalized<Response>,
+  ResponseBody: Normalized<ResponseBody>,
+  ResponseBodyKind: Normalized<ResponseBodyKind>,
   Trigger: Normalized<Trigger>,
   StateMappingPageInfo: Normalized<StateMappingPageInfo>,
   Boolean: Normalized<Scalars['Boolean']>,
@@ -638,6 +713,8 @@ export type ResolversParentTypes = ResolversObject<{
   AddScenarioStateInput: Normalized<AddScenarioStateInput>,
   AddStateInput: Normalized<AddStateInput>,
   AddScenarioStateResult: Normalized<AddScenarioStateResult>,
+  SetStateDetailsInput: Normalized<SetStateDetailsInput>,
+  SetStateDetailsResult: Normalized<SetStateDetailsResult>,
   DeleteStateInput: Normalized<DeleteStateInput>,
   DeleteStateResult: Normalized<DeleteStateResult>,
   AddStateMappingInput: Normalized<AddStateMappingInput>,
@@ -645,15 +722,20 @@ export type ResolversParentTypes = ResolversObject<{
   AddMatcherInput: Normalized<AddMatcherInput>,
   AddLiteralMatcherInput: Normalized<AddLiteralMatcherInput>,
   AddResponseInput: Normalized<AddResponseInput>,
+  AddResponseBodyInput: Normalized<AddResponseBodyInput>,
+  AddTemplateResponseBodyInput: Normalized<AddTemplateResponseBodyInput>,
   AddTriggerInput: Normalized<AddTriggerInput>,
   AddStateMappingResult: Normalized<AddStateMappingResult>,
   SetMappingResponseInput: Normalized<SetMappingResponseInput>,
   SetMappingResponseResult: Normalized<SetMappingResponseResult>,
   SetMappingTriggerInput: Normalized<SetMappingTriggerInput>,
   SetMappingTriggerResult: Normalized<SetMappingTriggerResult>,
+  SetMappingPriorityInput: Normalized<SetMappingPriorityInput>,
+  SetMappingPriorityResult: Normalized<SetMappingPriorityResult>,
   DeleteMappingInput: Normalized<DeleteMappingInput>,
   DeleteMappingResult: Normalized<DeleteMappingResult>,
   LiteralMatcher: Normalized<LiteralMatcher>,
+  TemplateResponseBody: Normalized<TemplateResponseBody>,
 }>;
 
 export type AddScenarioResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AddScenarioResult'] = ResolversParentTypes['AddScenarioResult']> = ResolversObject<{
@@ -708,6 +790,7 @@ export type MappingResolvers<ContextType = Context, ParentType extends Resolvers
   pathMatcher?: Resolver<Maybe<ResolversTypes['Matcher']>, ParentType, ContextType>,
   response?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>,
   trigger?: Resolver<Maybe<ResolversTypes['Trigger']>, ParentType, ContextType>,
+  priority?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 }>;
@@ -726,10 +809,12 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   enableScenario?: Resolver<ResolversTypes['EnableScenarioResult'], ParentType, ContextType, RequireFields<MutationEnableScenarioArgs, 'input'>>,
   deleteScenario?: Resolver<ResolversTypes['DeleteScenarioResult'], ParentType, ContextType, RequireFields<MutationDeleteScenarioArgs, 'input'>>,
   addScenarioState?: Resolver<ResolversTypes['AddScenarioStateResult'], ParentType, ContextType, RequireFields<MutationAddScenarioStateArgs, 'input'>>,
+  setStateDetails?: Resolver<ResolversTypes['SetStateDetailsResult'], ParentType, ContextType, RequireFields<MutationSetStateDetailsArgs, 'input'>>,
   deleteState?: Resolver<ResolversTypes['DeleteStateResult'], ParentType, ContextType, RequireFields<MutationDeleteStateArgs, 'input'>>,
   addStateMapping?: Resolver<ResolversTypes['AddStateMappingResult'], ParentType, ContextType, RequireFields<MutationAddStateMappingArgs, 'input'>>,
   setMappingResponse?: Resolver<ResolversTypes['SetMappingResponseResult'], ParentType, ContextType, RequireFields<MutationSetMappingResponseArgs, 'input'>>,
   setMappingTrigger?: Resolver<ResolversTypes['SetMappingTriggerResult'], ParentType, ContextType, RequireFields<MutationSetMappingTriggerArgs, 'input'>>,
+  setMappingPriority?: Resolver<ResolversTypes['SetMappingPriorityResult'], ParentType, ContextType, RequireFields<MutationSetMappingPriorityArgs, 'input'>>,
   deleteMapping?: Resolver<ResolversTypes['DeleteMappingResult'], ParentType, ContextType, RequireFields<MutationDeleteMappingArgs, 'input'>>,
 }>;
 
@@ -744,7 +829,12 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
 }>;
 
 export type ResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Response'] = ResolversParentTypes['Response']> = ResolversObject<{
-  body?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  body?: Resolver<ResolversTypes['ResponseBody'], ParentType, ContextType>,
+}>;
+
+export type ResponseBodyResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ResponseBody'] = ResolversParentTypes['ResponseBody']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'TemplateResponseBody', ParentType, ContextType>,
+  kind?: Resolver<ResolversTypes['ResponseBodyKind'], ParentType, ContextType>,
 }>;
 
 export type ScenarioResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Scenario'] = ResolversParentTypes['Scenario']> = ResolversObject<{
@@ -793,6 +883,10 @@ export type ScenarioStatePageInfoResolvers<ContextType = Context, ParentType ext
   endCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 }>;
 
+export type SetMappingPriorityResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SetMappingPriorityResult'] = ResolversParentTypes['SetMappingPriorityResult']> = ResolversObject<{
+  mapping?: Resolver<ResolversTypes['Mapping'], ParentType, ContextType>,
+}>;
+
 export type SetMappingResponseResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SetMappingResponseResult'] = ResolversParentTypes['SetMappingResponseResult']> = ResolversObject<{
   mapping?: Resolver<ResolversTypes['Mapping'], ParentType, ContextType>,
 }>;
@@ -811,6 +905,10 @@ export type SetScenarioDetailsResultResolvers<ContextType = Context, ParentType 
 
 export type SetScenarioExpirationResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SetScenarioExpirationResult'] = ResolversParentTypes['SetScenarioExpirationResult']> = ResolversObject<{
   scenario?: Resolver<ResolversTypes['Scenario'], ParentType, ContextType>,
+}>;
+
+export type SetStateDetailsResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SetStateDetailsResult'] = ResolversParentTypes['SetStateDetailsResult']> = ResolversObject<{
+  state?: Resolver<ResolversTypes['State'], ParentType, ContextType>,
 }>;
 
 export type StateResolvers<ContextType = Context, ParentType extends ResolversParentTypes['State'] = ResolversParentTypes['State']> = ResolversObject<{
@@ -838,14 +936,20 @@ export type StateMappingPageInfoResolvers<ContextType = Context, ParentType exte
   endCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 }>;
 
+export type TemplateResponseBodyResolvers<ContextType = Context, ParentType extends ResolversParentTypes['TemplateResponseBody'] = ResolversParentTypes['TemplateResponseBody']> = ResolversObject<{
+  kind?: Resolver<ResolversTypes['ResponseBodyKind'], ParentType, ContextType>,
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+}>;
+
 export type TriggerResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Trigger'] = ResolversParentTypes['Trigger']> = ResolversObject<{
-  targetState?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  targetState?: Resolver<ResolversTypes['State'], ParentType, ContextType>,
 }>;
 
 export type ViewerResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Viewer'] = ResolversParentTypes['Viewer']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   scenarios?: Resolver<ResolversTypes['ScenarioConnection'], ParentType, ContextType, RequireFields<ViewerScenariosArgs, 'first'>>,
   scenario?: Resolver<Maybe<ResolversTypes['Scenario']>, ParentType, ContextType, RequireFields<ViewerScenarioArgs, 'id'>>,
+  state?: Resolver<Maybe<ResolversTypes['State']>, ParentType, ContextType, RequireFields<ViewerStateArgs, 'id'>>,
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
@@ -864,6 +968,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   Node?: NodeResolvers,
   Query?: QueryResolvers<ContextType>,
   Response?: ResponseResolvers<ContextType>,
+  ResponseBody?: ResponseBodyResolvers,
   Scenario?: ScenarioResolvers<ContextType>,
   ScenarioConnection?: ScenarioConnectionResolvers<ContextType>,
   ScenarioEdge?: ScenarioEdgeResolvers<ContextType>,
@@ -871,15 +976,18 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   ScenarioStateConnection?: ScenarioStateConnectionResolvers<ContextType>,
   ScenarioStateEdge?: ScenarioStateEdgeResolvers<ContextType>,
   ScenarioStatePageInfo?: ScenarioStatePageInfoResolvers<ContextType>,
+  SetMappingPriorityResult?: SetMappingPriorityResultResolvers<ContextType>,
   SetMappingResponseResult?: SetMappingResponseResultResolvers<ContextType>,
   SetMappingTriggerResult?: SetMappingTriggerResultResolvers<ContextType>,
   SetScenarioDefaultStateResult?: SetScenarioDefaultStateResultResolvers<ContextType>,
   SetScenarioDetailsResult?: SetScenarioDetailsResultResolvers<ContextType>,
   SetScenarioExpirationResult?: SetScenarioExpirationResultResolvers<ContextType>,
+  SetStateDetailsResult?: SetStateDetailsResultResolvers<ContextType>,
   State?: StateResolvers<ContextType>,
   StateMappingConnection?: StateMappingConnectionResolvers<ContextType>,
   StateMappingEdge?: StateMappingEdgeResolvers<ContextType>,
   StateMappingPageInfo?: StateMappingPageInfoResolvers<ContextType>,
+  TemplateResponseBody?: TemplateResponseBodyResolvers<ContextType>,
   Trigger?: TriggerResolvers<ContextType>,
   Viewer?: ViewerResolvers<ContextType>,
 }>;

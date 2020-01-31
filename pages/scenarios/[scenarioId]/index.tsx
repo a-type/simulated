@@ -2,13 +2,13 @@ import { useQuery, graphql } from 'relay-hooks';
 import { useRouter } from 'next/router';
 import { ScenarioIdQuery } from './__generated__/ScenarioIdQuery.graphql';
 import { Container, makeStyles, CircularProgress } from '@material-ui/core';
-import ScenarioDetails from '../../components/ScenarioDetails';
-import ScenarioStates from '../../components/ScenarioStates';
-import AddStateButton from '../../components/AddStateButton';
-import DeleteScenarioButton from '../../components/DeleteScenarioButton';
+import ScenarioDetails from '../../../components/ScenarioDetails';
+import ScenarioStates from '../../../components/ScenarioStates';
+import AddStateButton from '../../../components/AddStateButton';
+import DeleteScenarioButton from '../../../components/DeleteScenarioButton';
 import { useCallback } from 'react';
 import Router from 'next/router';
-import Navigation from '../../components/Navigation';
+import Navigation from '../../../components/Navigation';
 
 const query = graphql`
   query ScenarioIdQuery($scenarioId: ID!) {

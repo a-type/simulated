@@ -54,9 +54,9 @@ const AddStateButton: FC<AddStateButtonProps> = props => {
   const [mutate, { loading }] = useMutation<AddStateButton_addStateMutation>(
     addStateMutation,
     {
-      onCompleted: ({ addScenarioState }: any) => {
+      onCompleted: ({ addScenarioState }) => {
         if (!onAdd) return;
-        onAdd(addScenarioState.scenario.id, addScenarioState.stateEdge.node.id);
+        onAdd(scenarioId, addScenarioState.stateEdge.node.id);
       },
       updater: store => {
         const root = store.getRootField('addScenarioState');

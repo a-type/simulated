@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash e113ca43717c208e52e0cdfb5b3146b5 */
+/* @relayHash e26373fc9e5802489b46bd428890f4e9 */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -60,6 +60,7 @@ fragment ScenarioDetails_scenario on Scenario {
 }
 
 fragment ScenarioStates_scenario on Scenario {
+  id
   defaultState {
     id
     name
@@ -318,7 +319,7 @@ const node: ConcreteRequest = (function () {
             "operationKind": "query",
             "name": "ScenarioIdQuery",
             "id": null,
-            "text": "query ScenarioIdQuery(\n  $scenarioId: ID!\n) {\n  viewer {\n    ...DeleteScenarioButton_viewer\n    scenario(id: $scenarioId) {\n      ...ScenarioDetails_scenario\n      ...ScenarioStates_scenario\n      ...AddStateButton_scenario\n      ...DeleteScenarioButton_scenario\n      id\n    }\n    id\n  }\n}\n\nfragment AddStateButton_scenario on Scenario {\n  id\n}\n\nfragment DeleteScenarioButton_scenario on Scenario {\n  id\n  name\n}\n\nfragment DeleteScenarioButton_viewer on Viewer {\n  id\n}\n\nfragment ScenarioDetails_scenario on Scenario {\n  id\n  name\n  createdAt\n  updatedAt\n}\n\nfragment ScenarioStates_scenario on Scenario {\n  defaultState {\n    id\n    name\n  }\n  possibleStates(first: 10) {\n    edges {\n      node {\n        id\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
+            "text": "query ScenarioIdQuery(\n  $scenarioId: ID!\n) {\n  viewer {\n    ...DeleteScenarioButton_viewer\n    scenario(id: $scenarioId) {\n      ...ScenarioDetails_scenario\n      ...ScenarioStates_scenario\n      ...AddStateButton_scenario\n      ...DeleteScenarioButton_scenario\n      id\n    }\n    id\n  }\n}\n\nfragment AddStateButton_scenario on Scenario {\n  id\n}\n\nfragment DeleteScenarioButton_scenario on Scenario {\n  id\n  name\n}\n\nfragment DeleteScenarioButton_viewer on Viewer {\n  id\n}\n\nfragment ScenarioDetails_scenario on Scenario {\n  id\n  name\n  createdAt\n  updatedAt\n}\n\nfragment ScenarioStates_scenario on Scenario {\n  id\n  defaultState {\n    id\n    name\n  }\n  possibleStates(first: 10) {\n    edges {\n      node {\n        id\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;

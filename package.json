@@ -14,7 +14,7 @@
     "relay": "relay-compiler ./relay.config.js",
     "relay:watch": "relay-compiler ./relay.config.js --watch",
     "dev:server": "ts-node-dev --respawn --no-deps --prefer-ts --ignore-watch=node_modules --ignore-watch .next --inspect -r dotenv/config --project ./tsconfig.server.json -- server/entry.ts",
-    "dev": "run-p dev:server relay:watch codegen:watch"
+    "dev": "run-p dev:server codegen:watch"
   },
   "repository": {
     "type": "git",
@@ -70,6 +70,8 @@
     "dotenv-webpack": "^1.7.0",
     "express": "^4.17.1",
     "fielder": "^1.1.1",
+    "formik": "^2.1.3",
+    "formik-material-ui": "^2.0.0-alpha.3",
     "graphql": "^14.5.8",
     "graphql-import": "^0.7.1",
     "isomorphic-unfetch": "^3.0.0",

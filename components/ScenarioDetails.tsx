@@ -18,6 +18,7 @@ import { ScenarioDetails_scenario$key } from './__generated__/ScenarioDetails_sc
 import { ScenarioDetails_updateScenarioMutation } from './__generated__/ScenarioDetails_updateScenarioMutation.graphql';
 import clsx from 'clsx';
 import Timestamp from './Timestamp';
+import useSavingField from '../hooks/useSavingField';
 
 export interface ScenarioDetailsProps {
   scenario: ScenarioDetails_scenario$key;
@@ -72,56 +73,29 @@ const ScenarioDetails: FC<ScenarioDetailsProps> = props => {
 
   const scenario = useFragment(scenarioFragment, props.scenario);
 
-  // raw input value
-  const [nameValue, setNameValue] = useState(scenario?.name);
-
-  // synchronize input state with updated api data
-  useEffect(() => {
-    setNameValue(scenario?.name);
-  }, [scenario?.name]);
-
-  // tracking when the details were updated by the user
-  const [justUpdated, setJustUpdated] = useState(false);
-  // resets just updated after 2 seconds
-  useEffect(() => {
-    if (justUpdated) {
-      const handle = setTimeout(() => setJustUpdated(false), 2000);
-      return () => clearTimeout(handle);
-    }
-  }, [justUpdated]);
-
   // mutation for modifying details
-  const [mutate, { loading }] = useMutation<
-    ScenarioDetails_updateScenarioMutation
-  >(updateScenarioMutation, {
-    onCompleted: () => {
-      setJustUpdated(true);
-    },
-  });
-
-  const handleNameFieldChange = useCallback(
-    (ev: ChangeEvent<HTMLInputElement>) => {
-      const name = ev.target.value;
-      setNameValue(name);
-    },
-    [setNameValue],
+  const [mutate] = useMutation<ScenarioDetails_updateScenarioMutation>(
+    updateScenarioMutation,
+    {},
   );
 
-  const handleNameFieldBlur = useCallback(
-    (ev: FocusEvent<HTMLInputElement>) => {
-      // bail if no change
-      if (scenario.name === nameValue) return;
-
-      mutate({
+  const saveName = useCallback(
+    async (name: string) => {
+      await mutate({
         variables: {
           input: {
-            scenarioId: scenario.id,
-            name: nameValue,
+            scenarioId: scenario?.id,
+            name,
           },
         },
       });
     },
-    [mutate, nameValue, scenario?.id, scenario?.name],
+    [mutate, scenario?.id],
+  );
+
+  const [fieldProps, { justUpdated, saving }] = useSavingField(
+    scenario?.name,
+    saveName,
   );
 
   if (!scenario) {
@@ -131,12 +105,10 @@ const ScenarioDetails: FC<ScenarioDetailsProps> = props => {
   return (
     <Box display="flex" flexDirection="column" className={classes.root}>
       <TextField
-        value={nameValue}
-        onChange={handleNameFieldChange}
-        onBlur={handleNameFieldBlur}
+        {...fieldProps}
         label="Scenario name"
         required
-        disabled={loading}
+        disabled={saving}
         className={clsx(classes.field, classes.name)}
       />
       <Typography variant="caption" className={classes.timestamp}>

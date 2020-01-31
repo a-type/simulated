@@ -4,6 +4,8 @@ import scenarios from './scenarios';
 import states from './states';
 import mappings from './mappings';
 import matchers from './matchers';
+import responseBodies from './responseBodies';
+import triggers from './triggers';
 import { Resolvers } from '../generated/graphql';
 
 // merges various resolver types into one giant map
@@ -33,4 +35,6 @@ export default combineResolvers([
   states,
   mappings,
   matchers,
+  responseBodies,
+  triggers,
 ]);

@@ -37,6 +37,17 @@ const resolvers: Resolvers = {
       };
     },
 
+    setStateDetails: async (_parent, { input: { stateId, ...rest } }, ctx) => {
+      const state = await ctx.storage.updateState({
+        id: stateId,
+        data: rest,
+      });
+
+      return {
+        state,
+      };
+    },
+
     deleteState: async (parent, { input: { stateId } }, ctx) => {
       const state = await ctx.storage.deleteState({ stateId });
 
@@ -69,6 +80,13 @@ const resolvers: Resolvers = {
       });
 
       return relayConnection(mappings, hasNextPage, hasPreviousPage);
+    },
+  },
+
+  Viewer: {
+    state: async (parent, { id }, ctx) => {
+      const state = await ctx.storage.getState({ stateId: id });
+      return state;
     },
   },
 };

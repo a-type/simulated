@@ -11,6 +11,7 @@ type Viewer implements Node {
   id: ID!
   scenarios(first: Int = 10, after: String): ScenarioConnection!
   scenario(id: ID!): Scenario
+  state(id: ID!): State
 }
 
 type ScenarioConnection {
@@ -124,6 +125,7 @@ type Mapping implements Node {
   pathMatcher: Matcher
   response: Response
   trigger: Trigger
+  priority: Int!
   """
   UTC formatted string
   """
@@ -148,11 +150,24 @@ type LiteralMatcher implements Matcher {
 }
 
 type Response {
-  body: String
+  body: ResponseBody!
+}
+
+enum ResponseBodyKind {
+  Template
+}
+
+interface ResponseBody {
+  kind: ResponseBodyKind!
+}
+
+type TemplateResponseBody implements ResponseBody {
+  kind: ResponseBodyKind!
+  value: String!
 }
 
 type Trigger {
-  targetState: ID!
+  targetState: State!
 }
 
 type Mutation {
@@ -195,6 +210,10 @@ type Mutation {
   """
   addScenarioState(input: AddScenarioStateInput!): AddScenarioStateResult!
   """
+  Updates the basic information of a state
+  """
+  setStateDetails(input: SetStateDetailsInput!): SetStateDetailsResult!
+  """
   Deletes a particular state, removing it from its parent scenario
   """
   deleteState(input: DeleteStateInput!): DeleteStateResult!
@@ -212,6 +231,10 @@ type Mutation {
   into the target state
   """
   setMappingTrigger(input: SetMappingTriggerInput!): SetMappingTriggerResult!
+  """
+  Updates the priority level of a mapping
+  """
+  setMappingPriority(input: SetMappingPriorityInput!): SetMappingPriorityResult!
   """
   Deletes a particular mapping, removing it from its parent state
   """
@@ -303,6 +326,7 @@ input AddMappingInput {
   pathMatcher: AddMatcherInput
   response: AddResponseInput
   trigger: AddTriggerInput
+  priority: Int!
 }
 
 """
@@ -328,7 +352,15 @@ input SetMappingResponseInput {
 }
 
 input AddResponseInput {
-  body: String!
+  body: AddResponseBodyInput!
+}
+
+input AddResponseBodyInput {
+  template: AddTemplateResponseBodyInput
+}
+
+input AddTemplateResponseBodyInput {
+  value: String!
 }
 
 type SetMappingResponseResult {
@@ -345,6 +377,15 @@ input AddTriggerInput {
 }
 
 type SetMappingTriggerResult {
+  mapping: Mapping!
+}
+
+input SetMappingPriorityInput {
+  mappingId: ID!
+  priority: Int!
+}
+
+type SetMappingPriorityResult {
   mapping: Mapping!
 }
 
@@ -366,4 +407,13 @@ type DeleteStateResult {
   state: State!
   stateEdge: ScenarioStateEdge!
   scenario: Scenario!
+}
+
+input SetStateDetailsInput {
+  stateId: ID!
+  name: String
+}
+
+type SetStateDetailsResult {
+  state: State!
 }

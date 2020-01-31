@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 import { graphql, usePagination } from 'relay-hooks';
 import { ScenarioStates_scenario$key } from './__generated__/ScenarioStates_scenario.graphql';
+import Link from './Link';
 
 export interface ScenarioStatesProps {
   scenario: ScenarioStates_scenario$key;
@@ -21,6 +22,8 @@ const useStyles = makeStyles<Theme, ScenarioStatesProps>(theme => ({}));
 const scenarioFragment = graphql`
   fragment ScenarioStates_scenario on Scenario
     @argumentDefinitions(first: { type: "Int", defaultValue: 10 }) {
+    id
+
     defaultState {
       id
       name
@@ -42,7 +45,7 @@ const ScenarioStates: FC<ScenarioStatesProps> = props => {
   const { ...rest } = props;
   const classes = useStyles(props);
 
-  const [{ defaultState, possibleStates }] = usePagination(
+  const [{ defaultState, possibleStates, id: scenarioId }] = usePagination(
     scenarioFragment,
     props.scenario,
   );
@@ -60,7 +63,12 @@ const ScenarioStates: FC<ScenarioStatesProps> = props => {
         {possibleStates.edges.map(({ node }) => (
           <TableRow key={node.id}>
             <TableCell component="th" scope="row">
-              {node.name}
+              <Link
+                href="/scenarios/[scenarioId]/states/[stateId]"
+                as={`/scenarios/${scenarioId}/states/${node.id}`}
+              >
+                {node.name}
+              </Link>
             </TableCell>
             <TableCell>
               {`${!!defaultState && node.id === defaultState.id}`}

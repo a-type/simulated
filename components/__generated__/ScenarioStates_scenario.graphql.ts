@@ -4,6 +4,7 @@
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type ScenarioStates_scenario = {
+    readonly id: string;
     readonly defaultState: {
         readonly id: string;
         readonly name: string;
@@ -65,6 +66,7 @@ const node: ReaderFragment = (function () {
             }
         ],
         "selections": [
+            (v0 /*: any*/),
             {
                 "kind": "LinkedField",
                 "alias": null,
@@ -155,5 +157,5 @@ const node: ReaderFragment = (function () {
         ]
     } as any;
 })();
-(node as any).hash = '0cfccd57dd483602cc337480ed7c06d9';
+(node as any).hash = '10a2ecb5978e831e3021b73833cfd328';
 export default node;
