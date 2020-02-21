@@ -28,9 +28,11 @@ export type StateMappings_state = {
                 readonly priority: number;
                 readonly createdAt: string;
                 readonly updatedAt: string;
+                readonly " $fragmentRefs": FragmentRefs<"MappingLink_mapping">;
             };
         }>;
     };
+    readonly " $fragmentRefs": FragmentRefs<"MappingLink_state">;
     readonly " $refType": "StateMappings_state";
 };
 export type StateMappings_state$data = StateMappings_state;
@@ -213,6 +215,11 @@ const node: ReaderFragment = (function () {
                                         "name": "__typename",
                                         "args": null,
                                         "storageKey": null
+                                    },
+                                    {
+                                        "kind": "FragmentSpread",
+                                        "name": "MappingLink_mapping",
+                                        "args": null
                                     }
                                 ]
                             },
@@ -251,9 +258,14 @@ const node: ReaderFragment = (function () {
                         ]
                     }
                 ]
+            },
+            {
+                "kind": "FragmentSpread",
+                "name": "MappingLink_state",
+                "args": null
             }
         ]
     } as any;
 })();
-(node as any).hash = '3a95b851bf4692e48b25d5225ea1d1bb';
+(node as any).hash = 'dc03d22d234c51664fffc50c904f9790';
 export default node;

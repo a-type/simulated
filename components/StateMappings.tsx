@@ -9,11 +9,14 @@ import {
   TableBody,
   Box,
 } from '@material-ui/core';
-import { graphql, usePagination } from 'relay-hooks';
+import { graphql, usePagination, useFragment } from 'relay-hooks';
 import { StateMappings_state$key } from './__generated__/StateMappings_state.graphql';
+import MappingLink from './MappingLink';
+import { StateMappings_scenario$key } from './__generated__/StateMappings_scenario.graphql';
 
 export interface StateMappingsProps {
   state: StateMappings_state$key;
+  scenario: StateMappings_scenario$key;
 }
 
 const useStyles = makeStyles<Theme, StateMappingsProps>(theme => ({}));
@@ -47,16 +50,28 @@ const stateFragment = graphql`
           priority
           createdAt
           updatedAt
+
+          ...MappingLink_mapping
         }
       }
     }
+
+    ...MappingLink_state
+  }
+`;
+
+const scenarioFragment = graphql`
+  fragment StateMappings_scenario on Scenario {
+    ...MappingLink_scenario
   }
 `;
 
 const StateMappings: FC<StateMappingsProps> = props => {
   const classes = useStyles(props);
 
-  const [{ mappings }] = usePagination(stateFragment, props.state);
+  const [state] = usePagination(stateFragment, props.state);
+  const { mappings } = state;
+  const scenario = useFragment(scenarioFragment, props.scenario);
 
   if (!mappings.edges.length) {
     return <Box my={2}>There are no mappings for this state</Box>;
@@ -77,7 +92,13 @@ const StateMappings: FC<StateMappingsProps> = props => {
         {mappings.edges.map(({ node }) => (
           <TableRow key={node.id}>
             <TableCell>
-              <PathMatcherSummary matcher={node.pathMatcher} />
+              <MappingLink
+                scenario={scenario}
+                state={state as any}
+                mapping={node as any}
+              >
+                <PathMatcherSummary matcher={node.pathMatcher} />
+              </MappingLink>
             </TableCell>
             <TableCell>{node.response?.body?.kind ?? 'None'}</TableCell>
             <TableCell>{node.trigger?.targetState?.name ?? 'None'}</TableCell>

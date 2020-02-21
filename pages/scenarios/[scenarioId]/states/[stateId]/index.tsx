@@ -24,6 +24,7 @@ const query = graphql`
       scenario(id: $scenarioId) {
         ...ScenarioLink_scenario
         ...StateLink_scenario
+        ...StateMappings_scenario
       }
       state(id: $stateId) {
         ...StateDetails_state
@@ -82,7 +83,10 @@ function StatePage() {
               <Paper className={classes.topContent}>
                 <StateDetails state={props.viewer.state} />
               </Paper>
-              <StateMappings state={props.viewer.state} />
+              <StateMappings
+                state={props.viewer.state}
+                scenario={props.viewer.scenario}
+              />
               <Button
                 component={Link}
                 href="/scenarios/[scenarioId]/states/[stateId]/mappings/create"

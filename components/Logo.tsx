@@ -6,12 +6,13 @@ export interface LogoProps {
   className?: string;
   backdropClassName?: string;
   children?: ReactNode;
+  title?: string;
 }
 
 const WIDTH = 110;
 const HEIGHT = 20;
 const FONT_SIZE = HEIGHT / 1.2;
-const LOGO_TEXT = 'SIMULATED';
+const FULL_TITLE = 'SIMULATED';
 
 const useStyles = makeStyles<Theme, LogoProps>(theme => ({
   root: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles<Theme, LogoProps>(theme => ({
   },
   box: {
     //theme.palette.background.default,
-    fill: theme.palette.common.black,
+    fill: theme.palette.background.paper,
   },
   backdrop: {
     fill: theme.palette.secondary.main,
@@ -60,7 +61,7 @@ const Logo: FC<LogoProps> = props => {
             strokeWidth={1}
             stroke="#000000"
           >
-            {LOGO_TEXT}
+            {props.title || FULL_TITLE}
           </text>
         </mask>
       </defs>
@@ -76,21 +77,21 @@ const Logo: FC<LogoProps> = props => {
       </g>
       <text
         {...commonTextProps}
-        stroke={theme.palette.common.white}
+        stroke={theme.palette.text.primary}
         fill="transparent"
         strokeWidth={1}
         vectorEffect="non-scaling-stroke"
       >
-        {LOGO_TEXT}
+        {props.title || FULL_TITLE}
       </text>
-      <rect
+      {/* <rect
         width={WIDTH}
         height={HEIGHT}
         vectorEffect="non-scaling-stroke"
         fill="transparent"
-        stroke={theme.palette.common.white}
+        stroke={theme.palette.text.primary}
         strokeWidth={1}
-      />
+      /> */}
     </svg>
   );
 };

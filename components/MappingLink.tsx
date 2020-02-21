@@ -35,6 +35,7 @@ const MappingLink: FC<MappingLinkProps> = ({
   scenario: scenarioKey,
   state: stateKey,
   mapping: mappingKey,
+  children,
   ...rest
 }) => {
   const scenario = useFragment(scenarioFragment, scenarioKey);
@@ -60,7 +61,7 @@ const MappingLink: FC<MappingLinkProps> = ({
       href="/scenarios/[scenarioId]/states/[stateId]/mappings/[mappingId]"
       as={`/scenarios/${scenario.id}/states/${state.id}/mappings/${mapping.id}`}
     >
-      {state.name}
+      {children || mapping.id}
     </Link>
   );
 };

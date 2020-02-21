@@ -1,46 +1,51 @@
 import { createMuiTheme } from '@material-ui/core';
 import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
+import colors from './colors';
+import { generateShadows } from './shadows';
 
-const basePalette: ThemeOptions['palette'] = {
+const darkPalette: ThemeOptions['palette'] = {
   type: 'dark',
+  text: {
+    primary: colors.white,
+  },
   primary: {
-    main: '#f67280',
-    dark: '#c06c84',
+    main: colors.bright,
   },
   secondary: {
-    main: '#f6a672',
+    main: colors.dark,
   },
   background: {
-    default: '#151515',
-    paper: '#151a20',
+    default: colors.black,
+    paper: colors.medium,
+  },
+};
+const lightPalette: ThemeOptions['palette'] = {
+  type: 'light',
+  text: {
+    primary: colors.black,
+  },
+  primary: {
+    main: colors.black,
+  },
+  secondary: {
+    main: colors.medium,
+  },
+  background: {
+    default: colors.bright,
+    paper: colors.white,
   },
 };
 
-const { palette } = createMuiTheme({ palette: basePalette });
+const { palette } = createMuiTheme({ palette: lightPalette });
 
 export default createMuiTheme({
   palette,
-  shape: {
-    borderRadius: 0,
-  },
+  shape: {},
+  shadows: generateShadows(),
   overrides: {
     MuiAppBar: {
       colorDefault: {
         backgroundColor: 'transparent',
-      },
-      root: {
-        boxShadow: 'none',
-        borderBottom: `1px solid black`,
-      },
-    },
-    MuiPaper: {
-      root: {},
-    },
-    MuiCard: {
-      root: {
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: '#ffffff80',
       },
     },
   },
