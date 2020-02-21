@@ -143,8 +143,9 @@ const AddMappingButton: FC<AddMappingButtonProps> = props => {
           },
         },
       });
+      setShowModal(false);
     },
-    [mutate],
+    [mutate, setShowModal],
   );
 
   const handleSubmit = useFormikSubmit(save);

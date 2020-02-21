@@ -1,11 +1,4 @@
-import React, {
-  FC,
-  useState,
-  useEffect,
-  useCallback,
-  ChangeEvent,
-  FocusEvent,
-} from 'react';
+import React, { FC, useCallback } from 'react';
 import {
   makeStyles,
   Theme,
@@ -22,6 +15,7 @@ import useSavingField from '../hooks/useSavingField';
 
 export interface ScenarioDetailsProps {
   scenario: ScenarioDetails_scenario$key;
+  className?: string;
 }
 
 const useStyles = makeStyles<Theme, ScenarioDetailsProps>(theme => ({
@@ -69,9 +63,10 @@ const updateScenarioMutation = graphql`
 `;
 
 const ScenarioDetails: FC<ScenarioDetailsProps> = props => {
+  const { scenario: scenarioKey, className, ...rest } = props;
   const classes = useStyles(props);
 
-  const scenario = useFragment(scenarioFragment, props.scenario);
+  const scenario = useFragment(scenarioFragment, scenarioKey);
 
   // mutation for modifying details
   const [mutate] = useMutation<ScenarioDetails_updateScenarioMutation>(
@@ -103,7 +98,12 @@ const ScenarioDetails: FC<ScenarioDetailsProps> = props => {
   }
 
   return (
-    <Box display="flex" flexDirection="column" className={classes.root}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      {...rest}
+      className={clsx(classes.root, className)}
+    >
       <TextField
         {...fieldProps}
         label="Scenario name"

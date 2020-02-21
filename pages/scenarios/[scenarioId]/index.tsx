@@ -1,7 +1,12 @@
 import { useQuery, graphql } from 'relay-hooks';
 import { useRouter } from 'next/router';
 import { ScenarioIdQuery } from './__generated__/ScenarioIdQuery.graphql';
-import { Container, makeStyles, CircularProgress } from '@material-ui/core';
+import {
+  Container,
+  makeStyles,
+  CircularProgress,
+  Paper,
+} from '@material-ui/core';
 import ScenarioDetails from '../../../components/ScenarioDetails';
 import ScenarioStates from '../../../components/ScenarioStates';
 import AddStateButton from '../../../components/AddStateButton';
@@ -9,6 +14,7 @@ import DeleteScenarioButton from '../../../components/DeleteScenarioButton';
 import { useCallback } from 'react';
 import Router from 'next/router';
 import Navigation from '../../../components/Navigation';
+import ScenarioStatus from '../../../components/ScenarioStatus';
 
 const query = graphql`
   query ScenarioIdQuery($scenarioId: ID!) {
@@ -16,6 +22,7 @@ const query = graphql`
       ...DeleteScenarioButton_viewer
       scenario(id: $scenarioId) {
         ...ScenarioDetails_scenario
+        ...ScenarioStatus_scenario
         ...ScenarioStates_scenario
         ...AddStateButton_scenario
         ...DeleteScenarioButton_scenario
@@ -30,6 +37,13 @@ const useStyles = makeStyles(theme => ({
   },
   states: {
     marginBottom: theme.spacing(2),
+  },
+  details: {
+    marginBottom: theme.spacing(2),
+  },
+  topSection: {
+    marginBottom: theme.spacing(2),
+    padding: theme.spacing(2),
   },
 }));
 
@@ -58,7 +72,13 @@ function ScenarioPage() {
         {props ? (
           props.viewer?.scenario ? (
             <>
-              <ScenarioDetails scenario={props.viewer.scenario} />
+              <Paper className={classes.topSection}>
+                <ScenarioDetails
+                  className={classes.details}
+                  scenario={props.viewer.scenario}
+                />
+                <ScenarioStatus scenario={props.viewer.scenario} />
+              </Paper>
               <DeleteScenarioButton
                 scenario={props.viewer.scenario}
                 viewer={props.viewer}

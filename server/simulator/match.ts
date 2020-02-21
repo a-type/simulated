@@ -22,7 +22,10 @@ export default async (req: Request): Promise<EligibleMapping | null> => {
 
   for (const mapping of preparedMappings) {
     if (isEligibleMapping(mapping) && mappingMatches(mapping, req)) {
-      return mapping;
+      const isActive = await isMappingActive(mapping);
+      if (isActive) {
+        return mapping;
+      }
     }
   }
 
@@ -47,4 +50,10 @@ const pathMatches = (pathMatcher: Matcher | undefined | null, path: string) => {
   }
 
   return false;
+};
+
+const isMappingActive = async (mapping: StorageMapping) => {
+  const state = await storage.getState({ stateId: mapping.parentId });
+  const scenario = await storage.getScenario({ scenarioId: state.parentId });
+  return scenario?.currentState === state.id ?? false;
 };

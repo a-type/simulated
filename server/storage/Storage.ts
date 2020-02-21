@@ -71,7 +71,7 @@ export default class Storage {
     };
   }
 
-  async getScenario({ id }: { id: string }) {
+  async getScenario({ scenarioId: id }: { scenarioId: string }) {
     const scenario = (await db)
       .get('scenarios', [])
       .find(s => s.id === id)
@@ -115,10 +115,10 @@ export default class Storage {
   }
 
   async updateScenario({
-    id,
+    scenarioId: id,
     data,
   }: {
-    id: string;
+    scenarioId: string;
     data: {
       name?: string | null;
       expirationDurationSeconds?: number;

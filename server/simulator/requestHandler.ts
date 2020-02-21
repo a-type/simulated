@@ -15,6 +15,8 @@ export default async (req: Request, res: Response) => {
       body: req.body,
     });
 
+    res.status(404).send();
+
     return;
   }
 

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash e26373fc9e5802489b46bd428890f4e9 */
+/* @relayHash d3689a5bd8ea29f3c0a8e0fec22733f4 */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -10,7 +10,7 @@ export type ScenarioIdQueryVariables = {
 export type ScenarioIdQueryResponse = {
     readonly viewer: {
         readonly scenario: {
-            readonly " $fragmentRefs": FragmentRefs<"ScenarioDetails_scenario" | "ScenarioStates_scenario" | "AddStateButton_scenario" | "DeleteScenarioButton_scenario">;
+            readonly " $fragmentRefs": FragmentRefs<"ScenarioDetails_scenario" | "ScenarioStatus_scenario" | "ScenarioStates_scenario" | "AddStateButton_scenario" | "DeleteScenarioButton_scenario">;
         } | null;
         readonly " $fragmentRefs": FragmentRefs<"DeleteScenarioButton_viewer">;
     };
@@ -30,6 +30,7 @@ query ScenarioIdQuery(
     ...DeleteScenarioButton_viewer
     scenario(id: $scenarioId) {
       ...ScenarioDetails_scenario
+      ...ScenarioStatus_scenario
       ...ScenarioStates_scenario
       ...AddStateButton_scenario
       ...DeleteScenarioButton_scenario
@@ -80,6 +81,33 @@ fragment ScenarioStates_scenario on Scenario {
     }
   }
 }
+
+fragment ScenarioStatus_scenario on Scenario {
+  id
+  currentState {
+    id
+    name
+  }
+  ...StateSelector_scenario
+}
+
+fragment StateSelector_scenario on Scenario {
+  id
+  possibleStates(first: 10) {
+    edges {
+      node {
+        id
+        name
+        __typename
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
 */
 
 const node: ConcreteRequest = (function () {
@@ -109,6 +137,9 @@ const node: ConcreteRequest = (function () {
         "args": null,
         "storageKey": null
     } as any), v4 = [
+        (v2 /*: any*/),
+        (v3 /*: any*/)
+    ], v5 = [
         ({
             "kind": "Literal",
             "name": "first",
@@ -145,6 +176,11 @@ const node: ConcreteRequest = (function () {
                                 {
                                     "kind": "FragmentSpread",
                                     "name": "ScenarioDetails_scenario",
+                                    "args": null
+                                },
+                                {
+                                    "kind": "FragmentSpread",
+                                    "name": "ScenarioStatus_scenario",
                                     "args": null
                                 },
                                 {
@@ -216,22 +252,19 @@ const node: ConcreteRequest = (function () {
                                 {
                                     "kind": "LinkedField",
                                     "alias": null,
-                                    "name": "defaultState",
+                                    "name": "currentState",
                                     "storageKey": null,
                                     "args": null,
                                     "concreteType": "State",
                                     "plural": false,
-                                    "selections": [
-                                        (v2 /*: any*/),
-                                        (v3 /*: any*/)
-                                    ]
+                                    "selections": (v4 /*: any*/)
                                 },
                                 {
                                     "kind": "LinkedField",
                                     "alias": null,
                                     "name": "possibleStates",
                                     "storageKey": "possibleStates(first:10)",
-                                    "args": (v4 /*: any*/),
+                                    "args": (v5 /*: any*/),
                                     "concreteType": "ScenarioStateConnection",
                                     "plural": false,
                                     "selections": [
@@ -304,10 +337,29 @@ const node: ConcreteRequest = (function () {
                                     "kind": "LinkedHandle",
                                     "alias": null,
                                     "name": "possibleStates",
-                                    "args": (v4 /*: any*/),
+                                    "args": (v5 /*: any*/),
+                                    "handle": "connection",
+                                    "key": "StateSelector_possibleStates",
+                                    "filters": null
+                                },
+                                {
+                                    "kind": "LinkedHandle",
+                                    "alias": null,
+                                    "name": "possibleStates",
+                                    "args": (v5 /*: any*/),
                                     "handle": "connection",
                                     "key": "ScenarioStates_possibleStates",
                                     "filters": null
+                                },
+                                {
+                                    "kind": "LinkedField",
+                                    "alias": null,
+                                    "name": "defaultState",
+                                    "storageKey": null,
+                                    "args": null,
+                                    "concreteType": "State",
+                                    "plural": false,
+                                    "selections": (v4 /*: any*/)
                                 }
                             ]
                         }
@@ -319,10 +371,10 @@ const node: ConcreteRequest = (function () {
             "operationKind": "query",
             "name": "ScenarioIdQuery",
             "id": null,
-            "text": "query ScenarioIdQuery(\n  $scenarioId: ID!\n) {\n  viewer {\n    ...DeleteScenarioButton_viewer\n    scenario(id: $scenarioId) {\n      ...ScenarioDetails_scenario\n      ...ScenarioStates_scenario\n      ...AddStateButton_scenario\n      ...DeleteScenarioButton_scenario\n      id\n    }\n    id\n  }\n}\n\nfragment AddStateButton_scenario on Scenario {\n  id\n}\n\nfragment DeleteScenarioButton_scenario on Scenario {\n  id\n  name\n}\n\nfragment DeleteScenarioButton_viewer on Viewer {\n  id\n}\n\nfragment ScenarioDetails_scenario on Scenario {\n  id\n  name\n  createdAt\n  updatedAt\n}\n\nfragment ScenarioStates_scenario on Scenario {\n  id\n  defaultState {\n    id\n    name\n  }\n  possibleStates(first: 10) {\n    edges {\n      node {\n        id\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
+            "text": "query ScenarioIdQuery(\n  $scenarioId: ID!\n) {\n  viewer {\n    ...DeleteScenarioButton_viewer\n    scenario(id: $scenarioId) {\n      ...ScenarioDetails_scenario\n      ...ScenarioStatus_scenario\n      ...ScenarioStates_scenario\n      ...AddStateButton_scenario\n      ...DeleteScenarioButton_scenario\n      id\n    }\n    id\n  }\n}\n\nfragment AddStateButton_scenario on Scenario {\n  id\n}\n\nfragment DeleteScenarioButton_scenario on Scenario {\n  id\n  name\n}\n\nfragment DeleteScenarioButton_viewer on Viewer {\n  id\n}\n\nfragment ScenarioDetails_scenario on Scenario {\n  id\n  name\n  createdAt\n  updatedAt\n}\n\nfragment ScenarioStates_scenario on Scenario {\n  id\n  defaultState {\n    id\n    name\n  }\n  possibleStates(first: 10) {\n    edges {\n      node {\n        id\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment ScenarioStatus_scenario on Scenario {\n  id\n  currentState {\n    id\n    name\n  }\n  ...StateSelector_scenario\n}\n\nfragment StateSelector_scenario on Scenario {\n  id\n  possibleStates(first: 10) {\n    edges {\n      node {\n        id\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = '2cd7aa73d7eacfdb5a2b3316f755a2d9';
+(node as any).hash = '85e6f61c46ae471d4b1c7f2078ad947d';
 export default node;

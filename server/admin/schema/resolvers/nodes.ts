@@ -15,7 +15,7 @@ const resolvers: Resolvers = {
         case 'Mapping':
           return ctx.storage.getMapping({ mappingId: id });
         case 'Scenario':
-          return ctx.storage.getScenario({ id });
+          return ctx.storage.getScenario({ scenarioId: id });
         case 'State':
           return ctx.storage.getState({ stateId: id });
         default:

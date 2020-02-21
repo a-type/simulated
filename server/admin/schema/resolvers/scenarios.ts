@@ -15,7 +15,7 @@ const resolvers: Resolvers = {
       return data;
     },
     scenario: async (parent, { id }, ctx) => {
-      return ctx.storage.getScenario({ id });
+      return ctx.storage.getScenario({ scenarioId: id });
     },
   },
   Mutation: {
@@ -32,7 +32,7 @@ const resolvers: Resolvers = {
     },
     setScenarioDetails: async (parent, { input }, ctx) => {
       const scenario = await ctx.storage.updateScenario({
-        id: input.scenarioId,
+        scenarioId: input.scenarioId,
         data: {
           name: input.name,
         },
@@ -48,7 +48,7 @@ const resolvers: Resolvers = {
       ctx,
     ) => {
       const scenario = await ctx.storage.updateScenario({
-        id: scenarioId,
+        scenarioId: scenarioId,
         data: {
           defaultState: stateId,
         },
@@ -64,7 +64,7 @@ const resolvers: Resolvers = {
       ctx,
     ) => {
       const scenario = await ctx.storage.updateScenario({
-        id: scenarioId,
+        scenarioId: scenarioId,
         data: {
           expirationDurationSeconds,
         },
@@ -76,7 +76,7 @@ const resolvers: Resolvers = {
     },
     disableScenario: async (parent, { input: { scenarioId } }, ctx) => {
       const scenario = await ctx.storage.updateScenario({
-        id: scenarioId,
+        scenarioId: scenarioId,
         data: {
           disabled: true,
         },
@@ -88,7 +88,7 @@ const resolvers: Resolvers = {
     },
     enableScenario: async (parent, { input: { scenarioId } }, ctx) => {
       const scenario = await ctx.storage.updateScenario({
-        id: scenarioId,
+        scenarioId: scenarioId,
         data: {
           disabled: false,
         },
@@ -99,7 +99,9 @@ const resolvers: Resolvers = {
       };
     },
     deleteScenario: async (parent, { input: { scenarioId } }, ctx) => {
-      const scenario = await ctx.storage.getScenario({ id: scenarioId });
+      const scenario = await ctx.storage.getScenario({
+        scenarioId: scenarioId,
+      });
 
       // clean it all up
       await Promise.all(
@@ -142,11 +144,15 @@ const resolvers: Resolvers = {
       return relayConnection(states, hasNextPage, hasPreviousPage);
     },
     defaultState: async (parent, args, ctx) => {
-      const state = await ctx.storage.getState(parent.defaultState);
+      const state = await ctx.storage.getState({
+        stateId: parent.defaultState,
+      });
       return state;
     },
     currentState: async (parent, args, ctx) => {
-      const state = await ctx.storage.getState(parent.defaultState);
+      const state = await ctx.storage.getState({
+        stateId: parent.currentState,
+      });
       return state;
     },
   },
