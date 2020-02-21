@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { makeStyles, Theme, AppBar, Toolbar, Button } from '@material-ui/core';
 import Link from './Link';
 import Logo from './Logo';
+import DarkModeToggle from './DarkModeToggle';
 
 export interface NavigationProps {}
 
@@ -22,6 +23,9 @@ const Navigation: FC<NavigationProps> = props => {
         <Link underline="none" color="inherit" href="/">
           <Logo className={classes.title} />
         </Link>
+        <div style={{ marginLeft: 'auto' }}>
+          <DarkModeToggle />
+        </div>
       </Toolbar>
     </AppBar>
   );

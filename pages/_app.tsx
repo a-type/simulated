@@ -3,10 +3,24 @@ import Head from 'next/head';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { RelayEnvironmentProvider } from 'relay-hooks';
 import initEnvironment from '../lib/createRelayEnvironment';
-import Navigation from '../components/Navigation';
-import theme from '../theme/theme';
+import { lightTheme, darkTheme } from '../theme/theme';
+import { DarkModeProvider, useDarkMode } from '../contexts/DarkModeContext';
 
 const environment = initEnvironment();
+
+const AppInternal = ({ Component, pageProps }) => {
+  const { dark } = useDarkMode();
+
+  return (
+    <ThemeProvider theme={dark ? darkTheme : lightTheme}>
+      <Head>
+        <title>Simulated Admin</title>
+      </Head>
+      <CssBaseline />
+      <Component {...pageProps} />
+    </ThemeProvider>
+  );
+};
 
 class CustomApp extends App<{}> {
   componentDidMount() {
@@ -18,17 +32,11 @@ class CustomApp extends App<{}> {
   }
 
   render() {
-    const { Component, pageProps } = this.props;
-
     return (
       <RelayEnvironmentProvider environment={environment}>
-        <ThemeProvider theme={theme}>
-          <Head>
-            <title>Simulated Admin</title>
-          </Head>
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
+        <DarkModeProvider>
+          <AppInternal {...this.props} />
+        </DarkModeProvider>
       </RelayEnvironmentProvider>
     );
   }

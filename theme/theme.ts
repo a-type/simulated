@@ -3,7 +3,7 @@ import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
 import colors from './colors';
 import { generateShadows } from './shadows';
 
-const darkPalette: ThemeOptions['palette'] = {
+const baseDarkPalette: ThemeOptions['palette'] = {
   type: 'dark',
   text: {
     primary: colors.white,
@@ -19,7 +19,7 @@ const darkPalette: ThemeOptions['palette'] = {
     paper: colors.medium,
   },
 };
-const lightPalette: ThemeOptions['palette'] = {
+const baseLightPalette: ThemeOptions['palette'] = {
   type: 'light',
   text: {
     primary: colors.black,
@@ -36,25 +36,33 @@ const lightPalette: ThemeOptions['palette'] = {
   },
 };
 
-const { palette } = createMuiTheme({ palette: lightPalette });
+const { palette: lightPalette } = createMuiTheme({ palette: baseLightPalette });
+const { palette: darkPalette } = createMuiTheme({ palette: baseDarkPalette });
 
-export default createMuiTheme({
-  palette,
-  shape: {},
-  shadows: generateShadows(),
-  overrides: {
-    MuiAppBar: {
-      colorDefault: {
-        backgroundColor: 'transparent',
+const themeFactory = palette =>
+  createMuiTheme({
+    palette,
+    shape: {},
+    shadows: generateShadows(),
+    overrides: {
+      MuiAppBar: {
+        colorDefault: {
+          backgroundColor: 'transparent',
+        },
       },
     },
-  },
-  props: {
-    MuiTextField: {
-      variant: 'outlined',
+    props: {
+      MuiTextField: {
+        variant: 'outlined',
+      },
+      MuiButton: {
+        color: 'primary',
+      },
+      MuiLink: {
+        underline: 'always',
+      },
     },
-    MuiButton: {
-      color: 'primary',
-    },
-  },
-});
+  });
+
+export const lightTheme = themeFactory(lightPalette);
+export const darkTheme = themeFactory(darkPalette);
