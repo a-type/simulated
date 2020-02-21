@@ -3,8 +3,8 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type MatcherKind = "%future added value" | "Literal" | "%future added value";
-export type ResponseBodyKind = "%future added value" | "Template" | "%future added value";
+export type MatcherKind = "%future added value" | "%future added value" | "%future added value" | "Literal" | "%future added value";
+export type ResponseBodyKind = "%future added value" | "%future added value" | "%future added value" | "Template" | "%future added value";
 export type StateMappings_state = {
     readonly id: string;
     readonly mappings: {

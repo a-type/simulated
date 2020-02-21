@@ -26,6 +26,7 @@ const stateFragment = graphql`
     mappings(first: $first) @connection(key: "StateMappings_mappings") {
       edges {
         node {
+          # TODO: find better way to synchronize this...
           id
           pathMatcher {
             kind

@@ -6,6 +6,7 @@ import {
   makeStyles,
   CircularProgress,
   Paper,
+  Breadcrumbs,
 } from '@material-ui/core';
 import ScenarioDetails from '../../../components/ScenarioDetails';
 import ScenarioStates from '../../../components/ScenarioStates';
@@ -15,6 +16,8 @@ import { useCallback } from 'react';
 import Router from 'next/router';
 import Navigation from '../../../components/Navigation';
 import ScenarioStatus from '../../../components/ScenarioStatus';
+import ScenarioLink from '../../../components/ScenarioLink';
+import Link from '../../../components/Link';
 
 const query = graphql`
   query ScenarioIdQuery($scenarioId: ID!) {
@@ -26,6 +29,7 @@ const query = graphql`
         ...ScenarioStates_scenario
         ...AddStateButton_scenario
         ...DeleteScenarioButton_scenario
+        ...ScenarioLink_scenario
       }
     }
   }
@@ -44,6 +48,9 @@ const useStyles = makeStyles(theme => ({
   topSection: {
     marginBottom: theme.spacing(2),
     padding: theme.spacing(2),
+  },
+  breadcrumbs: {
+    marginBottom: theme.spacing(2),
   },
 }));
 
@@ -72,6 +79,10 @@ function ScenarioPage() {
         {props ? (
           props.viewer?.scenario ? (
             <>
+              <Breadcrumbs className={classes.breadcrumbs}>
+                <Link href="/">Scenarios</Link>
+                <ScenarioLink disabled scenario={props.viewer.scenario} />
+              </Breadcrumbs>
               <Paper className={classes.topSection}>
                 <ScenarioDetails
                   className={classes.details}

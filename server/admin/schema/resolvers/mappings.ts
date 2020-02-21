@@ -95,6 +95,12 @@ const resolvers: Resolvers = {
       };
     },
   },
+  Viewer: {
+    mapping: async (_parent, { id }, ctx) => {
+      const mapping = await ctx.storage.getMapping({ mappingId: id });
+      return mapping;
+    },
+  },
 };
 
 export default resolvers;

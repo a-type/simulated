@@ -12,6 +12,7 @@ type Viewer implements Node {
   scenarios(first: Int = 10, after: String): ScenarioConnection!
   scenario(id: ID!): Scenario
   state(id: ID!): State
+  mapping(id: ID!): Mapping
 }
 
 type ScenarioConnection {

@@ -1,16 +1,20 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 3afdfd91c43b5785677c731c86cf9aeb */
+/* @relayHash a6a1c6abff068dacfdebe7aeb67adf07 */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type StateIdQueryVariables = {
     stateId: string;
+    scenarioId: string;
 };
 export type StateIdQueryResponse = {
     readonly viewer: {
+        readonly scenario: {
+            readonly " $fragmentRefs": FragmentRefs<"ScenarioLink_scenario" | "StateLink_scenario">;
+        } | null;
         readonly state: {
-            readonly " $fragmentRefs": FragmentRefs<"StateDetails_state" | "StateMappings_state" | "AddMappingButton_state">;
+            readonly " $fragmentRefs": FragmentRefs<"StateDetails_state" | "StateMappings_state" | "StateLink_state">;
         } | null;
     };
 };
@@ -24,20 +28,27 @@ export type StateIdQuery = {
 /*
 query StateIdQuery(
   $stateId: ID!
+  $scenarioId: ID!
 ) {
   viewer {
+    scenario(id: $scenarioId) {
+      ...ScenarioLink_scenario
+      ...StateLink_scenario
+      id
+    }
     state(id: $stateId) {
       ...StateDetails_state
       ...StateMappings_state
-      ...AddMappingButton_state
+      ...StateLink_state
       id
     }
     id
   }
 }
 
-fragment AddMappingButton_state on State {
+fragment ScenarioLink_scenario on Scenario {
   id
+  name
 }
 
 fragment StateDetails_state on State {
@@ -45,6 +56,15 @@ fragment StateDetails_state on State {
   name
   createdAt
   updatedAt
+}
+
+fragment StateLink_scenario on Scenario {
+  id
+}
+
+fragment StateLink_state on State {
+  id
+  name
 }
 
 fragment StateMappings_state on State {
@@ -94,50 +114,62 @@ const node: ConcreteRequest = (function () {
             "name": "stateId",
             "type": "ID!",
             "defaultValue": null
+        } as any),
+        ({
+            "kind": "LocalArgument",
+            "name": "scenarioId",
+            "type": "ID!",
+            "defaultValue": null
         } as any)
     ], v1 = [
         ({
             "kind": "Variable",
             "name": "id",
+            "variableName": "scenarioId"
+        } as any)
+    ], v2 = [
+        ({
+            "kind": "Variable",
+            "name": "id",
             "variableName": "stateId"
         } as any)
-    ], v2 = ({
+    ], v3 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "id",
         "args": null,
         "storageKey": null
-    } as any), v3 = ({
+    } as any), v4 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "name",
         "args": null,
         "storageKey": null
-    } as any), v4 = ({
+    } as any), v5 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "createdAt",
         "args": null,
         "storageKey": null
-    } as any), v5 = ({
+    } as any), v6 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "updatedAt",
         "args": null,
         "storageKey": null
-    } as any), v6 = [
+    } as any), v7 = [
         ({
             "kind": "Literal",
             "name": "first",
             "value": 10
         } as any)
-    ], v7 = ({
+    ], v8 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "__typename",
         "args": null,
         "storageKey": null
-    } as any), v8 = ({
+    } as any), v9 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "kind",
@@ -165,9 +197,30 @@ const node: ConcreteRequest = (function () {
                         {
                             "kind": "LinkedField",
                             "alias": null,
-                            "name": "state",
+                            "name": "scenario",
                             "storageKey": null,
                             "args": (v1 /*: any*/),
+                            "concreteType": "Scenario",
+                            "plural": false,
+                            "selections": [
+                                {
+                                    "kind": "FragmentSpread",
+                                    "name": "ScenarioLink_scenario",
+                                    "args": null
+                                },
+                                {
+                                    "kind": "FragmentSpread",
+                                    "name": "StateLink_scenario",
+                                    "args": null
+                                }
+                            ]
+                        },
+                        {
+                            "kind": "LinkedField",
+                            "alias": null,
+                            "name": "state",
+                            "storageKey": null,
+                            "args": (v2 /*: any*/),
                             "concreteType": "State",
                             "plural": false,
                             "selections": [
@@ -183,7 +236,7 @@ const node: ConcreteRequest = (function () {
                                 },
                                 {
                                     "kind": "FragmentSpread",
-                                    "name": "AddMappingButton_state",
+                                    "name": "StateLink_state",
                                     "args": null
                                 }
                             ]
@@ -209,22 +262,35 @@ const node: ConcreteRequest = (function () {
                         {
                             "kind": "LinkedField",
                             "alias": null,
-                            "name": "state",
+                            "name": "scenario",
                             "storageKey": null,
                             "args": (v1 /*: any*/),
+                            "concreteType": "Scenario",
+                            "plural": false,
+                            "selections": [
+                                (v3 /*: any*/),
+                                (v4 /*: any*/)
+                            ]
+                        },
+                        {
+                            "kind": "LinkedField",
+                            "alias": null,
+                            "name": "state",
+                            "storageKey": null,
+                            "args": (v2 /*: any*/),
                             "concreteType": "State",
                             "plural": false,
                             "selections": [
-                                (v2 /*: any*/),
                                 (v3 /*: any*/),
                                 (v4 /*: any*/),
                                 (v5 /*: any*/),
+                                (v6 /*: any*/),
                                 {
                                     "kind": "LinkedField",
                                     "alias": null,
                                     "name": "mappings",
                                     "storageKey": "mappings(first:10)",
-                                    "args": (v6 /*: any*/),
+                                    "args": (v7 /*: any*/),
                                     "concreteType": "StateMappingConnection",
                                     "plural": false,
                                     "selections": [
@@ -246,7 +312,7 @@ const node: ConcreteRequest = (function () {
                                                     "concreteType": "Mapping",
                                                     "plural": false,
                                                     "selections": [
-                                                        (v2 /*: any*/),
+                                                        (v3 /*: any*/),
                                                         {
                                                             "kind": "LinkedField",
                                                             "alias": null,
@@ -256,8 +322,8 @@ const node: ConcreteRequest = (function () {
                                                             "concreteType": null,
                                                             "plural": false,
                                                             "selections": [
-                                                                (v7 /*: any*/),
                                                                 (v8 /*: any*/),
+                                                                (v9 /*: any*/),
                                                                 {
                                                                     "kind": "InlineFragment",
                                                                     "type": "LiteralMatcher",
@@ -291,8 +357,8 @@ const node: ConcreteRequest = (function () {
                                                                     "concreteType": null,
                                                                     "plural": false,
                                                                     "selections": [
-                                                                        (v7 /*: any*/),
-                                                                        (v8 /*: any*/)
+                                                                        (v8 /*: any*/),
+                                                                        (v9 /*: any*/)
                                                                     ]
                                                                 }
                                                             ]
@@ -315,8 +381,8 @@ const node: ConcreteRequest = (function () {
                                                                     "concreteType": "State",
                                                                     "plural": false,
                                                                     "selections": [
-                                                                        (v3 /*: any*/),
-                                                                        (v2 /*: any*/)
+                                                                        (v4 /*: any*/),
+                                                                        (v3 /*: any*/)
                                                                     ]
                                                                 }
                                                             ]
@@ -328,9 +394,9 @@ const node: ConcreteRequest = (function () {
                                                             "args": null,
                                                             "storageKey": null
                                                         },
-                                                        (v4 /*: any*/),
                                                         (v5 /*: any*/),
-                                                        (v7 /*: any*/)
+                                                        (v6 /*: any*/),
+                                                        (v8 /*: any*/)
                                                     ]
                                                 },
                                                 {
@@ -373,14 +439,14 @@ const node: ConcreteRequest = (function () {
                                     "kind": "LinkedHandle",
                                     "alias": null,
                                     "name": "mappings",
-                                    "args": (v6 /*: any*/),
+                                    "args": (v7 /*: any*/),
                                     "handle": "connection",
                                     "key": "StateMappings_mappings",
                                     "filters": null
                                 }
                             ]
                         },
-                        (v2 /*: any*/)
+                        (v3 /*: any*/)
                     ]
                 }
             ]
@@ -389,10 +455,10 @@ const node: ConcreteRequest = (function () {
             "operationKind": "query",
             "name": "StateIdQuery",
             "id": null,
-            "text": "query StateIdQuery(\n  $stateId: ID!\n) {\n  viewer {\n    state(id: $stateId) {\n      ...StateDetails_state\n      ...StateMappings_state\n      ...AddMappingButton_state\n      id\n    }\n    id\n  }\n}\n\nfragment AddMappingButton_state on State {\n  id\n}\n\nfragment StateDetails_state on State {\n  id\n  name\n  createdAt\n  updatedAt\n}\n\nfragment StateMappings_state on State {\n  id\n  mappings(first: 10) {\n    edges {\n      node {\n        id\n        pathMatcher {\n          __typename\n          kind\n          ... on LiteralMatcher {\n            value\n          }\n        }\n        response {\n          body {\n            __typename\n            kind\n          }\n        }\n        trigger {\n          targetState {\n            name\n            id\n          }\n        }\n        priority\n        createdAt\n        updatedAt\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
+            "text": "query StateIdQuery(\n  $stateId: ID!\n  $scenarioId: ID!\n) {\n  viewer {\n    scenario(id: $scenarioId) {\n      ...ScenarioLink_scenario\n      ...StateLink_scenario\n      id\n    }\n    state(id: $stateId) {\n      ...StateDetails_state\n      ...StateMappings_state\n      ...StateLink_state\n      id\n    }\n    id\n  }\n}\n\nfragment ScenarioLink_scenario on Scenario {\n  id\n  name\n}\n\nfragment StateDetails_state on State {\n  id\n  name\n  createdAt\n  updatedAt\n}\n\nfragment StateLink_scenario on Scenario {\n  id\n}\n\nfragment StateLink_state on State {\n  id\n  name\n}\n\nfragment StateMappings_state on State {\n  id\n  mappings(first: 10) {\n    edges {\n      node {\n        id\n        pathMatcher {\n          __typename\n          kind\n          ... on LiteralMatcher {\n            value\n          }\n        }\n        response {\n          body {\n            __typename\n            kind\n          }\n        }\n        trigger {\n          targetState {\n            name\n            id\n          }\n        }\n        priority\n        createdAt\n        updatedAt\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = '0cbbb294856b5c1fa24732593ad0635e';
+(node as any).hash = 'f65741509a35a69a4e4b1ed41c06e3dd';
 export default node;

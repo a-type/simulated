@@ -508,6 +508,7 @@ export type Viewer = Node & {
   scenarios: ScenarioConnection,
   scenario?: Maybe<Scenario>,
   state?: Maybe<State>,
+  mapping?: Maybe<Mapping>,
 };
 
 
@@ -523,6 +524,11 @@ export type ViewerScenarioArgs = {
 
 
 export type ViewerStateArgs = {
+  id: Scalars['ID']
+};
+
+
+export type ViewerMappingArgs = {
   id: Scalars['ID']
 };
 
@@ -950,6 +956,7 @@ export type ViewerResolvers<ContextType = Context, ParentType extends ResolversP
   scenarios?: Resolver<ResolversTypes['ScenarioConnection'], ParentType, ContextType, RequireFields<ViewerScenariosArgs, 'first'>>,
   scenario?: Resolver<Maybe<ResolversTypes['Scenario']>, ParentType, ContextType, RequireFields<ViewerScenarioArgs, 'id'>>,
   state?: Resolver<Maybe<ResolversTypes['State']>, ParentType, ContextType, RequireFields<ViewerStateArgs, 'id'>>,
+  mapping?: Resolver<Maybe<ResolversTypes['Mapping']>, ParentType, ContextType, RequireFields<ViewerMappingArgs, 'id'>>,
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{

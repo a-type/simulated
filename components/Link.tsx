@@ -1,8 +1,21 @@
-import { Link as MuiLink, LinkProps as MuiLinkProps } from '@material-ui/core';
+import {
+  Link as MuiLink,
+  LinkProps as MuiLinkProps,
+  makeStyles,
+} from '@material-ui/core';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 import { forwardRef } from 'react';
 
-export type LinkProps = MuiLinkProps & NextLinkProps;
+export type LinkProps = MuiLinkProps &
+  NextLinkProps & {
+    disabled?: boolean;
+  };
+
+const useStyles = makeStyles(theme => ({
+  disabled: {
+    color: theme.palette.text.disabled,
+  },
+}));
 
 function Link(
   {
@@ -13,10 +26,22 @@ function Link(
     scroll,
     passHref,
     prefetch,
+    disabled,
+    children,
     ...props
   }: LinkProps,
   ref,
 ) {
+  const classes = useStyles({});
+
+  if (disabled) {
+    return (
+      <MuiLink component="span" className={classes.disabled} underline="none">
+        {children}
+      </MuiLink>
+    );
+  }
+
   return (
     <NextLink
       as={as}
@@ -27,7 +52,7 @@ function Link(
       passHref
       ref={ref}
     >
-      <MuiLink {...props} />
+      <MuiLink {...props}>{children}</MuiLink>
     </NextLink>
   );
 }
