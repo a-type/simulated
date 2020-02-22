@@ -3,13 +3,31 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type MatcherKind = "%future added value" | "%future added value" | "Literal" | "%future added value";
-export type ResponseBodyKind = "%future added value" | "%future added value" | "Template" | "%future added value";
+export type BodyMatcherKind = "%future added value" | "Literal" | "%future added value";
+export type HeadersMatcherKind = "%future added value" | "Literals" | "%future added value";
+export type MethodMatcherKind = "%future added value" | "Literals" | "%future added value";
+export type PathMatcherKind = "%future added value" | "Literal" | "%future added value";
+export type ResponseBodyKind = "%future added value" | "Template" | "%future added value";
 export type MappingEditor_mapping = {
     readonly id: string;
+    readonly methodMatcher: {
+        readonly kind: MethodMatcherKind;
+        readonly values?: ReadonlyArray<string>;
+    } | null;
     readonly pathMatcher: {
-        readonly kind: MatcherKind;
+        readonly kind: PathMatcherKind;
         readonly value?: string;
+    } | null;
+    readonly bodyMatcher: {
+        readonly kind: BodyMatcherKind;
+        readonly value?: string;
+    } | null;
+    readonly headersMatcher: {
+        readonly kind: HeadersMatcherKind;
+        readonly values?: ReadonlyArray<{
+            readonly name: string;
+            readonly value: string | null;
+        }>;
     } | null;
     readonly response: {
         readonly body: {
@@ -42,15 +60,21 @@ const node: ReaderFragment = (function () {
         "name": "kind",
         "args": null,
         "storageKey": null
-    } as any), v1 = [
-        ({
-            "kind": "ScalarField",
-            "alias": null,
-            "name": "value",
-            "args": null,
-            "storageKey": null
-        } as any)
-    ];
+    } as any), v1 = ({
+        "kind": "ScalarField",
+        "alias": null,
+        "name": "value",
+        "args": null,
+        "storageKey": null
+    } as any), v2 = [
+        (v1 /*: any*/)
+    ], v3 = ({
+        "kind": "ScalarField",
+        "alias": null,
+        "name": "name",
+        "args": null,
+        "storageKey": null
+    } as any);
     return {
         "kind": "Fragment",
         "name": "MappingEditor_mapping",
@@ -68,6 +92,31 @@ const node: ReaderFragment = (function () {
             {
                 "kind": "LinkedField",
                 "alias": null,
+                "name": "methodMatcher",
+                "storageKey": null,
+                "args": null,
+                "concreteType": null,
+                "plural": false,
+                "selections": [
+                    (v0 /*: any*/),
+                    {
+                        "kind": "InlineFragment",
+                        "type": "LiteralsMethodMatcher",
+                        "selections": [
+                            {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "name": "values",
+                                "args": null,
+                                "storageKey": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "kind": "LinkedField",
+                "alias": null,
                 "name": "pathMatcher",
                 "storageKey": null,
                 "args": null,
@@ -77,8 +126,56 @@ const node: ReaderFragment = (function () {
                     (v0 /*: any*/),
                     {
                         "kind": "InlineFragment",
-                        "type": "LiteralMatcher",
-                        "selections": (v1 /*: any*/)
+                        "type": "LiteralPathMatcher",
+                        "selections": (v2 /*: any*/)
+                    }
+                ]
+            },
+            {
+                "kind": "LinkedField",
+                "alias": null,
+                "name": "bodyMatcher",
+                "storageKey": null,
+                "args": null,
+                "concreteType": null,
+                "plural": false,
+                "selections": [
+                    (v0 /*: any*/),
+                    {
+                        "kind": "InlineFragment",
+                        "type": "LiteralBodyMatcher",
+                        "selections": (v2 /*: any*/)
+                    }
+                ]
+            },
+            {
+                "kind": "LinkedField",
+                "alias": null,
+                "name": "headersMatcher",
+                "storageKey": null,
+                "args": null,
+                "concreteType": null,
+                "plural": false,
+                "selections": [
+                    (v0 /*: any*/),
+                    {
+                        "kind": "InlineFragment",
+                        "type": "LiteralsHeadersMatcher",
+                        "selections": [
+                            {
+                                "kind": "LinkedField",
+                                "alias": null,
+                                "name": "values",
+                                "storageKey": null,
+                                "args": null,
+                                "concreteType": "LiteralHeaderValueMatcher",
+                                "plural": true,
+                                "selections": [
+                                    (v3 /*: any*/),
+                                    (v1 /*: any*/)
+                                ]
+                            }
+                        ]
                     }
                 ]
             },
@@ -104,7 +201,7 @@ const node: ReaderFragment = (function () {
                             {
                                 "kind": "InlineFragment",
                                 "type": "TemplateResponseBody",
-                                "selections": (v1 /*: any*/)
+                                "selections": (v2 /*: any*/)
                             }
                         ]
                     }
@@ -128,13 +225,7 @@ const node: ReaderFragment = (function () {
                         "concreteType": "State",
                         "plural": false,
                         "selections": [
-                            {
-                                "kind": "ScalarField",
-                                "alias": null,
-                                "name": "name",
-                                "args": null,
-                                "storageKey": null
-                            }
+                            (v3 /*: any*/)
                         ]
                     }
                 ]
@@ -163,5 +254,5 @@ const node: ReaderFragment = (function () {
         ]
     } as any;
 })();
-(node as any).hash = 'a4760c6a6aec006c6b868395553f978b';
+(node as any).hash = 'be1bc1440bb5b95a822fca96ee123693';
 export default node;

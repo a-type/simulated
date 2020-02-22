@@ -11,10 +11,6 @@ import { useRouter } from 'next/router';
 import { graphql, useMutation, useQuery } from 'relay-hooks';
 import { ConnectionHandler } from 'relay-runtime';
 import MappingEditor from '../../../../../../components/MappingEditor';
-import {
-  toMatcherInput,
-  toBodyInput,
-} from '../../../../../../lib/inputTransformers';
 import Navigation from '../../../../../../components/Navigation';
 import singleQuery from '../../../../../../lib/singleQuery';
 import Link from '../../../../../../components/Link';
@@ -55,10 +51,31 @@ const addMappingMutation = graphql`
         node {
           # TODO: find a better way to sync this with StateMappings component?
           id
+          methodMatcher {
+            kind
+            ... on LiteralsMethodMatcher {
+              values
+            }
+          }
           pathMatcher {
             kind
-            ... on LiteralMatcher {
+            ... on LiteralPathMatcher {
               value
+            }
+          }
+          bodyMatcher {
+            kind
+            ... on LiteralBodyMatcher {
+              value
+            }
+          }
+          headersMatcher {
+            kind
+            ... on LiteralsHeadersMatcher {
+              values {
+                name
+                value
+              }
             }
           }
           response {
@@ -98,6 +115,10 @@ const CreateMappingPage: FC<CreateMappingPageProps> = () => {
   const [mutate] = useMutation<create_addMappingMutation>(addMappingMutation, {
     updater: store => {
       const root = store.getRootField('addStateMapping');
+      if (!root) {
+        console.warn(`Failed to update mappings after create`);
+        return;
+      }
       const edge = root.getLinkedRecord('mappingEdge');
       const stateProxy = store.get(stateId as string);
       const connection = ConnectionHandler.getConnection(
@@ -114,13 +135,7 @@ const CreateMappingPage: FC<CreateMappingPageProps> = () => {
         variables: {
           input: {
             stateId,
-            mapping: {
-              priority: parseInt(values.priority, 10),
-              pathMatcher: toMatcherInput(values.pathMatcher),
-              response: {
-                body: toBodyInput(values.response.body),
-              },
-            },
+            mapping: values,
           },
         },
       });

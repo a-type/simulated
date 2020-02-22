@@ -1,25 +1,53 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash b0f45fd1457cb2fe43269515bb086fed */
+/* @relayHash 0e358a38550134cc14775f5248a4f1e0 */
 
 import { ConcreteRequest } from "relay-runtime";
-export type MatcherKind = "%future added value" | "Literal" | "%future added value";
-export type ResponseBodyKind = "%future added value" | "Template" | "%future added value";
+export type BodyMatcherKind = "Literal" | "%future added value";
+export type HeadersMatcherKind = "Literals" | "%future added value";
+export type MethodMatcherKind = "Literals" | "%future added value";
+export type PathMatcherKind = "Literal" | "%future added value";
+export type ResponseBodyKind = "Template" | "%future added value";
 export type AddStateMappingInput = {
     stateId: string;
     mapping: AddMappingInput;
 };
 export type AddMappingInput = {
-    pathMatcher?: AddMatcherInput | null;
+    methodMatcher?: AddMethodMatcherInput | null;
+    pathMatcher?: AddPathMatcherInput | null;
+    bodyMatcher?: AddBodyMatcherInput | null;
+    headersMatcher?: AddHeadersMatcherInput | null;
     response?: AddResponseInput | null;
     trigger?: AddTriggerInput | null;
     priority: number;
 };
-export type AddMatcherInput = {
-    literal?: AddLiteralMatcherInput | null;
+export type AddMethodMatcherInput = {
+    literals?: AddLiteralsMethodMatcherInput | null;
 };
-export type AddLiteralMatcherInput = {
+export type AddLiteralsMethodMatcherInput = {
+    values: Array<string>;
+};
+export type AddPathMatcherInput = {
+    literal?: AddLiteralPathMatcherInput | null;
+};
+export type AddLiteralPathMatcherInput = {
     value: string;
+};
+export type AddBodyMatcherInput = {
+    literal?: AddLiteralBodyMatcherInput | null;
+};
+export type AddLiteralBodyMatcherInput = {
+    value: string;
+};
+export type AddHeadersMatcherInput = {
+    literals?: AddLiteralsHeadersMatcherInput | null;
+};
+export type AddLiteralsHeadersMatcherInput = {
+    values: Array<AddLiteralHeaderValueInput>;
+};
+export type AddLiteralHeaderValueInput = {
+    name: string;
+    value?: string | null;
 };
 export type AddResponseInput = {
     body: AddResponseBodyInput;
@@ -41,9 +69,24 @@ export type create_addMappingMutationResponse = {
         readonly mappingEdge: {
             readonly node: {
                 readonly id: string;
+                readonly methodMatcher: {
+                    readonly kind: MethodMatcherKind;
+                    readonly values?: ReadonlyArray<string>;
+                } | null;
                 readonly pathMatcher: {
-                    readonly kind: MatcherKind;
+                    readonly kind: PathMatcherKind;
                     readonly value?: string;
+                } | null;
+                readonly bodyMatcher: {
+                    readonly kind: BodyMatcherKind;
+                    readonly value?: string;
+                } | null;
+                readonly headersMatcher: {
+                    readonly kind: HeadersMatcherKind;
+                    readonly values?: ReadonlyArray<{
+                        readonly name: string;
+                        readonly value: string | null;
+                    }>;
                 } | null;
                 readonly response: {
                     readonly body: {
@@ -77,11 +120,35 @@ mutation create_addMappingMutation(
     mappingEdge {
       node {
         id
+        methodMatcher {
+          __typename
+          kind
+          ... on LiteralsMethodMatcher {
+            values
+          }
+        }
         pathMatcher {
           __typename
           kind
-          ... on LiteralMatcher {
+          ... on LiteralPathMatcher {
             value
+          }
+        }
+        bodyMatcher {
+          __typename
+          kind
+          ... on LiteralBodyMatcher {
+            value
+          }
+        }
+        headersMatcher {
+          __typename
+          kind
+          ... on LiteralsHeadersMatcher {
+            values {
+              name
+              value
+            }
           }
         }
         response {
@@ -133,12 +200,12 @@ const node: ConcreteRequest = (function () {
         "storageKey": null
     } as any), v4 = ({
         "kind": "InlineFragment",
-        "type": "LiteralMatcher",
+        "type": "LiteralsMethodMatcher",
         "selections": [
             {
                 "kind": "ScalarField",
                 "alias": null,
-                "name": "value",
+                "name": "values",
                 "args": null,
                 "storageKey": null
             }
@@ -146,28 +213,62 @@ const node: ConcreteRequest = (function () {
     } as any), v5 = ({
         "kind": "ScalarField",
         "alias": null,
+        "name": "value",
+        "args": null,
+        "storageKey": null
+    } as any), v6 = [
+        (v5 /*: any*/)
+    ], v7 = ({
+        "kind": "InlineFragment",
+        "type": "LiteralPathMatcher",
+        "selections": (v6 /*: any*/)
+    } as any), v8 = ({
+        "kind": "InlineFragment",
+        "type": "LiteralBodyMatcher",
+        "selections": (v6 /*: any*/)
+    } as any), v9 = ({
+        "kind": "ScalarField",
+        "alias": null,
         "name": "name",
         "args": null,
         "storageKey": null
-    } as any), v6 = ({
+    } as any), v10 = ({
+        "kind": "InlineFragment",
+        "type": "LiteralsHeadersMatcher",
+        "selections": [
+            {
+                "kind": "LinkedField",
+                "alias": null,
+                "name": "values",
+                "storageKey": null,
+                "args": null,
+                "concreteType": "LiteralHeaderValueMatcher",
+                "plural": true,
+                "selections": [
+                    (v9 /*: any*/),
+                    (v5 /*: any*/)
+                ]
+            }
+        ]
+    } as any), v11 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "priority",
         "args": null,
         "storageKey": null
-    } as any), v7 = ({
+    } as any), v12 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "createdAt",
         "args": null,
         "storageKey": null
-    } as any), v8 = ({
+    } as any), v13 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "updatedAt",
         "args": null,
         "storageKey": null
-    } as any), v9 = ({
+    } as any), v14 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "__typename",
@@ -214,7 +315,7 @@ const node: ConcreteRequest = (function () {
                                         {
                                             "kind": "LinkedField",
                                             "alias": null,
-                                            "name": "pathMatcher",
+                                            "name": "methodMatcher",
                                             "storageKey": null,
                                             "args": null,
                                             "concreteType": null,
@@ -222,6 +323,45 @@ const node: ConcreteRequest = (function () {
                                             "selections": [
                                                 (v3 /*: any*/),
                                                 (v4 /*: any*/)
+                                            ]
+                                        },
+                                        {
+                                            "kind": "LinkedField",
+                                            "alias": null,
+                                            "name": "pathMatcher",
+                                            "storageKey": null,
+                                            "args": null,
+                                            "concreteType": null,
+                                            "plural": false,
+                                            "selections": [
+                                                (v3 /*: any*/),
+                                                (v7 /*: any*/)
+                                            ]
+                                        },
+                                        {
+                                            "kind": "LinkedField",
+                                            "alias": null,
+                                            "name": "bodyMatcher",
+                                            "storageKey": null,
+                                            "args": null,
+                                            "concreteType": null,
+                                            "plural": false,
+                                            "selections": [
+                                                (v3 /*: any*/),
+                                                (v8 /*: any*/)
+                                            ]
+                                        },
+                                        {
+                                            "kind": "LinkedField",
+                                            "alias": null,
+                                            "name": "headersMatcher",
+                                            "storageKey": null,
+                                            "args": null,
+                                            "concreteType": null,
+                                            "plural": false,
+                                            "selections": [
+                                                (v3 /*: any*/),
+                                                (v10 /*: any*/)
                                             ]
                                         },
                                         {
@@ -265,14 +405,14 @@ const node: ConcreteRequest = (function () {
                                                     "concreteType": "State",
                                                     "plural": false,
                                                     "selections": [
-                                                        (v5 /*: any*/)
+                                                        (v9 /*: any*/)
                                                     ]
                                                 }
                                             ]
                                         },
-                                        (v6 /*: any*/),
-                                        (v7 /*: any*/),
-                                        (v8 /*: any*/)
+                                        (v11 /*: any*/),
+                                        (v12 /*: any*/),
+                                        (v13 /*: any*/)
                                     ]
                                 }
                             ]
@@ -317,15 +457,57 @@ const node: ConcreteRequest = (function () {
                                         {
                                             "kind": "LinkedField",
                                             "alias": null,
+                                            "name": "methodMatcher",
+                                            "storageKey": null,
+                                            "args": null,
+                                            "concreteType": null,
+                                            "plural": false,
+                                            "selections": [
+                                                (v14 /*: any*/),
+                                                (v3 /*: any*/),
+                                                (v4 /*: any*/)
+                                            ]
+                                        },
+                                        {
+                                            "kind": "LinkedField",
+                                            "alias": null,
                                             "name": "pathMatcher",
                                             "storageKey": null,
                                             "args": null,
                                             "concreteType": null,
                                             "plural": false,
                                             "selections": [
-                                                (v9 /*: any*/),
+                                                (v14 /*: any*/),
                                                 (v3 /*: any*/),
-                                                (v4 /*: any*/)
+                                                (v7 /*: any*/)
+                                            ]
+                                        },
+                                        {
+                                            "kind": "LinkedField",
+                                            "alias": null,
+                                            "name": "bodyMatcher",
+                                            "storageKey": null,
+                                            "args": null,
+                                            "concreteType": null,
+                                            "plural": false,
+                                            "selections": [
+                                                (v14 /*: any*/),
+                                                (v3 /*: any*/),
+                                                (v8 /*: any*/)
+                                            ]
+                                        },
+                                        {
+                                            "kind": "LinkedField",
+                                            "alias": null,
+                                            "name": "headersMatcher",
+                                            "storageKey": null,
+                                            "args": null,
+                                            "concreteType": null,
+                                            "plural": false,
+                                            "selections": [
+                                                (v14 /*: any*/),
+                                                (v3 /*: any*/),
+                                                (v10 /*: any*/)
                                             ]
                                         },
                                         {
@@ -346,7 +528,7 @@ const node: ConcreteRequest = (function () {
                                                     "concreteType": null,
                                                     "plural": false,
                                                     "selections": [
-                                                        (v9 /*: any*/),
+                                                        (v14 /*: any*/),
                                                         (v3 /*: any*/)
                                                     ]
                                                 }
@@ -370,15 +552,15 @@ const node: ConcreteRequest = (function () {
                                                     "concreteType": "State",
                                                     "plural": false,
                                                     "selections": [
-                                                        (v5 /*: any*/),
+                                                        (v9 /*: any*/),
                                                         (v2 /*: any*/)
                                                     ]
                                                 }
                                             ]
                                         },
-                                        (v6 /*: any*/),
-                                        (v7 /*: any*/),
-                                        (v8 /*: any*/)
+                                        (v11 /*: any*/),
+                                        (v12 /*: any*/),
+                                        (v13 /*: any*/)
                                     ]
                                 }
                             ]
@@ -391,10 +573,10 @@ const node: ConcreteRequest = (function () {
             "operationKind": "mutation",
             "name": "create_addMappingMutation",
             "id": null,
-            "text": "mutation create_addMappingMutation(\n  $input: AddStateMappingInput!\n) {\n  addStateMapping(input: $input) {\n    mappingEdge {\n      node {\n        id\n        pathMatcher {\n          __typename\n          kind\n          ... on LiteralMatcher {\n            value\n          }\n        }\n        response {\n          body {\n            __typename\n            kind\n          }\n        }\n        trigger {\n          targetState {\n            name\n            id\n          }\n        }\n        priority\n        createdAt\n        updatedAt\n      }\n    }\n  }\n}\n",
+            "text": "mutation create_addMappingMutation(\n  $input: AddStateMappingInput!\n) {\n  addStateMapping(input: $input) {\n    mappingEdge {\n      node {\n        id\n        methodMatcher {\n          __typename\n          kind\n          ... on LiteralsMethodMatcher {\n            values\n          }\n        }\n        pathMatcher {\n          __typename\n          kind\n          ... on LiteralPathMatcher {\n            value\n          }\n        }\n        bodyMatcher {\n          __typename\n          kind\n          ... on LiteralBodyMatcher {\n            value\n          }\n        }\n        headersMatcher {\n          __typename\n          kind\n          ... on LiteralsHeadersMatcher {\n            values {\n              name\n              value\n            }\n          }\n        }\n        response {\n          body {\n            __typename\n            kind\n          }\n        }\n        trigger {\n          targetState {\n            name\n            id\n          }\n        }\n        priority\n        createdAt\n        updatedAt\n      }\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = '72da907bc9ffccae5edc39b3629c68b8';
+(node as any).hash = '8621c2b416986cd00d7d8d10b2169e85';
 export default node;

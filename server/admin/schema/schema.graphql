@@ -123,7 +123,10 @@ type StateMappingPageInfo {
 
 type Mapping implements Node {
   id: ID!
-  pathMatcher: Matcher
+  methodMatcher: MethodMatcher
+  pathMatcher: PathMatcher
+  bodyMatcher: BodyMatcher
+  headersMatcher: HeadersMatcher
   response: Response
   trigger: Trigger
   priority: Int!
@@ -137,17 +140,61 @@ type Mapping implements Node {
   updatedAt: String!
 }
 
-enum MatcherKind {
+enum MethodMatcherKind {
+  Literals
+}
+
+interface MethodMatcher {
+  kind: MethodMatcherKind!
+}
+
+type LiteralsMethodMatcher implements MethodMatcher {
+  kind: MethodMatcherKind!
+  values: [String!]!
+}
+
+enum PathMatcherKind {
   Literal
 }
 
-interface Matcher {
-  kind: MatcherKind!
+interface PathMatcher {
+  kind: PathMatcherKind!
 }
 
-type LiteralMatcher implements Matcher {
-  kind: MatcherKind!
+type LiteralPathMatcher implements PathMatcher {
+  kind: PathMatcherKind!
   value: String!
+}
+
+enum BodyMatcherKind {
+  Literal
+}
+
+interface BodyMatcher {
+  kind: BodyMatcherKind!
+}
+
+type LiteralBodyMatcher implements BodyMatcher {
+  kind: BodyMatcherKind!
+  value: String!
+}
+
+enum HeadersMatcherKind {
+  Literals
+}
+
+interface HeadersMatcher {
+  kind: HeadersMatcherKind!
+}
+
+type LiteralsHeadersMatcher implements HeadersMatcher {
+  kind: HeadersMatcherKind!
+  values: [LiteralHeaderValueMatcher!]!
+}
+
+type LiteralHeaderValueMatcher {
+  name: String!
+  value: String
 }
 
 type Response {
@@ -324,21 +371,53 @@ input AddStateMappingInput {
 }
 
 input AddMappingInput {
-  pathMatcher: AddMatcherInput
+  methodMatcher: AddMethodMatcherInput
+  pathMatcher: AddPathMatcherInput
+  bodyMatcher: AddBodyMatcherInput
+  headersMatcher: AddHeadersMatcherInput
   response: AddResponseInput
   trigger: AddTriggerInput
   priority: Int!
 }
 
+input AddMethodMatcherInput {
+  literals: AddLiteralsMethodMatcherInput
+}
+
+input AddLiteralsMethodMatcherInput {
+  values: [String!]!
+}
+
 """
 All fields are exclusive; choose one
 """
-input AddMatcherInput {
-  literal: AddLiteralMatcherInput
+input AddPathMatcherInput {
+  literal: AddLiteralPathMatcherInput
 }
 
-input AddLiteralMatcherInput {
+input AddLiteralPathMatcherInput {
   value: String!
+}
+
+input AddBodyMatcherInput {
+  literal: AddLiteralBodyMatcherInput
+}
+
+input AddLiteralBodyMatcherInput {
+  value: String!
+}
+
+input AddHeadersMatcherInput {
+  literals: AddLiteralsHeadersMatcherInput
+}
+
+input AddLiteralsHeadersMatcherInput {
+  values: [AddLiteralHeaderValueInput!]!
+}
+
+input AddLiteralHeaderValueInput {
+  name: String!
+  value: String
 }
 
 type AddStateMappingResult {

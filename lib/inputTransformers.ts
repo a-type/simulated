@@ -1,29 +1,20 @@
-type MatcherCreateValues = {
-  kind: 'Literal';
-  value: string;
+export type PolymorphicInput = {
+  [kind: string]: {} | undefined;
 };
 
-type ResponseBodyCreateValues = {
-  kind: 'Template';
-  value: string;
+export type PolymorphicFormValues = {
+  kind: string;
+  [other: string]: any;
 };
 
-export const toMatcherInput = ({ kind, ...rest }: MatcherCreateValues) => {
-  if (kind === 'Literal') {
-    return {
-      literal: rest,
-    };
-  }
+export const toPolymorphicInput = <T extends PolymorphicInput>(
+  values: PolymorphicFormValues | null,
+): T => {
+  if (!values) return null;
 
-  return null;
-};
+  const { kind, ...rest } = values;
 
-export const toBodyInput = ({ kind, ...rest }: ResponseBodyCreateValues) => {
-  if (kind === 'Template') {
-    return {
-      template: rest,
-    };
-  }
-
-  return null;
+  return {
+    [(kind as string).toLowerCase()]: rest,
+  } as T;
 };

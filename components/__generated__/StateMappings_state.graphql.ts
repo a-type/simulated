@@ -3,17 +3,35 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type MatcherKind = "%future added value" | "%future added value" | "%future added value" | "Literal" | "%future added value";
-export type ResponseBodyKind = "%future added value" | "%future added value" | "%future added value" | "Template" | "%future added value";
+export type BodyMatcherKind = "%future added value" | "%future added value" | "Literal" | "%future added value";
+export type HeadersMatcherKind = "%future added value" | "%future added value" | "Literals" | "%future added value";
+export type MethodMatcherKind = "%future added value" | "%future added value" | "Literals" | "%future added value";
+export type PathMatcherKind = "%future added value" | "%future added value" | "Literal" | "%future added value";
+export type ResponseBodyKind = "%future added value" | "%future added value" | "Template" | "%future added value";
 export type StateMappings_state = {
     readonly id: string;
     readonly mappings: {
         readonly edges: ReadonlyArray<{
             readonly node: {
                 readonly id: string;
+                readonly methodMatcher: {
+                    readonly kind: MethodMatcherKind;
+                    readonly values?: ReadonlyArray<string>;
+                } | null;
                 readonly pathMatcher: {
-                    readonly kind: MatcherKind;
+                    readonly kind: PathMatcherKind;
                     readonly value?: string;
+                } | null;
+                readonly bodyMatcher: {
+                    readonly kind: BodyMatcherKind;
+                    readonly value?: string;
+                } | null;
+                readonly headersMatcher: {
+                    readonly kind: HeadersMatcherKind;
+                    readonly values?: ReadonlyArray<{
+                        readonly name: string;
+                        readonly value: string | null;
+                    }>;
                 } | null;
                 readonly response: {
                     readonly body: {
@@ -54,6 +72,20 @@ const node: ReaderFragment = (function () {
         "kind": "ScalarField",
         "alias": null,
         "name": "kind",
+        "args": null,
+        "storageKey": null
+    } as any), v2 = ({
+        "kind": "ScalarField",
+        "alias": null,
+        "name": "value",
+        "args": null,
+        "storageKey": null
+    } as any), v3 = [
+        (v2 /*: any*/)
+    ], v4 = ({
+        "kind": "ScalarField",
+        "alias": null,
+        "name": "name",
         "args": null,
         "storageKey": null
     } as any);
@@ -114,6 +146,31 @@ const node: ReaderFragment = (function () {
                                     {
                                         "kind": "LinkedField",
                                         "alias": null,
+                                        "name": "methodMatcher",
+                                        "storageKey": null,
+                                        "args": null,
+                                        "concreteType": null,
+                                        "plural": false,
+                                        "selections": [
+                                            (v1 /*: any*/),
+                                            {
+                                                "kind": "InlineFragment",
+                                                "type": "LiteralsMethodMatcher",
+                                                "selections": [
+                                                    {
+                                                        "kind": "ScalarField",
+                                                        "alias": null,
+                                                        "name": "values",
+                                                        "args": null,
+                                                        "storageKey": null
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "kind": "LinkedField",
+                                        "alias": null,
                                         "name": "pathMatcher",
                                         "storageKey": null,
                                         "args": null,
@@ -123,14 +180,54 @@ const node: ReaderFragment = (function () {
                                             (v1 /*: any*/),
                                             {
                                                 "kind": "InlineFragment",
-                                                "type": "LiteralMatcher",
+                                                "type": "LiteralPathMatcher",
+                                                "selections": (v3 /*: any*/)
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "kind": "LinkedField",
+                                        "alias": null,
+                                        "name": "bodyMatcher",
+                                        "storageKey": null,
+                                        "args": null,
+                                        "concreteType": null,
+                                        "plural": false,
+                                        "selections": [
+                                            (v1 /*: any*/),
+                                            {
+                                                "kind": "InlineFragment",
+                                                "type": "LiteralBodyMatcher",
+                                                "selections": (v3 /*: any*/)
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "kind": "LinkedField",
+                                        "alias": null,
+                                        "name": "headersMatcher",
+                                        "storageKey": null,
+                                        "args": null,
+                                        "concreteType": null,
+                                        "plural": false,
+                                        "selections": [
+                                            (v1 /*: any*/),
+                                            {
+                                                "kind": "InlineFragment",
+                                                "type": "LiteralsHeadersMatcher",
                                                 "selections": [
                                                     {
-                                                        "kind": "ScalarField",
+                                                        "kind": "LinkedField",
                                                         "alias": null,
-                                                        "name": "value",
+                                                        "name": "values",
+                                                        "storageKey": null,
                                                         "args": null,
-                                                        "storageKey": null
+                                                        "concreteType": "LiteralHeaderValueMatcher",
+                                                        "plural": true,
+                                                        "selections": [
+                                                            (v4 /*: any*/),
+                                                            (v2 /*: any*/)
+                                                        ]
                                                     }
                                                 ]
                                             }
@@ -177,13 +274,7 @@ const node: ReaderFragment = (function () {
                                                 "concreteType": "State",
                                                 "plural": false,
                                                 "selections": [
-                                                    {
-                                                        "kind": "ScalarField",
-                                                        "alias": null,
-                                                        "name": "name",
-                                                        "args": null,
-                                                        "storageKey": null
-                                                    }
+                                                    (v4 /*: any*/)
                                                 ]
                                             }
                                         ]
@@ -267,5 +358,5 @@ const node: ReaderFragment = (function () {
         ]
     } as any;
 })();
-(node as any).hash = 'dc03d22d234c51664fffc50c904f9790';
+(node as any).hash = 'cbf19d04bcc798804da053d151459056';
 export default node;

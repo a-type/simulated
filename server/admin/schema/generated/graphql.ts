@@ -12,20 +12,52 @@ export type Scalars = {
   Float: number,
 };
 
-export type AddLiteralMatcherInput = {
+export type AddBodyMatcherInput = {
+  literal?: Maybe<AddLiteralBodyMatcherInput>,
+};
+
+export type AddHeadersMatcherInput = {
+  literals?: Maybe<AddLiteralsHeadersMatcherInput>,
+};
+
+export type AddLiteralBodyMatcherInput = {
   value: Scalars['String'],
 };
 
+export type AddLiteralHeaderValueInput = {
+  name: Scalars['String'],
+  value?: Maybe<Scalars['String']>,
+};
+
+export type AddLiteralPathMatcherInput = {
+  value: Scalars['String'],
+};
+
+export type AddLiteralsHeadersMatcherInput = {
+  values: Array<AddLiteralHeaderValueInput>,
+};
+
+export type AddLiteralsMethodMatcherInput = {
+  values: Array<Scalars['String']>,
+};
+
 export type AddMappingInput = {
-  pathMatcher?: Maybe<AddMatcherInput>,
+  methodMatcher?: Maybe<AddMethodMatcherInput>,
+  pathMatcher?: Maybe<AddPathMatcherInput>,
+  bodyMatcher?: Maybe<AddBodyMatcherInput>,
+  headersMatcher?: Maybe<AddHeadersMatcherInput>,
   response?: Maybe<AddResponseInput>,
   trigger?: Maybe<AddTriggerInput>,
   priority: Scalars['Int'],
 };
 
+export type AddMethodMatcherInput = {
+  literals?: Maybe<AddLiteralsMethodMatcherInput>,
+};
+
 /** All fields are exclusive; choose one */
-export type AddMatcherInput = {
-  literal?: Maybe<AddLiteralMatcherInput>,
+export type AddPathMatcherInput = {
+  literal?: Maybe<AddLiteralPathMatcherInput>,
 };
 
 export type AddResponseBodyInput = {
@@ -82,6 +114,14 @@ export type AddTriggerInput = {
   targetState: Scalars['ID'],
 };
 
+export type BodyMatcher = {
+  kind: BodyMatcherKind,
+};
+
+export enum BodyMatcherKind {
+  Literal = 'Literal'
+}
+
 export type DeleteMappingInput = {
   mappingId: Scalars['ID'],
 };
@@ -132,16 +172,51 @@ export type EnableScenarioResult = {
   scenario: Scenario,
 };
 
-export type LiteralMatcher = Matcher & {
-   __typename?: 'LiteralMatcher',
-  kind: MatcherKind,
+export type HeadersMatcher = {
+  kind: HeadersMatcherKind,
+};
+
+export enum HeadersMatcherKind {
+  Literals = 'Literals'
+}
+
+export type LiteralBodyMatcher = BodyMatcher & {
+   __typename?: 'LiteralBodyMatcher',
+  kind: BodyMatcherKind,
   value: Scalars['String'],
+};
+
+export type LiteralHeaderValueMatcher = {
+   __typename?: 'LiteralHeaderValueMatcher',
+  name: Scalars['String'],
+  value?: Maybe<Scalars['String']>,
+};
+
+export type LiteralPathMatcher = PathMatcher & {
+   __typename?: 'LiteralPathMatcher',
+  kind: PathMatcherKind,
+  value: Scalars['String'],
+};
+
+export type LiteralsHeadersMatcher = HeadersMatcher & {
+   __typename?: 'LiteralsHeadersMatcher',
+  kind: HeadersMatcherKind,
+  values: Array<LiteralHeaderValueMatcher>,
+};
+
+export type LiteralsMethodMatcher = MethodMatcher & {
+   __typename?: 'LiteralsMethodMatcher',
+  kind: MethodMatcherKind,
+  values: Array<Scalars['String']>,
 };
 
 export type Mapping = Node & {
    __typename?: 'Mapping',
   id: Scalars['ID'],
-  pathMatcher?: Maybe<Matcher>,
+  methodMatcher?: Maybe<MethodMatcher>,
+  pathMatcher?: Maybe<PathMatcher>,
+  bodyMatcher?: Maybe<BodyMatcher>,
+  headersMatcher?: Maybe<HeadersMatcher>,
   response?: Maybe<Response>,
   trigger?: Maybe<Trigger>,
   priority: Scalars['Int'],
@@ -151,12 +226,12 @@ export type Mapping = Node & {
   updatedAt: Scalars['String'],
 };
 
-export type Matcher = {
-  kind: MatcherKind,
+export type MethodMatcher = {
+  kind: MethodMatcherKind,
 };
 
-export enum MatcherKind {
-  Literal = 'Literal'
+export enum MethodMatcherKind {
+  Literals = 'Literals'
 }
 
 export type Mutation = {
@@ -281,6 +356,14 @@ export type MutationDeleteMappingArgs = {
 export type Node = {
   id: Scalars['ID'],
 };
+
+export type PathMatcher = {
+  kind: PathMatcherKind,
+};
+
+export enum PathMatcherKind {
+  Literal = 'Literal'
+}
 
 export type Query = {
    __typename?: 'Query',
@@ -619,8 +702,14 @@ export type ResolversTypes = ResolversObject<{
   StateMappingConnection: ResolverTypeWrapper<Normalized<StateMappingConnection>>,
   StateMappingEdge: ResolverTypeWrapper<Normalized<StateMappingEdge>>,
   Mapping: ResolverTypeWrapper<Normalized<Mapping>>,
-  Matcher: ResolverTypeWrapper<Normalized<Matcher>>,
-  MatcherKind: ResolverTypeWrapper<Normalized<MatcherKind>>,
+  MethodMatcher: ResolverTypeWrapper<Normalized<MethodMatcher>>,
+  MethodMatcherKind: ResolverTypeWrapper<Normalized<MethodMatcherKind>>,
+  PathMatcher: ResolverTypeWrapper<Normalized<PathMatcher>>,
+  PathMatcherKind: ResolverTypeWrapper<Normalized<PathMatcherKind>>,
+  BodyMatcher: ResolverTypeWrapper<Normalized<BodyMatcher>>,
+  BodyMatcherKind: ResolverTypeWrapper<Normalized<BodyMatcherKind>>,
+  HeadersMatcher: ResolverTypeWrapper<Normalized<HeadersMatcher>>,
+  HeadersMatcherKind: ResolverTypeWrapper<Normalized<HeadersMatcherKind>>,
   Response: ResolverTypeWrapper<Normalized<Response>>,
   ResponseBody: ResolverTypeWrapper<Normalized<ResponseBody>>,
   ResponseBodyKind: ResolverTypeWrapper<Normalized<ResponseBodyKind>>,
@@ -654,8 +743,15 @@ export type ResolversTypes = ResolversObject<{
   DeleteStateResult: ResolverTypeWrapper<Normalized<DeleteStateResult>>,
   AddStateMappingInput: ResolverTypeWrapper<Normalized<AddStateMappingInput>>,
   AddMappingInput: ResolverTypeWrapper<Normalized<AddMappingInput>>,
-  AddMatcherInput: ResolverTypeWrapper<Normalized<AddMatcherInput>>,
-  AddLiteralMatcherInput: ResolverTypeWrapper<Normalized<AddLiteralMatcherInput>>,
+  AddMethodMatcherInput: ResolverTypeWrapper<Normalized<AddMethodMatcherInput>>,
+  AddLiteralsMethodMatcherInput: ResolverTypeWrapper<Normalized<AddLiteralsMethodMatcherInput>>,
+  AddPathMatcherInput: ResolverTypeWrapper<Normalized<AddPathMatcherInput>>,
+  AddLiteralPathMatcherInput: ResolverTypeWrapper<Normalized<AddLiteralPathMatcherInput>>,
+  AddBodyMatcherInput: ResolverTypeWrapper<Normalized<AddBodyMatcherInput>>,
+  AddLiteralBodyMatcherInput: ResolverTypeWrapper<Normalized<AddLiteralBodyMatcherInput>>,
+  AddHeadersMatcherInput: ResolverTypeWrapper<Normalized<AddHeadersMatcherInput>>,
+  AddLiteralsHeadersMatcherInput: ResolverTypeWrapper<Normalized<AddLiteralsHeadersMatcherInput>>,
+  AddLiteralHeaderValueInput: ResolverTypeWrapper<Normalized<AddLiteralHeaderValueInput>>,
   AddResponseInput: ResolverTypeWrapper<Normalized<AddResponseInput>>,
   AddResponseBodyInput: ResolverTypeWrapper<Normalized<AddResponseBodyInput>>,
   AddTemplateResponseBodyInput: ResolverTypeWrapper<Normalized<AddTemplateResponseBodyInput>>,
@@ -669,7 +765,11 @@ export type ResolversTypes = ResolversObject<{
   SetMappingPriorityResult: ResolverTypeWrapper<Normalized<SetMappingPriorityResult>>,
   DeleteMappingInput: ResolverTypeWrapper<Normalized<DeleteMappingInput>>,
   DeleteMappingResult: ResolverTypeWrapper<Normalized<DeleteMappingResult>>,
-  LiteralMatcher: ResolverTypeWrapper<Normalized<LiteralMatcher>>,
+  LiteralsMethodMatcher: ResolverTypeWrapper<Normalized<LiteralsMethodMatcher>>,
+  LiteralPathMatcher: ResolverTypeWrapper<Normalized<LiteralPathMatcher>>,
+  LiteralBodyMatcher: ResolverTypeWrapper<Normalized<LiteralBodyMatcher>>,
+  LiteralsHeadersMatcher: ResolverTypeWrapper<Normalized<LiteralsHeadersMatcher>>,
+  LiteralHeaderValueMatcher: ResolverTypeWrapper<Normalized<LiteralHeaderValueMatcher>>,
   TemplateResponseBody: ResolverTypeWrapper<Normalized<TemplateResponseBody>>,
 }>;
 
@@ -690,8 +790,14 @@ export type ResolversParentTypes = ResolversObject<{
   StateMappingConnection: Normalized<StateMappingConnection>,
   StateMappingEdge: Normalized<StateMappingEdge>,
   Mapping: Normalized<Mapping>,
-  Matcher: Normalized<Matcher>,
-  MatcherKind: Normalized<MatcherKind>,
+  MethodMatcher: Normalized<MethodMatcher>,
+  MethodMatcherKind: Normalized<MethodMatcherKind>,
+  PathMatcher: Normalized<PathMatcher>,
+  PathMatcherKind: Normalized<PathMatcherKind>,
+  BodyMatcher: Normalized<BodyMatcher>,
+  BodyMatcherKind: Normalized<BodyMatcherKind>,
+  HeadersMatcher: Normalized<HeadersMatcher>,
+  HeadersMatcherKind: Normalized<HeadersMatcherKind>,
   Response: Normalized<Response>,
   ResponseBody: Normalized<ResponseBody>,
   ResponseBodyKind: Normalized<ResponseBodyKind>,
@@ -725,8 +831,15 @@ export type ResolversParentTypes = ResolversObject<{
   DeleteStateResult: Normalized<DeleteStateResult>,
   AddStateMappingInput: Normalized<AddStateMappingInput>,
   AddMappingInput: Normalized<AddMappingInput>,
-  AddMatcherInput: Normalized<AddMatcherInput>,
-  AddLiteralMatcherInput: Normalized<AddLiteralMatcherInput>,
+  AddMethodMatcherInput: Normalized<AddMethodMatcherInput>,
+  AddLiteralsMethodMatcherInput: Normalized<AddLiteralsMethodMatcherInput>,
+  AddPathMatcherInput: Normalized<AddPathMatcherInput>,
+  AddLiteralPathMatcherInput: Normalized<AddLiteralPathMatcherInput>,
+  AddBodyMatcherInput: Normalized<AddBodyMatcherInput>,
+  AddLiteralBodyMatcherInput: Normalized<AddLiteralBodyMatcherInput>,
+  AddHeadersMatcherInput: Normalized<AddHeadersMatcherInput>,
+  AddLiteralsHeadersMatcherInput: Normalized<AddLiteralsHeadersMatcherInput>,
+  AddLiteralHeaderValueInput: Normalized<AddLiteralHeaderValueInput>,
   AddResponseInput: Normalized<AddResponseInput>,
   AddResponseBodyInput: Normalized<AddResponseBodyInput>,
   AddTemplateResponseBodyInput: Normalized<AddTemplateResponseBodyInput>,
@@ -740,7 +853,11 @@ export type ResolversParentTypes = ResolversObject<{
   SetMappingPriorityResult: Normalized<SetMappingPriorityResult>,
   DeleteMappingInput: Normalized<DeleteMappingInput>,
   DeleteMappingResult: Normalized<DeleteMappingResult>,
-  LiteralMatcher: Normalized<LiteralMatcher>,
+  LiteralsMethodMatcher: Normalized<LiteralsMethodMatcher>,
+  LiteralPathMatcher: Normalized<LiteralPathMatcher>,
+  LiteralBodyMatcher: Normalized<LiteralBodyMatcher>,
+  LiteralsHeadersMatcher: Normalized<LiteralsHeadersMatcher>,
+  LiteralHeaderValueMatcher: Normalized<LiteralHeaderValueMatcher>,
   TemplateResponseBody: Normalized<TemplateResponseBody>,
 }>;
 
@@ -759,6 +876,11 @@ export type AddStateMappingResultResolvers<ContextType = Context, ParentType ext
   state?: Resolver<ResolversTypes['State'], ParentType, ContextType>,
   mapping?: Resolver<ResolversTypes['Mapping'], ParentType, ContextType>,
   mappingEdge?: Resolver<ResolversTypes['StateMappingEdge'], ParentType, ContextType>,
+}>;
+
+export type BodyMatcherResolvers<ContextType = Context, ParentType extends ResolversParentTypes['BodyMatcher'] = ResolversParentTypes['BodyMatcher']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'LiteralBodyMatcher', ParentType, ContextType>,
+  kind?: Resolver<ResolversTypes['BodyMatcherKind'], ParentType, ContextType>,
 }>;
 
 export type DeleteMappingResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['DeleteMappingResult'] = ResolversParentTypes['DeleteMappingResult']> = ResolversObject<{
@@ -786,14 +908,42 @@ export type EnableScenarioResultResolvers<ContextType = Context, ParentType exte
   scenario?: Resolver<ResolversTypes['Scenario'], ParentType, ContextType>,
 }>;
 
-export type LiteralMatcherResolvers<ContextType = Context, ParentType extends ResolversParentTypes['LiteralMatcher'] = ResolversParentTypes['LiteralMatcher']> = ResolversObject<{
-  kind?: Resolver<ResolversTypes['MatcherKind'], ParentType, ContextType>,
+export type HeadersMatcherResolvers<ContextType = Context, ParentType extends ResolversParentTypes['HeadersMatcher'] = ResolversParentTypes['HeadersMatcher']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'LiteralsHeadersMatcher', ParentType, ContextType>,
+  kind?: Resolver<ResolversTypes['HeadersMatcherKind'], ParentType, ContextType>,
+}>;
+
+export type LiteralBodyMatcherResolvers<ContextType = Context, ParentType extends ResolversParentTypes['LiteralBodyMatcher'] = ResolversParentTypes['LiteralBodyMatcher']> = ResolversObject<{
+  kind?: Resolver<ResolversTypes['BodyMatcherKind'], ParentType, ContextType>,
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+}>;
+
+export type LiteralHeaderValueMatcherResolvers<ContextType = Context, ParentType extends ResolversParentTypes['LiteralHeaderValueMatcher'] = ResolversParentTypes['LiteralHeaderValueMatcher']> = ResolversObject<{
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+}>;
+
+export type LiteralPathMatcherResolvers<ContextType = Context, ParentType extends ResolversParentTypes['LiteralPathMatcher'] = ResolversParentTypes['LiteralPathMatcher']> = ResolversObject<{
+  kind?: Resolver<ResolversTypes['PathMatcherKind'], ParentType, ContextType>,
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+}>;
+
+export type LiteralsHeadersMatcherResolvers<ContextType = Context, ParentType extends ResolversParentTypes['LiteralsHeadersMatcher'] = ResolversParentTypes['LiteralsHeadersMatcher']> = ResolversObject<{
+  kind?: Resolver<ResolversTypes['HeadersMatcherKind'], ParentType, ContextType>,
+  values?: Resolver<Array<ResolversTypes['LiteralHeaderValueMatcher']>, ParentType, ContextType>,
+}>;
+
+export type LiteralsMethodMatcherResolvers<ContextType = Context, ParentType extends ResolversParentTypes['LiteralsMethodMatcher'] = ResolversParentTypes['LiteralsMethodMatcher']> = ResolversObject<{
+  kind?: Resolver<ResolversTypes['MethodMatcherKind'], ParentType, ContextType>,
+  values?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
 }>;
 
 export type MappingResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mapping'] = ResolversParentTypes['Mapping']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  pathMatcher?: Resolver<Maybe<ResolversTypes['Matcher']>, ParentType, ContextType>,
+  methodMatcher?: Resolver<Maybe<ResolversTypes['MethodMatcher']>, ParentType, ContextType>,
+  pathMatcher?: Resolver<Maybe<ResolversTypes['PathMatcher']>, ParentType, ContextType>,
+  bodyMatcher?: Resolver<Maybe<ResolversTypes['BodyMatcher']>, ParentType, ContextType>,
+  headersMatcher?: Resolver<Maybe<ResolversTypes['HeadersMatcher']>, ParentType, ContextType>,
   response?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>,
   trigger?: Resolver<Maybe<ResolversTypes['Trigger']>, ParentType, ContextType>,
   priority?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
@@ -801,9 +951,9 @@ export type MappingResolvers<ContextType = Context, ParentType extends Resolvers
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 }>;
 
-export type MatcherResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Matcher'] = ResolversParentTypes['Matcher']> = ResolversObject<{
-  __resolveType: TypeResolveFn<'LiteralMatcher', ParentType, ContextType>,
-  kind?: Resolver<ResolversTypes['MatcherKind'], ParentType, ContextType>,
+export type MethodMatcherResolvers<ContextType = Context, ParentType extends ResolversParentTypes['MethodMatcher'] = ResolversParentTypes['MethodMatcher']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'LiteralsMethodMatcher', ParentType, ContextType>,
+  kind?: Resolver<ResolversTypes['MethodMatcherKind'], ParentType, ContextType>,
 }>;
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -827,6 +977,11 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
 export type NodeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = ResolversObject<{
   __resolveType: TypeResolveFn<'Viewer' | 'Scenario' | 'State' | 'Mapping', ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+}>;
+
+export type PathMatcherResolvers<ContextType = Context, ParentType extends ResolversParentTypes['PathMatcher'] = ResolversParentTypes['PathMatcher']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'LiteralPathMatcher', ParentType, ContextType>,
+  kind?: Resolver<ResolversTypes['PathMatcherKind'], ParentType, ContextType>,
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -963,16 +1118,23 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   AddScenarioResult?: AddScenarioResultResolvers<ContextType>,
   AddScenarioStateResult?: AddScenarioStateResultResolvers<ContextType>,
   AddStateMappingResult?: AddStateMappingResultResolvers<ContextType>,
+  BodyMatcher?: BodyMatcherResolvers,
   DeleteMappingResult?: DeleteMappingResultResolvers<ContextType>,
   DeleteScenarioResult?: DeleteScenarioResultResolvers<ContextType>,
   DeleteStateResult?: DeleteStateResultResolvers<ContextType>,
   DisableScenarioResult?: DisableScenarioResultResolvers<ContextType>,
   EnableScenarioResult?: EnableScenarioResultResolvers<ContextType>,
-  LiteralMatcher?: LiteralMatcherResolvers<ContextType>,
+  HeadersMatcher?: HeadersMatcherResolvers,
+  LiteralBodyMatcher?: LiteralBodyMatcherResolvers<ContextType>,
+  LiteralHeaderValueMatcher?: LiteralHeaderValueMatcherResolvers<ContextType>,
+  LiteralPathMatcher?: LiteralPathMatcherResolvers<ContextType>,
+  LiteralsHeadersMatcher?: LiteralsHeadersMatcherResolvers<ContextType>,
+  LiteralsMethodMatcher?: LiteralsMethodMatcherResolvers<ContextType>,
   Mapping?: MappingResolvers<ContextType>,
-  Matcher?: MatcherResolvers,
+  MethodMatcher?: MethodMatcherResolvers,
   Mutation?: MutationResolvers<ContextType>,
   Node?: NodeResolvers,
+  PathMatcher?: PathMatcherResolvers,
   Query?: QueryResolvers<ContextType>,
   Response?: ResponseResolvers<ContextType>,
   ResponseBody?: ResponseBodyResolvers,

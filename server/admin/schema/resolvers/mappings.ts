@@ -1,13 +1,26 @@
 import {
   Resolvers,
-  AddMatcherInput,
-  LiteralMatcher,
-  MatcherKind,
+  AddPathMatcherInput,
+  PathMatcherKind,
   ResponseBodyKind,
+  BodyMatcherKind,
+  HeadersMatcherKind,
+  MethodMatcherKind,
 } from '../generated/graphql';
 import { toCursor } from '../../../storage/cursors';
-import { StorageMatcher } from '../../../storage/types';
-import { AddResponseBodyInput, ResponseBody } from '../generated/graphql';
+import { AddMethodMatcherInput } from '../generated/graphql';
+import { StorageMethodMatcher } from '../../../storage/types';
+import {
+  StoragePathMatcher,
+  StorageBodyMatcher,
+  StorageHeadersMatcher,
+} from '../../../storage/types';
+import {
+  AddResponseBodyInput,
+  ResponseBody,
+  AddBodyMatcherInput,
+  AddHeadersMatcherInput,
+} from '../generated/graphql';
 
 const resolvers: Resolvers = {
   Mutation: {
@@ -16,7 +29,10 @@ const resolvers: Resolvers = {
         stateId: input.stateId,
         data: {
           ...input.mapping,
-          pathMatcher: getMatcherInput(input.mapping.pathMatcher),
+          methodMatcher: getMethodMatcherInput(input.mapping.methodMatcher),
+          pathMatcher: getPathMatcherInput(input.mapping.pathMatcher),
+          bodyMatcher: getBodyMatcherInput(input.mapping.bodyMatcher),
+          headersMatcher: getHeadersMatcherInput(input.mapping.headersMatcher),
           response: input.mapping.response && {
             body: getResponseBodyInput(input.mapping.response.body),
           },
@@ -105,15 +121,66 @@ const resolvers: Resolvers = {
 
 export default resolvers;
 
-const getMatcherInput = (
-  input: AddMatcherInput | null | undefined,
-): StorageMatcher | null => {
+const getMethodMatcherInput = (
+  input: AddMethodMatcherInput | null | undefined,
+): StorageMethodMatcher | null => {
+  if (!input) return null;
+
+  if (input.literals) {
+    return {
+      ...input.literals,
+      kind: MethodMatcherKind.Literals,
+    };
+  }
+
+  throw new Error(
+    'You must provide one of the available types of matcher input data',
+  );
+};
+
+const getPathMatcherInput = (
+  input: AddPathMatcherInput | null | undefined,
+): StoragePathMatcher | null => {
   if (!input) return null;
 
   if (input.literal) {
     return {
       ...input.literal,
-      kind: MatcherKind.Literal,
+      kind: PathMatcherKind.Literal,
+    };
+  }
+
+  throw new Error(
+    'You must provide one of the available types of matcher input data',
+  );
+};
+
+const getBodyMatcherInput = (
+  input: AddBodyMatcherInput | null | undefined,
+): StorageBodyMatcher | null => {
+  if (!input) return null;
+
+  if (input.literal) {
+    return {
+      ...input.literal,
+      kind: BodyMatcherKind.Literal,
+    };
+  }
+
+  throw new Error(
+    'You must provide one of the available types of matcher input data',
+  );
+};
+
+const getHeadersMatcherInput = (
+  input: AddHeadersMatcherInput | null | undefined,
+): StorageHeadersMatcher | null => {
+  if (!input) return null;
+
+  if (input.literals) {
+    return {
+      ...input.literals,
+      kind: HeadersMatcherKind.Literals,
     };
   }
 

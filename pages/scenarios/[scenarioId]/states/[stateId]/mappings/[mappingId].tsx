@@ -96,7 +96,7 @@ const MappingPage: FC<MappingPageProps> = () => {
           />
         </Breadcrumbs>
         <MappingEditor
-          initialValues={props.viewer.mapping}
+          mapping={props.viewer.mapping}
           onSubmit={handleMappingSave}
         />
       </Container>

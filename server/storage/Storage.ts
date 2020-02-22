@@ -8,10 +8,17 @@ import {
   StorageScenario,
   StorageState,
   StorageMapping,
+  StorageBodyMatcher,
+  StorageHeadersMatcher,
 } from './types';
 import { createId } from './ids';
 import { timestamp } from './dates';
-import { StorageMatcher, StorageResponse, StorageTrigger } from './types';
+import {
+  StoragePathMatcher,
+  StorageResponse,
+  StorageTrigger,
+  StorageMethodMatcher,
+} from './types';
 
 const databaseFilePath =
   process.env.JSON_DB_FILE_PATH || path.join(process.cwd(), './data/db.json');
@@ -410,11 +417,21 @@ export default class Storage {
 
   async createMapping({
     stateId: parentId,
-    data: { pathMatcher = null, response = null, trigger = null },
+    data: {
+      pathMatcher = null,
+      bodyMatcher = null,
+      headersMatcher = null,
+      methodMatcher = null,
+      response = null,
+      trigger = null,
+    },
   }: {
     stateId: string;
     data: {
-      pathMatcher?: StorageMatcher | null;
+      methodMatcher?: StorageMethodMatcher | null;
+      pathMatcher?: StoragePathMatcher | null;
+      bodyMatcher?: StorageBodyMatcher | null;
+      headersMatcher?: StorageHeadersMatcher | null;
       response?: StorageResponse | null;
       trigger?: StorageTrigger | null;
     };
@@ -425,6 +442,9 @@ export default class Storage {
       createdAt: timestamp(),
       updatedAt: timestamp(),
       pathMatcher,
+      bodyMatcher,
+      headersMatcher,
+      methodMatcher,
       response,
       trigger,
       priority: 0,
@@ -488,7 +508,7 @@ export default class Storage {
   }: {
     id: string;
     data: {
-      pathMatcher?: StorageMatcher | null;
+      pathMatcher?: StoragePathMatcher | null;
       response?: StorageResponse | null;
       trigger?: StorageTrigger | null;
       priority?: number;
