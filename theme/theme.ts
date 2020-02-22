@@ -39,11 +39,11 @@ const baseLightPalette: ThemeOptions['palette'] = {
 const { palette: lightPalette } = createMuiTheme({ palette: baseLightPalette });
 const { palette: darkPalette } = createMuiTheme({ palette: baseDarkPalette });
 
-const themeFactory = palette =>
+const themeFactory = (palette, shadows) =>
   createMuiTheme({
     palette,
     shape: {},
-    shadows: generateShadows(),
+    shadows,
     overrides: {
       MuiAppBar: {
         colorDefault: {
@@ -64,5 +64,8 @@ const themeFactory = palette =>
     },
   });
 
-export const lightTheme = themeFactory(lightPalette);
-export const darkTheme = themeFactory(darkPalette);
+export const lightTheme = themeFactory(lightPalette, generateShadows());
+export const darkTheme = themeFactory(
+  darkPalette,
+  generateShadows(colors.blackRgb, colors.trueBlackRgb),
+);

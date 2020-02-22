@@ -6,4 +6,6 @@ export default {
   dark: '#5c5470',
   medium: '#352f44',
   mediumRgb: [53, 47, 68],
+  trueBlack: '#040408',
+  trueBlackRgb: [4, 4, 8],
 };
