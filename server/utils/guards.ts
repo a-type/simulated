@@ -1,30 +1,26 @@
 import {
   BodyMatcher,
-  LiteralBodyMatcher,
-  BodyMatcherKind,
-  MethodMatcher,
-  LiteralsMethodMatcher,
-  MethodMatcherKind,
   ResponseBody,
   TemplateResponseBody,
   ResponseBodyKind,
   PathMatcher,
-  LiteralPathMatcher,
-  PathMatcherKind,
+  Matcher,
+  MethodsMatcher,
+  MatcherKind,
+  HeadersMatcher,
 } from '../admin/schema/generated/graphql';
 
-export const isLiteralsMethodMatcher = (
-  matcher: MethodMatcher,
-): matcher is LiteralsMethodMatcher =>
-  matcher.kind === MethodMatcherKind.Literals;
+export const isMethodsMatcher = (matcher: Matcher): matcher is MethodsMatcher =>
+  matcher.kind === MatcherKind.Methods;
 
-export const isLiteralPathMatcher = (
-  matcher: PathMatcher,
-): matcher is LiteralPathMatcher => matcher.kind === PathMatcherKind.Literal;
+export const isPathMatcher = (matcher: Matcher): matcher is PathMatcher =>
+  matcher.kind === MatcherKind.Path;
 
-export const isLiteralBodyMatcher = (
-  matcher: BodyMatcher,
-): matcher is LiteralBodyMatcher => matcher.kind === BodyMatcherKind.Literal;
+export const isBodyMatcher = (matcher: Matcher): matcher is BodyMatcher =>
+  matcher.kind === MatcherKind.Body;
+
+export const isHeadersMatcher = (matcher: Matcher): matcher is HeadersMatcher =>
+  matcher.kind === MatcherKind.Headers;
 
 export const isTemplateResponseBody = (
   body: ResponseBody,

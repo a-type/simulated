@@ -17,6 +17,8 @@ import Link from '../../../../../components/Link';
 import singleQuery from '../../../../../lib/singleQuery';
 import ScenarioLink from '../../../../../components/ScenarioLink';
 import StateLink from '../../../../../components/StateLink';
+import AddMappingButton from '../../../../../components/AddMappingButton';
+import { useCallback } from 'react';
 
 const query = graphql`
   query StateIdQuery($stateId: ID!, $scenarioId: ID!) {
@@ -30,6 +32,7 @@ const query = graphql`
         ...StateDetails_state
         ...StateMappings_state
         ...StateLink_state
+        ...AddMappingButton_state
       }
     }
   }
@@ -63,44 +66,51 @@ function StatePage() {
     {},
   );
 
+  const handleAddMapping = useCallback(
+    (mapping: any) => {
+      router.push(
+        '/scenarios/[scenarioId]/states/[stateId]/mappings/[mappingId]',
+        `/scenarios/${scenarioId}/states/${stateId}/mappings/${mapping.id}`,
+      );
+    },
+    [router],
+  );
+
+  if (!props || !props.viewer?.state || !props.viewer?.scenario) {
+    return (
+      <>
+        <Navigation />
+        <Container className={classes.container}>
+          <CircularProgress />
+        </Container>
+      </>
+    );
+  }
+
   return (
     <>
       <Navigation />
       <Container className={classes.container}>
-        {props ? (
-          props.viewer?.state && props.viewer?.scenario ? (
-            <>
-              <Breadcrumbs className={classes.breadcrumbs}>
-                <Link href="/">Scenarios</Link>
-                <ScenarioLink scenario={props.viewer.scenario} />
-                <Typography>States</Typography>
-                <StateLink
-                  disabled
-                  scenario={props.viewer.scenario}
-                  state={props.viewer.state}
-                />
-              </Breadcrumbs>
-              <Paper className={classes.topContent}>
-                <StateDetails state={props.viewer.state} />
-              </Paper>
-              <StateMappings
-                state={props.viewer.state}
-                scenario={props.viewer.scenario}
-              />
-              <Button
-                component={Link}
-                href="/scenarios/[scenarioId]/states/[stateId]/mappings/create"
-                as={`/scenarios/${scenarioId}/states/${stateId}/mappings/create`}
-              >
-                Add mapping
-              </Button>
-            </>
-          ) : (
-            <div>State does not exist</div>
-          )
-        ) : (
-          <CircularProgress />
-        )}
+        <Breadcrumbs className={classes.breadcrumbs}>
+          <Link href="/">Scenarios</Link>
+          <ScenarioLink scenario={props.viewer.scenario} />
+          <Typography>States</Typography>
+          <StateLink
+            disabled
+            scenario={props.viewer.scenario}
+            state={props.viewer.state}
+          />
+        </Breadcrumbs>
+        <Paper className={classes.topContent}>
+          <StateDetails state={props.viewer.state} />
+        </Paper>
+        <StateMappings
+          state={props.viewer.state}
+          scenario={props.viewer.scenario}
+        />
+        <AddMappingButton state={props.viewer.state} onAdd={handleAddMapping}>
+          Add mapping
+        </AddMappingButton>
       </Container>
     </>
   );

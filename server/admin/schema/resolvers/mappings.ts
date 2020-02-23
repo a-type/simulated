@@ -1,42 +1,21 @@
 import {
   Resolvers,
-  AddPathMatcherInput,
-  PathMatcherKind,
   ResponseBodyKind,
-  BodyMatcherKind,
-  HeadersMatcherKind,
-  MethodMatcherKind,
-} from '../generated/graphql';
-import { toCursor } from '../../../storage/cursors';
-import { AddMethodMatcherInput } from '../generated/graphql';
-import { StorageMethodMatcher } from '../../../storage/types';
-import {
-  StoragePathMatcher,
-  StorageBodyMatcher,
-  StorageHeadersMatcher,
-} from '../../../storage/types';
-import {
+  AddMatcherInput,
+  MatcherKind,
   AddResponseBodyInput,
   ResponseBody,
-  AddBodyMatcherInput,
-  AddHeadersMatcherInput,
 } from '../generated/graphql';
+import { toCursor } from '../../../storage/cursors';
+import { StorageMatcher } from '../../../storage/types';
+import { UserInputError } from 'apollo-server-express';
 
 const resolvers: Resolvers = {
   Mutation: {
     addStateMapping: async (_parent, { input }, ctx, info) => {
       const mapping = await ctx.storage.createMapping({
         stateId: input.stateId,
-        data: {
-          ...input.mapping,
-          methodMatcher: getMethodMatcherInput(input.mapping.methodMatcher),
-          pathMatcher: getPathMatcherInput(input.mapping.pathMatcher),
-          bodyMatcher: getBodyMatcherInput(input.mapping.bodyMatcher),
-          headersMatcher: getHeadersMatcherInput(input.mapping.headersMatcher),
-          response: input.mapping.response && {
-            body: getResponseBodyInput(input.mapping.response.body),
-          },
-        },
+        data: input.mapping,
       });
 
       const state = await ctx.storage.addStateMapping({
@@ -53,9 +32,37 @@ const resolvers: Resolvers = {
         state,
       };
     },
+    addMappingMatcher: async (_parent, { input }, ctx, info) => {
+      const matcher = getMatcherInput(input.matcher);
+
+      if (!matcher) {
+        throw new UserInputError(
+          'Exactly one matcher initializer input value must be supplied',
+        );
+      }
+
+      const mapping = await ctx.storage.addMappingMatcher({
+        mappingId: input.mappingId,
+        matcher,
+      });
+
+      return {
+        mapping,
+      };
+    },
+    removeMappingMatcher: async (_parent, { input }, ctx) => {
+      const mapping = await ctx.storage.removeMappingMatcher({
+        mappingId: input.mappingId,
+        matcherKind: input.matcherKind,
+      });
+
+      return {
+        mapping,
+      };
+    },
     setMappingResponse: async (parent, { input }, ctx, info) => {
       const mapping = await ctx.storage.updateMapping({
-        id: input.mappingId,
+        mappingId: input.mappingId,
         data: {
           response: {
             body: getResponseBodyInput(input.response.body),
@@ -69,7 +76,7 @@ const resolvers: Resolvers = {
     },
     setMappingTrigger: async (parent, { input }, ctx, info) => {
       const mapping = await ctx.storage.updateMapping({
-        id: input.mappingId,
+        mappingId: input.mappingId,
         data: {
           trigger: input.trigger,
         },
@@ -81,7 +88,7 @@ const resolvers: Resolvers = {
     },
     setMappingPriority: async (_parent, { input }, ctx) => {
       const mapping = await ctx.storage.updateMapping({
-        id: input.mappingId,
+        mappingId: input.mappingId,
         data: {
           priority: input.priority,
         },
@@ -121,66 +128,33 @@ const resolvers: Resolvers = {
 
 export default resolvers;
 
-const getMethodMatcherInput = (
-  input: AddMethodMatcherInput | null | undefined,
-): StorageMethodMatcher | null => {
+const getMatcherInput = (
+  input: AddMatcherInput | null | undefined,
+): StorageMatcher | null => {
   if (!input) return null;
 
-  if (input.literals) {
+  if (input.methods) {
     return {
-      ...input.literals,
-      kind: MethodMatcherKind.Literals,
+      ...input.methods,
+      kind: MatcherKind.Methods,
     };
-  }
-
-  throw new Error(
-    'You must provide one of the available types of matcher input data',
-  );
-};
-
-const getPathMatcherInput = (
-  input: AddPathMatcherInput | null | undefined,
-): StoragePathMatcher | null => {
-  if (!input) return null;
-
-  if (input.literal) {
+  } else if (input.path) {
     return {
-      ...input.literal,
-      kind: PathMatcherKind.Literal,
+      ...input.path,
+      regex: !!input.path.regex,
+      kind: MatcherKind.Path,
     };
-  }
-
-  throw new Error(
-    'You must provide one of the available types of matcher input data',
-  );
-};
-
-const getBodyMatcherInput = (
-  input: AddBodyMatcherInput | null | undefined,
-): StorageBodyMatcher | null => {
-  if (!input) return null;
-
-  if (input.literal) {
+  } else if (input.body) {
     return {
-      ...input.literal,
-      kind: BodyMatcherKind.Literal,
+      ...input.body,
+      regex: !!input.body.regex,
+      ignoreWhitespace: input.body.ignoreWhitespace ?? true,
+      kind: MatcherKind.Body,
     };
-  }
-
-  throw new Error(
-    'You must provide one of the available types of matcher input data',
-  );
-};
-
-const getHeadersMatcherInput = (
-  input: AddHeadersMatcherInput | null | undefined,
-): StorageHeadersMatcher | null => {
-  if (!input) return null;
-
-  if (input.literals) {
+  } else if (input.headers) {
     return {
-      ...input.literals,
-      kind: HeadersMatcherKind.Literals,
+      ...input.headers,
+      kind: MatcherKind.Headers,
     };
   }
 

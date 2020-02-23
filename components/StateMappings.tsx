@@ -36,28 +36,22 @@ const stateFragment = graphql`
         node {
           # TODO: find better way to synchronize this...
           id
-          methodMatcher {
+          matchers {
             kind
-            ... on LiteralsMethodMatcher {
-              values
+            ... on MethodsMatcher {
+              methods
             }
-          }
-          pathMatcher {
-            kind
-            ... on LiteralPathMatcher {
-              value
+            ... on PathMatcher {
+              path
+              regex
             }
-          }
-          bodyMatcher {
-            kind
-            ... on LiteralBodyMatcher {
-              value
+            ... on BodyMatcher {
+              body
+              ignoreWhitespace
+              regex
             }
-          }
-          headersMatcher {
-            kind
-            ... on LiteralsHeadersMatcher {
-              values {
+            ... on HeadersMatcher {
+              headers {
                 name
                 value
               }
@@ -96,9 +90,13 @@ const StateMappings: FC<StateMappingsProps> = props => {
   const classes = useStyles(props);
 
   const [state] = usePagination(stateFragment, props.state);
-  const { mappings } = state;
   const scenario = useFragment(scenarioFragment, props.scenario);
 
+  if (!state) {
+    return <Box my={2}>There was an error fetching this state</Box>;
+  }
+
+  const { mappings } = state;
   if (!mappings.edges.length) {
     return <Box my={2}>There are no mappings for this state</Box>;
   }
@@ -138,30 +136,33 @@ const StateMappings: FC<StateMappingsProps> = props => {
 };
 
 const MatcherSummary: FC<{ mapping: any }> = ({ mapping }) => {
-  const method = mapping.methodMatcher
-    ? summarizeMethodMatcher(mapping.methodMatcher)
-    : '';
-  const path = mapping.pathMatcher
-    ? summarizePathMatcher(mapping.pathMatcher)
-    : '';
-  const body = mapping.bodyMatcher ? '+ Body' : '';
+  const summary = mapping.matchers.length
+    ? mapping.matchers.reduce(
+        (sum, matcher) => sum + ' ' + summarizeMatcher(matcher),
+        '',
+      )
+    : '(no rules)';
 
-  return <>{[method, path, body].join(' ')}</>;
+  return <>{summary}</>;
+};
+
+const summarizeMatcher = matcher => {
+  switch (matcher.kind) {
+    case 'method':
+      return summarizeMethodMatcher(matcher);
+    case 'path':
+      return summarizePathMatcher(matcher);
+    default:
+      return '';
+  }
 };
 
 const summarizeMethodMatcher = matcher => {
-  if (matcher.kind === 'Literals') {
-    return matcher.values.join('/');
-  }
-  return '';
+  return matcher.methods.join('/');
 };
 
 const summarizePathMatcher = matcher => {
-  if (matcher.kind === 'Literal') {
-    return matcher.value;
-  }
-
-  return '';
+  return matcher.path;
 };
 
 export default StateMappings;

@@ -1,11 +1,11 @@
 import {
-  LiteralBodyMatcher,
-  LiteralsHeadersMatcher,
+  BodyMatcher,
+  HeadersMatcher,
   Scenario,
   State,
   Mapping,
-  LiteralPathMatcher,
-  LiteralsMethodMatcher,
+  PathMatcher,
+  MethodsMatcher,
   Response,
   Trigger,
 } from '../admin/schema/generated/graphql';
@@ -31,17 +31,15 @@ export type StorageMapping = Omit<
 > & {
   parentId: string;
   trigger: StorageTrigger | null;
-  methodMatcher: StorageMethodMatcher | null;
-  pathMatcher: StoragePathMatcher | null;
-  bodyMatcher: StorageBodyMatcher | null;
-  headersMatcher: StorageHeadersMatcher | null;
+  matchers: StorageMatcher[] | [];
   response: StorageResponse | null;
 };
 // re-exporting some raw data types
-export type StorageMethodMatcher = LiteralsMethodMatcher;
-export type StoragePathMatcher = LiteralPathMatcher;
-export type StorageBodyMatcher = LiteralBodyMatcher;
-export type StorageHeadersMatcher = LiteralsHeadersMatcher;
+export type StorageMatcher =
+  | MethodsMatcher
+  | PathMatcher
+  | BodyMatcher
+  | HeadersMatcher;
 export type StorageResponse = Response;
 export type StorageTrigger = Omit<Trigger, 'targetState'> & {
   targetState: string | null;

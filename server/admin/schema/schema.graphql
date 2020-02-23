@@ -123,10 +123,7 @@ type StateMappingPageInfo {
 
 type Mapping implements Node {
   id: ID!
-  methodMatcher: MethodMatcher
-  pathMatcher: PathMatcher
-  bodyMatcher: BodyMatcher
-  headersMatcher: HeadersMatcher
+  matchers: [Matcher!]!
   response: Response
   trigger: Trigger
   priority: Int!
@@ -140,59 +137,41 @@ type Mapping implements Node {
   updatedAt: String!
 }
 
-enum MethodMatcherKind {
-  Literals
+enum MatcherKind {
+  methods
+  path
+  body
+  headers
 }
 
-interface MethodMatcher {
-  kind: MethodMatcherKind!
+interface Matcher {
+  kind: MatcherKind!
 }
 
-type LiteralsMethodMatcher implements MethodMatcher {
-  kind: MethodMatcherKind!
-  values: [String!]!
+type MethodsMatcher implements Matcher {
+  kind: MatcherKind!
+  methods: [String!]!
 }
 
-enum PathMatcherKind {
-  Literal
+type PathMatcher implements Matcher {
+  kind: MatcherKind!
+  path: String!
+  regex: Boolean!
 }
 
-interface PathMatcher {
-  kind: PathMatcherKind!
+type BodyMatcher implements Matcher {
+  kind: MatcherKind!
+  body: String!
+  ignoreWhitespace: Boolean!
+  regex: Boolean!
 }
 
-type LiteralPathMatcher implements PathMatcher {
-  kind: PathMatcherKind!
-  value: String!
+type HeadersMatcher implements Matcher {
+  kind: MatcherKind!
+  headers: [HeaderKeyValuePair!]!
 }
 
-enum BodyMatcherKind {
-  Literal
-}
-
-interface BodyMatcher {
-  kind: BodyMatcherKind!
-}
-
-type LiteralBodyMatcher implements BodyMatcher {
-  kind: BodyMatcherKind!
-  value: String!
-}
-
-enum HeadersMatcherKind {
-  Literals
-}
-
-interface HeadersMatcher {
-  kind: HeadersMatcherKind!
-}
-
-type LiteralsHeadersMatcher implements HeadersMatcher {
-  kind: HeadersMatcherKind!
-  values: [LiteralHeaderValueMatcher!]!
-}
-
-type LiteralHeaderValueMatcher {
+type HeaderKeyValuePair {
   name: String!
   value: String
 }
@@ -202,7 +181,7 @@ type Response {
 }
 
 enum ResponseBodyKind {
-  Template
+  template
 }
 
 interface ResponseBody {
@@ -269,6 +248,21 @@ type Mutation {
   Adds a request mapping to a scenario state
   """
   addStateMapping(input: AddStateMappingInput!): AddStateMappingResult!
+  """
+  Configures a new rule for how a mapping matches against a request. Rules are
+  additive; all rules must match for a mapping to be a valid match for a request. You
+  may only have one matcher per MatcherKind. Adding a matcher which has the same
+  MatcherKind as another existing Matcher will overwrite the previous one.
+  """
+  addMappingMatcher(input: AddMappingMatcherInput!): AddMappingMatcherResult!
+  """
+  Deletes a rule for how a mapping matches against a request, by MatcherKind value.
+  Because Matchers are exclusive per MatcherKind for each Mapping, you can expect
+  that at most one Matcher will be deleted for any MatcherKind supplied.
+  """
+  removeMappingMatcher(
+    input: RemoveMappingMatcherInput!
+  ): RemoveMappingMatcherResult!
   """
   Configures a mapping with a simulated response to send back to the client
   """
@@ -371,59 +365,66 @@ input AddStateMappingInput {
 }
 
 input AddMappingInput {
-  methodMatcher: AddMethodMatcherInput
-  pathMatcher: AddPathMatcherInput
-  bodyMatcher: AddBodyMatcherInput
-  headersMatcher: AddHeadersMatcherInput
-  response: AddResponseInput
-  trigger: AddTriggerInput
   priority: Int!
-}
-
-input AddMethodMatcherInput {
-  literals: AddLiteralsMethodMatcherInput
-}
-
-input AddLiteralsMethodMatcherInput {
-  values: [String!]!
-}
-
-"""
-All fields are exclusive; choose one
-"""
-input AddPathMatcherInput {
-  literal: AddLiteralPathMatcherInput
-}
-
-input AddLiteralPathMatcherInput {
-  value: String!
-}
-
-input AddBodyMatcherInput {
-  literal: AddLiteralBodyMatcherInput
-}
-
-input AddLiteralBodyMatcherInput {
-  value: String!
-}
-
-input AddHeadersMatcherInput {
-  literals: AddLiteralsHeadersMatcherInput
-}
-
-input AddLiteralsHeadersMatcherInput {
-  values: [AddLiteralHeaderValueInput!]!
-}
-
-input AddLiteralHeaderValueInput {
-  name: String!
-  value: String
 }
 
 type AddStateMappingResult {
   state: State!
   mapping: Mapping!
   mappingEdge: StateMappingEdge!
+}
+
+input AddMappingMatcherInput {
+  mappingId: ID!
+  matcher: AddMatcherInput!
+}
+
+"""
+These options are exclusive; provide exactly one to indicate what kind
+of matcher you are adding.
+"""
+input AddMatcherInput {
+  methods: AddMethodsMatcherInput
+  path: AddPathMatcherInput
+  body: AddBodyMatcherInput
+  headers: AddHeadersMatcherInput
+}
+
+input AddMethodsMatcherInput {
+  methods: [String!]!
+}
+
+input AddPathMatcherInput {
+  path: String!
+  regex: Boolean
+}
+
+input AddBodyMatcherInput {
+  body: String!
+  ignoreWhitespace: Boolean
+  regex: Boolean
+}
+
+input AddHeadersMatcherInput {
+  headers: [AddHeaderNameValuePairInput!]!
+}
+
+input AddHeaderNameValuePairInput {
+  name: String!
+  value: String
+}
+
+type AddMappingMatcherResult {
+  mapping: Mapping!
+}
+
+input RemoveMappingMatcherInput {
+  mappingId: ID!
+  matcherKind: MatcherKind!
+}
+
+type RemoveMappingMatcherResult {
+  mapping: Mapping!
 }
 
 input SetMappingResponseInput {

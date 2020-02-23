@@ -887,49 +887,25 @@
             "deprecationReason": null
           },
           {
-            "name": "methodMatcher",
+            "name": "matchers",
             "description": "",
             "args": [],
             "type": {
-              "kind": "INTERFACE",
-              "name": "MethodMatcher",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "pathMatcher",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "INTERFACE",
-              "name": "PathMatcher",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "bodyMatcher",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "INTERFACE",
-              "name": "BodyMatcher",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "headersMatcher",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "INTERFACE",
-              "name": "HeadersMatcher",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INTERFACE",
+                    "name": "Matcher",
+                    "ofType": null
+                  }
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -1020,7 +996,7 @@
       },
       {
         "kind": "INTERFACE",
-        "name": "MethodMatcher",
+        "name": "Matcher",
         "description": "",
         "fields": [
           {
@@ -1032,7 +1008,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "MethodMatcherKind",
+                "name": "MatcherKind",
                 "ofType": null
               }
             },
@@ -1046,171 +1022,54 @@
         "possibleTypes": [
           {
             "kind": "OBJECT",
-            "name": "LiteralsMethodMatcher",
+            "name": "MethodsMatcher",
             "ofType": null
-          }
-        ]
-      },
-      {
-        "kind": "ENUM",
-        "name": "MethodMatcherKind",
-        "description": "",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "Literals",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "INTERFACE",
-        "name": "PathMatcher",
-        "description": "",
-        "fields": [
-          {
-            "name": "kind",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "ENUM",
-                "name": "PathMatcherKind",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": [
+          },
           {
             "kind": "OBJECT",
-            "name": "LiteralPathMatcher",
+            "name": "PathMatcher",
             "ofType": null
-          }
-        ]
-      },
-      {
-        "kind": "ENUM",
-        "name": "PathMatcherKind",
-        "description": "",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "Literal",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "INTERFACE",
-        "name": "BodyMatcher",
-        "description": "",
-        "fields": [
-          {
-            "name": "kind",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "ENUM",
-                "name": "BodyMatcherKind",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": [
+          },
           {
             "kind": "OBJECT",
-            "name": "LiteralBodyMatcher",
+            "name": "BodyMatcher",
             "ofType": null
-          }
-        ]
-      },
-      {
-        "kind": "ENUM",
-        "name": "BodyMatcherKind",
-        "description": "",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "Literal",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "INTERFACE",
-        "name": "HeadersMatcher",
-        "description": "",
-        "fields": [
-          {
-            "name": "kind",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "ENUM",
-                "name": "HeadersMatcherKind",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": [
+          },
           {
             "kind": "OBJECT",
-            "name": "LiteralsHeadersMatcher",
+            "name": "HeadersMatcher",
             "ofType": null
           }
         ]
       },
       {
         "kind": "ENUM",
-        "name": "HeadersMatcherKind",
+        "name": "MatcherKind",
         "description": "",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
           {
-            "name": "Literals",
+            "name": "methods",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "path",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "body",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "headers",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
@@ -1287,7 +1146,7 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "Template",
+            "name": "template",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
@@ -1883,6 +1742,68 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "AddStateMappingResult",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "addMappingMatcher",
+            "description": "Configures a new rule for how a mapping matches against a request. Rules are\nadditive; all rules must match for a mapping to be a valid match for a request. You\nmay only have one matcher per MatcherKind. Adding a matcher which has the same\nMatcherKind as another existing Matcher will overwrite the previous one.",
+            "args": [
+              {
+                "name": "input",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "AddMappingMatcherInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "AddMappingMatcherResult",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "removeMappingMatcher",
+            "description": "Deletes a rule for how a mapping matches against a request, by MatcherKind value.\nBecause Matchers are exclusive per MatcherKind for each Mapping, you can expect\nthat at most one Matcher will be deleted for any MatcherKind supplied.",
+            "args": [
+              {
+                "name": "input",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "RemoveMappingMatcherInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "RemoveMappingMatcherResult",
                 "ofType": null
               }
             },
@@ -2764,66 +2685,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "methodMatcher",
-            "description": "",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "AddMethodMatcherInput",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "pathMatcher",
-            "description": "",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "AddPathMatcherInput",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "bodyMatcher",
-            "description": "",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "AddBodyMatcherInput",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "headersMatcher",
-            "description": "",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "AddHeadersMatcherInput",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "response",
-            "description": "",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "AddResponseInput",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "trigger",
-            "description": "",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "AddTriggerInput",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
             "name": "priority",
             "description": "",
             "type": {
@@ -2843,17 +2704,145 @@
         "possibleTypes": null
       },
       {
+        "kind": "OBJECT",
+        "name": "AddStateMappingResult",
+        "description": "",
+        "fields": [
+          {
+            "name": "state",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "State",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mapping",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Mapping",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mappingEdge",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "StateMappingEdge",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "INPUT_OBJECT",
-        "name": "AddMethodMatcherInput",
+        "name": "AddMappingMatcherInput",
         "description": "",
         "fields": null,
         "inputFields": [
           {
-            "name": "literals",
+            "name": "mappingId",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "matcher",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "AddMatcherInput",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "AddMatcherInput",
+        "description": "These options are exclusive; provide exactly one to indicate what kind\nof matcher you are adding.",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "methods",
             "description": "",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "AddLiteralsMethodMatcherInput",
+              "name": "AddMethodsMatcherInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "path",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "AddPathMatcherInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "body",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "AddBodyMatcherInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "headers",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "AddHeadersMatcherInput",
               "ofType": null
             },
             "defaultValue": null
@@ -2865,12 +2854,12 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "AddLiteralsMethodMatcherInput",
+        "name": "AddMethodsMatcherInput",
         "description": "",
         "fields": null,
         "inputFields": [
           {
-            "name": "values",
+            "name": "methods",
             "description": "",
             "type": {
               "kind": "NON_NULL",
@@ -2899,32 +2888,11 @@
       {
         "kind": "INPUT_OBJECT",
         "name": "AddPathMatcherInput",
-        "description": "All fields are exclusive; choose one",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "literal",
-            "description": "",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "AddLiteralPathMatcherInput",
-              "ofType": null
-            },
-            "defaultValue": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "AddLiteralPathMatcherInput",
         "description": "",
         "fields": null,
         "inputFields": [
           {
-            "name": "value",
+            "name": "path",
             "description": "",
             "type": {
               "kind": "NON_NULL",
@@ -2934,6 +2902,16 @@
                 "name": "String",
                 "ofType": null
               }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "regex",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
             },
             "defaultValue": null
           }
@@ -2949,28 +2927,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "literal",
-            "description": "",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "AddLiteralBodyMatcherInput",
-              "ofType": null
-            },
-            "defaultValue": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "AddLiteralBodyMatcherInput",
-        "description": "",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "value",
+            "name": "body",
             "description": "",
             "type": {
               "kind": "NON_NULL",
@@ -2980,6 +2937,26 @@
                 "name": "String",
                 "ofType": null
               }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "ignoreWhitespace",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "regex",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
             },
             "defaultValue": null
           }
@@ -2995,28 +2972,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "literals",
-            "description": "",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "AddLiteralsHeadersMatcherInput",
-              "ofType": null
-            },
-            "defaultValue": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "AddLiteralsHeadersMatcherInput",
-        "description": "",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "values",
+            "name": "headers",
             "description": "",
             "type": {
               "kind": "NON_NULL",
@@ -3029,7 +2985,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "AddLiteralHeaderValueInput",
+                    "name": "AddHeaderNameValuePairInput",
                     "ofType": null
                   }
                 }
@@ -3044,7 +3000,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "AddLiteralHeaderValueInput",
+        "name": "AddHeaderNameValuePairInput",
         "description": "",
         "fields": null,
         "inputFields": [
@@ -3069,6 +3025,138 @@
               "kind": "SCALAR",
               "name": "String",
               "ofType": null
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "AddMappingMatcherResult",
+        "description": "",
+        "fields": [
+          {
+            "name": "mapping",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Mapping",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "RemoveMappingMatcherInput",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "mappingId",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "matcherKind",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "MatcherKind",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RemoveMappingMatcherResult",
+        "description": "",
+        "fields": [
+          {
+            "name": "mapping",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Mapping",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "SetMappingResponseInput",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "mappingId",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "response",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "AddResponseInput",
+                "ofType": null
+              }
             },
             "defaultValue": null
           }
@@ -3149,129 +3237,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "INPUT_OBJECT",
-        "name": "AddTriggerInput",
-        "description": "",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "targetState",
-            "description": "",
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "AddStateMappingResult",
-        "description": "",
-        "fields": [
-          {
-            "name": "state",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "State",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "mapping",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Mapping",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "mappingEdge",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "StateMappingEdge",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "SetMappingResponseInput",
-        "description": "",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "mappingId",
-            "description": "",
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "response",
-            "description": "",
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "INPUT_OBJECT",
-                "name": "AddResponseInput",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
         "kind": "OBJECT",
         "name": "SetMappingResponseResult",
         "description": "",
@@ -3327,6 +3292,31 @@
               "ofType": {
                 "kind": "INPUT_OBJECT",
                 "name": "AddTriggerInput",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "AddTriggerInput",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "targetState",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
                 "ofType": null
               }
             },
@@ -4312,7 +4302,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "LiteralsMethodMatcher",
+        "name": "MethodsMatcher",
         "description": "",
         "fields": [
           {
@@ -4324,7 +4314,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "MethodMatcherKind",
+                "name": "MatcherKind",
                 "ofType": null
               }
             },
@@ -4332,7 +4322,7 @@
             "deprecationReason": null
           },
           {
-            "name": "values",
+            "name": "methods",
             "description": "",
             "args": [],
             "type": {
@@ -4360,7 +4350,7 @@
         "interfaces": [
           {
             "kind": "INTERFACE",
-            "name": "MethodMatcher",
+            "name": "Matcher",
             "ofType": null
           }
         ],
@@ -4369,7 +4359,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "LiteralPathMatcher",
+        "name": "PathMatcher",
         "description": "",
         "fields": [
           {
@@ -4381,7 +4371,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "PathMatcherKind",
+                "name": "MatcherKind",
                 "ofType": null
               }
             },
@@ -4389,7 +4379,7 @@
             "deprecationReason": null
           },
           {
-            "name": "value",
+            "name": "path",
             "description": "",
             "args": [],
             "type": {
@@ -4403,13 +4393,29 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "regex",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
         "interfaces": [
           {
             "kind": "INTERFACE",
-            "name": "PathMatcher",
+            "name": "Matcher",
             "ofType": null
           }
         ],
@@ -4418,7 +4424,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "LiteralBodyMatcher",
+        "name": "BodyMatcher",
         "description": "",
         "fields": [
           {
@@ -4430,7 +4436,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "BodyMatcherKind",
+                "name": "MatcherKind",
                 "ofType": null
               }
             },
@@ -4438,7 +4444,7 @@
             "deprecationReason": null
           },
           {
-            "name": "value",
+            "name": "body",
             "description": "",
             "args": [],
             "type": {
@@ -4452,13 +4458,45 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "ignoreWhitespace",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "regex",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
         "interfaces": [
           {
             "kind": "INTERFACE",
-            "name": "BodyMatcher",
+            "name": "Matcher",
             "ofType": null
           }
         ],
@@ -4467,7 +4505,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "LiteralsHeadersMatcher",
+        "name": "HeadersMatcher",
         "description": "",
         "fields": [
           {
@@ -4479,7 +4517,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "HeadersMatcherKind",
+                "name": "MatcherKind",
                 "ofType": null
               }
             },
@@ -4487,7 +4525,7 @@
             "deprecationReason": null
           },
           {
-            "name": "values",
+            "name": "headers",
             "description": "",
             "args": [],
             "type": {
@@ -4501,7 +4539,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "LiteralHeaderValueMatcher",
+                    "name": "HeaderKeyValuePair",
                     "ofType": null
                   }
                 }
@@ -4515,7 +4553,7 @@
         "interfaces": [
           {
             "kind": "INTERFACE",
-            "name": "HeadersMatcher",
+            "name": "Matcher",
             "ofType": null
           }
         ],
@@ -4524,7 +4562,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "LiteralHeaderValueMatcher",
+        "name": "HeaderKeyValuePair",
         "description": "",
         "fields": [
           {

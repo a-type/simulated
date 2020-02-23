@@ -1,47 +1,17 @@
-import {
-  Resolvers,
-  PathMatcherKind,
-  BodyMatcherKind,
-  MethodMatcherKind,
-  HeadersMatcherKind,
-} from '../generated/graphql';
+import { Resolvers, MatcherKind } from '../generated/graphql';
 
 const resolvers: Resolvers = {
-  PathMatcher: {
+  Matcher: {
     __resolveType: node => {
       switch ((node as any).kind) {
-        case PathMatcherKind.Literal:
-          return 'LiteralPathMatcher';
-        default:
-          return null;
-      }
-    },
-  },
-  BodyMatcher: {
-    __resolveType: node => {
-      switch ((node as any).kind) {
-        case BodyMatcherKind.Literal:
-          return 'LiteralBodyMatcher';
-        default:
-          return null;
-      }
-    },
-  },
-  MethodMatcher: {
-    __resolveType: node => {
-      switch ((node as any).kind) {
-        case MethodMatcherKind.Literals:
-          return 'LiteralsMethodMatcher';
-        default:
-          return null;
-      }
-    },
-  },
-  HeadersMatcher: {
-    __resolveType: node => {
-      switch ((node as any).kind) {
-        case HeadersMatcherKind.Literals:
-          return 'LiteralsHeadersMatcher';
+        case MatcherKind.Path:
+          return 'PathMatcher';
+        case MatcherKind.Body:
+          return 'BodyMatcher';
+        case MatcherKind.Headers:
+          return 'HeadersMatcher';
+        case MatcherKind.Methods:
+          return 'MethodsMatcher';
         default:
           return null;
       }

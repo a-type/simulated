@@ -2,16 +2,20 @@ import { Request } from 'express';
 import Storage from '../storage/Storage';
 import { StorageMapping } from '../storage/types';
 import {
+  isMethodsMatcher,
+  isPathMatcher,
+  isBodyMatcher,
+  isHeadersMatcher,
+} from '../utils/guards';
+import {
   PathMatcher,
   Response,
   BodyMatcher,
-  MethodMatcher,
+  MethodsMatcher,
+  Matcher,
+  HeadersMatcher,
 } from '../admin/schema/generated/graphql';
-import {
-  isLiteralPathMatcher,
-  isLiteralBodyMatcher,
-  isLiteralsMethodMatcher,
-} from '../utils/guards';
+import { IncomingHttpHeaders } from 'http';
 
 const storage = new Storage();
 
@@ -48,50 +52,62 @@ const isEligibleMapping = (
 };
 
 const mappingMatches = (mapping: StorageMapping, req: Request) => {
-  return (
-    methodMatches(mapping.methodMatcher, req.method) &&
-    pathMatches(mapping.pathMatcher, req.path) &&
-    bodyMatches(mapping.bodyMatcher, req.body)
-  );
+  return mapping.matchers.reduce((stillMatches, matcher) => {
+    if (!stillMatches) return stillMatches;
+
+    return matcherMatches(matcher, req);
+  }, true);
 };
 
-const methodMatches = (
-  methodMatcher: MethodMatcher | undefined | null,
-  method: string,
-) => {
-  if (!methodMatcher) return true;
-
-  if (isLiteralsMethodMatcher(methodMatcher)) {
-    return methodMatcher.values.includes(method);
+const matcherMatches = (matcher: Matcher, req: Request): boolean => {
+  if (isMethodsMatcher(matcher)) {
+    return methodMatches(matcher, req.method);
+  } else if (isPathMatcher(matcher)) {
+    return pathMatches(matcher, req.path);
+  } else if (isBodyMatcher(matcher)) {
+    return bodyMatches(matcher, req.body);
+  } else if (isHeadersMatcher(matcher)) {
+    return headersMatches(matcher, req);
   }
 
   return false;
 };
 
-const pathMatches = (
-  pathMatcher: PathMatcher | undefined | null,
-  path: string,
-) => {
-  if (!pathMatcher) return true;
-
-  if (isLiteralPathMatcher(pathMatcher)) {
-    return pathMatcher.value === path;
-  }
-
-  return false;
+const methodMatches = (methodMatcher: MethodsMatcher, method: string) => {
+  return methodMatcher.methods.includes(method);
 };
 
-const bodyMatches = (
-  bodyMatcher: BodyMatcher | undefined | null,
-  body: string,
-) => {
-  if (!bodyMatcher) return true;
-
-  if (isLiteralBodyMatcher(bodyMatcher)) {
-    return bodyMatcher.value === body;
+const pathMatches = (pathMatcher: PathMatcher, path: string) => {
+  if (pathMatcher.regex) {
+    return new RegExp(pathMatcher.path).test(path);
   }
 
-  return false;
+  return pathMatcher.path === path;
+};
+
+const bodyMatches = (bodyMatcher: BodyMatcher, body: string) => {
+  const match = bodyMatcher.ignoreWhitespace
+    ? bodyMatcher.body.replace(/\s*/g, '')
+    : bodyMatcher.body;
+  const requestBody = bodyMatcher.ignoreWhitespace
+    ? body.replace(/\s*/g, '')
+    : body;
+
+  if (bodyMatcher.regex) {
+    const regex = new RegExp(match);
+    return regex.test(requestBody);
+  }
+  return match === requestBody;
+};
+
+const headersMatches = (headersMatcher: HeadersMatcher, request: Request) => {
+  return headersMatcher.headers.reduce((stillMatches, pair) => {
+    if (!stillMatches) return stillMatches;
+
+    const realHeader = request.get(pair.name);
+    if (realHeader === pair.value) return true;
+    return false;
+  }, true);
 };
 
 const isMappingActive = async (mapping: StorageMapping) => {

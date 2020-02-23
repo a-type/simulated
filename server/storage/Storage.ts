@@ -8,17 +8,13 @@ import {
   StorageScenario,
   StorageState,
   StorageMapping,
-  StorageBodyMatcher,
-  StorageHeadersMatcher,
+  StorageResponse,
+  StorageTrigger,
 } from './types';
 import { createId } from './ids';
 import { timestamp } from './dates';
-import {
-  StoragePathMatcher,
-  StorageResponse,
-  StorageTrigger,
-  StorageMethodMatcher,
-} from './types';
+import { StorageMatcher } from './types';
+import { MatcherKind } from '../admin/schema/generated/graphql';
 
 const databaseFilePath =
   process.env.JSON_DB_FILE_PATH || path.join(process.cwd(), './data/db.json');
@@ -417,23 +413,11 @@ export default class Storage {
 
   async createMapping({
     stateId: parentId,
-    data: {
-      pathMatcher = null,
-      bodyMatcher = null,
-      headersMatcher = null,
-      methodMatcher = null,
-      response = null,
-      trigger = null,
-    },
+    data: { priority = 0 },
   }: {
     stateId: string;
     data: {
-      methodMatcher?: StorageMethodMatcher | null;
-      pathMatcher?: StoragePathMatcher | null;
-      bodyMatcher?: StorageBodyMatcher | null;
-      headersMatcher?: StorageHeadersMatcher | null;
-      response?: StorageResponse | null;
-      trigger?: StorageTrigger | null;
+      priority: number | undefined | null;
     };
   }) {
     const mapping: StorageMapping = {
@@ -441,13 +425,10 @@ export default class Storage {
       parentId,
       createdAt: timestamp(),
       updatedAt: timestamp(),
-      pathMatcher,
-      bodyMatcher,
-      headersMatcher,
-      methodMatcher,
-      response,
-      trigger,
-      priority: 0,
+      matchers: [],
+      response: null,
+      trigger: null,
+      priority: priority || 0,
     };
 
     await (await db)
@@ -503,12 +484,11 @@ export default class Storage {
   }
 
   async updateMapping({
-    id,
-    data: { pathMatcher, response, trigger, priority },
+    mappingId: id,
+    data: { response, trigger, priority },
   }: {
-    id: string;
+    mappingId: string;
     data: {
-      pathMatcher?: StoragePathMatcher | null;
       response?: StorageResponse | null;
       trigger?: StorageTrigger | null;
       priority?: number;
@@ -519,9 +499,6 @@ export default class Storage {
       .find(m => m.id === id)
       .value();
 
-    if (pathMatcher !== undefined) {
-      original.pathMatcher = pathMatcher;
-    }
     if (response !== undefined) {
       original.response = response;
     }
@@ -534,6 +511,68 @@ export default class Storage {
 
     const mapping = await (await db)
       .set<StorageMapping>(`mappings[${id}]`, original)
+      .write();
+
+    return mapping;
+  }
+
+  async addMappingMatcher({
+    mappingId,
+    matcher,
+  }: {
+    mappingId: string;
+    matcher: StorageMatcher;
+  }) {
+    const original = await this.getMapping({ mappingId });
+
+    const existingMatcherOfTypeIndex = original.matchers.findIndex(
+      m => m.kind === matcher.kind,
+    );
+
+    // copy memory to prevent mutation
+    const newMatchers = [...original.matchers];
+
+    if (existingMatcherOfTypeIndex !== -1) {
+      newMatchers.splice(existingMatcherOfTypeIndex, 1);
+    }
+
+    newMatchers.push(matcher);
+
+    const mapping = await (await db)
+      .set<StorageMapping>(`mappings[${mappingId}]`, {
+        ...original,
+        matchers: newMatchers,
+      })
+      .write();
+
+    return mapping;
+  }
+
+  async removeMappingMatcher({
+    mappingId,
+    matcherKind,
+  }: {
+    mappingId: string;
+    matcherKind: MatcherKind;
+  }) {
+    const original = await this.getMapping({ mappingId });
+
+    const existingMatcherOfTypeIndex = original.matchers.findIndex(
+      m => m.kind === matcherKind,
+    );
+
+    // copy memory to prevent mutation
+    const newMatchers = [...original.matchers];
+
+    if (existingMatcherOfTypeIndex !== -1) {
+      newMatchers.splice(existingMatcherOfTypeIndex, 1);
+    }
+
+    const mapping = await (await db)
+      .set<StorageMapping>(`mappings[${mappingId}]`, {
+        ...original,
+        matchers: newMatchers,
+      })
       .write();
 
     return mapping;

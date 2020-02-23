@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash c2db54d98ee2b4524ea459a6b7653a0b */
+/* @relayHash 084d750cfbdab341a66022318d5996b3 */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -56,38 +56,37 @@ query MappingIdQuery(
   }
 }
 
+fragment AddMatcherWidget_mapping on Mapping {
+  id
+}
+
+fragment EditMatcherWidget_matcher on Matcher {
+  kind
+  ... on MethodsMatcher {
+    methods
+  }
+  ... on PathMatcher {
+    path
+    regex
+  }
+  ... on BodyMatcher {
+    body
+    ignoreWhitespace
+    regex
+  }
+  ... on HeadersMatcher {
+    headers {
+      name
+      value
+    }
+  }
+}
+
 fragment MappingEditor_mapping on Mapping {
   id
-  methodMatcher {
+  matchers {
     __typename
-    kind
-    ... on LiteralsMethodMatcher {
-      values
-    }
-  }
-  pathMatcher {
-    __typename
-    kind
-    ... on LiteralPathMatcher {
-      value
-    }
-  }
-  bodyMatcher {
-    __typename
-    kind
-    ... on LiteralBodyMatcher {
-      value
-    }
-  }
-  headersMatcher {
-    __typename
-    kind
-    ... on LiteralsHeadersMatcher {
-      values {
-        name
-        value
-      }
-    }
+    ...EditMatcherWidget_matcher
   }
   response {
     body {
@@ -107,6 +106,7 @@ fragment MappingEditor_mapping on Mapping {
   priority
   createdAt
   updatedAt
+  ...AddMatcherWidget_mapping
 }
 
 fragment MappingLink_mapping on Mapping {
@@ -205,12 +205,16 @@ const node: ConcreteRequest = (function () {
     } as any), v9 = ({
         "kind": "ScalarField",
         "alias": null,
+        "name": "regex",
+        "args": null,
+        "storageKey": null
+    } as any), v10 = ({
+        "kind": "ScalarField",
+        "alias": null,
         "name": "value",
         "args": null,
         "storageKey": null
-    } as any), v10 = [
-        (v9 /*: any*/)
-    ];
+    } as any);
     return {
         "kind": "Request",
         "fragment": {
@@ -348,91 +352,77 @@ const node: ConcreteRequest = (function () {
                                 {
                                     "kind": "LinkedField",
                                     "alias": null,
-                                    "name": "methodMatcher",
+                                    "name": "matchers",
                                     "storageKey": null,
                                     "args": null,
                                     "concreteType": null,
-                                    "plural": false,
+                                    "plural": true,
                                     "selections": [
                                         (v7 /*: any*/),
                                         (v8 /*: any*/),
                                         {
                                             "kind": "InlineFragment",
-                                            "type": "LiteralsMethodMatcher",
+                                            "type": "MethodsMatcher",
                                             "selections": [
                                                 {
                                                     "kind": "ScalarField",
                                                     "alias": null,
-                                                    "name": "values",
+                                                    "name": "methods",
                                                     "args": null,
                                                     "storageKey": null
                                                 }
                                             ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "kind": "LinkedField",
-                                    "alias": null,
-                                    "name": "pathMatcher",
-                                    "storageKey": null,
-                                    "args": null,
-                                    "concreteType": null,
-                                    "plural": false,
-                                    "selections": [
-                                        (v7 /*: any*/),
-                                        (v8 /*: any*/),
+                                        },
                                         {
                                             "kind": "InlineFragment",
-                                            "type": "LiteralPathMatcher",
-                                            "selections": (v10 /*: any*/)
-                                        }
-                                    ]
-                                },
-                                {
-                                    "kind": "LinkedField",
-                                    "alias": null,
-                                    "name": "bodyMatcher",
-                                    "storageKey": null,
-                                    "args": null,
-                                    "concreteType": null,
-                                    "plural": false,
-                                    "selections": [
-                                        (v7 /*: any*/),
-                                        (v8 /*: any*/),
+                                            "type": "PathMatcher",
+                                            "selections": [
+                                                {
+                                                    "kind": "ScalarField",
+                                                    "alias": null,
+                                                    "name": "path",
+                                                    "args": null,
+                                                    "storageKey": null
+                                                },
+                                                (v9 /*: any*/)
+                                            ]
+                                        },
                                         {
                                             "kind": "InlineFragment",
-                                            "type": "LiteralBodyMatcher",
-                                            "selections": (v10 /*: any*/)
-                                        }
-                                    ]
-                                },
-                                {
-                                    "kind": "LinkedField",
-                                    "alias": null,
-                                    "name": "headersMatcher",
-                                    "storageKey": null,
-                                    "args": null,
-                                    "concreteType": null,
-                                    "plural": false,
-                                    "selections": [
-                                        (v7 /*: any*/),
-                                        (v8 /*: any*/),
+                                            "type": "BodyMatcher",
+                                            "selections": [
+                                                {
+                                                    "kind": "ScalarField",
+                                                    "alias": null,
+                                                    "name": "body",
+                                                    "args": null,
+                                                    "storageKey": null
+                                                },
+                                                {
+                                                    "kind": "ScalarField",
+                                                    "alias": null,
+                                                    "name": "ignoreWhitespace",
+                                                    "args": null,
+                                                    "storageKey": null
+                                                },
+                                                (v9 /*: any*/)
+                                            ]
+                                        },
                                         {
                                             "kind": "InlineFragment",
-                                            "type": "LiteralsHeadersMatcher",
+                                            "type": "HeadersMatcher",
                                             "selections": [
                                                 {
                                                     "kind": "LinkedField",
                                                     "alias": null,
-                                                    "name": "values",
+                                                    "name": "headers",
                                                     "storageKey": null,
                                                     "args": null,
-                                                    "concreteType": "LiteralHeaderValueMatcher",
+                                                    "concreteType": "HeaderKeyValuePair",
                                                     "plural": true,
                                                     "selections": [
                                                         (v5 /*: any*/),
-                                                        (v9 /*: any*/)
+                                                        (v10 /*: any*/)
                                                     ]
                                                 }
                                             ]
@@ -462,7 +452,9 @@ const node: ConcreteRequest = (function () {
                                                 {
                                                     "kind": "InlineFragment",
                                                     "type": "TemplateResponseBody",
-                                                    "selections": (v10 /*: any*/)
+                                                    "selections": [
+                                                        (v10 /*: any*/)
+                                                    ]
                                                 }
                                             ]
                                         }
@@ -524,7 +516,7 @@ const node: ConcreteRequest = (function () {
             "operationKind": "query",
             "name": "MappingIdQuery",
             "id": null,
-            "text": "query MappingIdQuery(\n  $scenarioId: ID!\n  $stateId: ID!\n  $mappingId: ID!\n) {\n  viewer {\n    scenario(id: $scenarioId) {\n      ...ScenarioLink_scenario\n      ...StateLink_scenario\n      ...MappingLink_scenario\n      id\n    }\n    state(id: $stateId) {\n      ...StateLink_state\n      ...MappingLink_state\n      id\n    }\n    mapping(id: $mappingId) {\n      ...MappingLink_mapping\n      ...MappingEditor_mapping\n      id\n    }\n    id\n  }\n}\n\nfragment MappingEditor_mapping on Mapping {\n  id\n  methodMatcher {\n    __typename\n    kind\n    ... on LiteralsMethodMatcher {\n      values\n    }\n  }\n  pathMatcher {\n    __typename\n    kind\n    ... on LiteralPathMatcher {\n      value\n    }\n  }\n  bodyMatcher {\n    __typename\n    kind\n    ... on LiteralBodyMatcher {\n      value\n    }\n  }\n  headersMatcher {\n    __typename\n    kind\n    ... on LiteralsHeadersMatcher {\n      values {\n        name\n        value\n      }\n    }\n  }\n  response {\n    body {\n      __typename\n      kind\n      ... on TemplateResponseBody {\n        value\n      }\n    }\n  }\n  trigger {\n    targetState {\n      name\n      id\n    }\n  }\n  priority\n  createdAt\n  updatedAt\n}\n\nfragment MappingLink_mapping on Mapping {\n  id\n}\n\nfragment MappingLink_scenario on Scenario {\n  id\n}\n\nfragment MappingLink_state on State {\n  id\n  name\n}\n\nfragment ScenarioLink_scenario on Scenario {\n  id\n  name\n}\n\nfragment StateLink_scenario on Scenario {\n  id\n}\n\nfragment StateLink_state on State {\n  id\n  name\n}\n",
+            "text": "query MappingIdQuery(\n  $scenarioId: ID!\n  $stateId: ID!\n  $mappingId: ID!\n) {\n  viewer {\n    scenario(id: $scenarioId) {\n      ...ScenarioLink_scenario\n      ...StateLink_scenario\n      ...MappingLink_scenario\n      id\n    }\n    state(id: $stateId) {\n      ...StateLink_state\n      ...MappingLink_state\n      id\n    }\n    mapping(id: $mappingId) {\n      ...MappingLink_mapping\n      ...MappingEditor_mapping\n      id\n    }\n    id\n  }\n}\n\nfragment AddMatcherWidget_mapping on Mapping {\n  id\n}\n\nfragment EditMatcherWidget_matcher on Matcher {\n  kind\n  ... on MethodsMatcher {\n    methods\n  }\n  ... on PathMatcher {\n    path\n    regex\n  }\n  ... on BodyMatcher {\n    body\n    ignoreWhitespace\n    regex\n  }\n  ... on HeadersMatcher {\n    headers {\n      name\n      value\n    }\n  }\n}\n\nfragment MappingEditor_mapping on Mapping {\n  id\n  matchers {\n    __typename\n    ...EditMatcherWidget_matcher\n  }\n  response {\n    body {\n      __typename\n      kind\n      ... on TemplateResponseBody {\n        value\n      }\n    }\n  }\n  trigger {\n    targetState {\n      name\n      id\n    }\n  }\n  priority\n  createdAt\n  updatedAt\n  ...AddMatcherWidget_mapping\n}\n\nfragment MappingLink_mapping on Mapping {\n  id\n}\n\nfragment MappingLink_scenario on Scenario {\n  id\n}\n\nfragment MappingLink_state on State {\n  id\n  name\n}\n\nfragment ScenarioLink_scenario on Scenario {\n  id\n  name\n}\n\nfragment StateLink_scenario on Scenario {\n  id\n}\n\nfragment StateLink_state on State {\n  id\n  name\n}\n",
             "metadata": {}
         }
     } as any;

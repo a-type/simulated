@@ -65,8 +65,6 @@ const MappingPage: FC<MappingPageProps> = () => {
     {},
   );
 
-  const handleMappingSave = () => {};
-
   if (!props) {
     return (
       <>
@@ -95,10 +93,7 @@ const MappingPage: FC<MappingPageProps> = () => {
             mapping={props.viewer.mapping}
           />
         </Breadcrumbs>
-        <MappingEditor
-          mapping={props.viewer.mapping}
-          onSubmit={handleMappingSave}
-        />
+        <MappingEditor mapping={props.viewer.mapping} />
       </Container>
     </>
   );
