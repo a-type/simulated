@@ -4,12 +4,18 @@ import {
   useCallback,
   ChangeEvent,
   FocusEvent,
+  useRef,
 } from 'react';
 
-export default (
-  backendValue: string,
-  saveValue: (value: string) => void | Promise<void>,
+export default <T extends string | boolean>(
+  backendValue: T,
+  saveValue: (value: T) => void | Promise<void>,
 ) => {
+  const isCheckbox = typeof backendValue === 'boolean';
+
+  const saveValueRef = useRef(saveValue);
+  saveValueRef.current = saveValue;
+
   const [rawValue, setRawValue] = useState(backendValue);
 
   // synchronize with new backend values
@@ -28,9 +34,13 @@ export default (
 
   const handleFieldChange = useCallback(
     (ev: ChangeEvent<HTMLInputElement>) => {
-      setRawValue(ev.target.value);
+      if (isCheckbox) {
+        setRawValue(ev.target.checked as T);
+      } else {
+        setRawValue(ev.target.value as T);
+      }
     },
-    [setRawValue],
+    [setRawValue, isCheckbox],
   );
 
   const [saving, setSaving] = useState(false);
@@ -41,12 +51,12 @@ export default (
 
       try {
         setSaving(true);
-        await saveValue(rawValue);
+        await saveValueRef.current(rawValue);
       } finally {
         setSaving(false);
       }
     },
-    [saveValue, rawValue, backendValue, setSaving],
+    [saveValueRef, rawValue, backendValue, setSaving],
   );
 
   return [

@@ -12,6 +12,8 @@ import { graphql, useFragment } from 'relay-hooks';
 import { MappingEditor_mapping$key } from './__generated__/MappingEditor_mapping.graphql';
 import MatcherAddWidget, { MatcherKind } from './MatcherAddWidget';
 import MatcherEditWidget from './MatcherEditWidget';
+import MappingPriorityField from './MappingPriorityField';
+import MappingResponseEditWidget from './MappingResponseEditWidget';
 
 export interface MappingEditorProps {
   mapping?: MappingEditor_mapping$key;
@@ -28,15 +30,8 @@ const mappingFragment = graphql`
   fragment MappingEditor_mapping on Mapping {
     id
     matchers {
+      kind
       ...MatcherEditWidget_matcher
-    }
-    response {
-      body {
-        kind
-        ... on TemplateResponseBody {
-          value
-        }
-      }
     }
     trigger {
       targetState {
@@ -47,6 +42,8 @@ const mappingFragment = graphql`
     createdAt
     updatedAt
     ...MatcherAddWidget_mapping
+    ...MappingPriorityField_mapping
+    ...MappingResponseEditWidget_mapping
   }
 `;
 
@@ -61,27 +58,25 @@ const MappingEditor: FC<MappingEditorProps> = props => {
     MatcherKind.body,
     MatcherKind.headers,
   ].filter(
-    kind => !mapping.matchers.some(matcher => matcher.kind === kind),
+    kind => !mapping.matchers.some(matcher => (matcher as any).kind === kind),
   ) as MatcherKind[];
 
   return (
     <Box>
       <Box mb={2}>
         <Typography variant="h4">Basics</Typography>
-        <TextField
-          type="number"
-          name="priority"
-          label="Priority"
-          variant="outlined"
-          margin="normal"
-        />
+        <MappingPriorityField mapping={mapping as any} />
       </Box>
       <Divider className={classes.divider} />
       <Box mb={2}>
         <Typography variant="h4">Request Matching</Typography>
         <Box mb={2}>
           {mapping.matchers.map(matcher => (
-            <MatcherEditWidget matcher={matcher as any} key={matcher.kind} />
+            <MatcherEditWidget
+              matcher={matcher as any}
+              key={(matcher as any).kind}
+              mappingId={mapping.id}
+            />
           ))}
         </Box>
         <MatcherAddWidget
@@ -92,26 +87,7 @@ const MappingEditor: FC<MappingEditorProps> = props => {
       <Divider className={classes.divider} />
       <Box mb={2}>
         <Typography variant="h4">Response</Typography>
-        <TextField
-          select
-          disabled
-          name="response.body.kind"
-          label="Response type"
-          style={{ minWidth: 200 }}
-          variant="outlined"
-          margin="normal"
-        >
-          <MenuItem value="Template">Template</MenuItem>
-        </TextField>
-        {/* TODO: configured based on matcher type */}
-        <TextField
-          multiline
-          name="response.body.value"
-          label="Body template"
-          fullWidth
-          variant="outlined"
-          margin="normal"
-        />
+        <MappingResponseEditWidget mapping={mapping} />
       </Box>
     </Box>
   );

@@ -1,55 +1,60 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 5e253e719e16aa829de6a59df0cc3c46 */
+/* @relayHash 494ac2220eb64a3d1312f8acf29e6bd8 */
 
 import { ConcreteRequest } from "relay-runtime";
-export type MatcherKind = "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
-export type AddStateMappingInput = {
-    stateId: string;
-    mapping: AddMappingInput;
+export type ResponseBodyKind = "template" | "%future added value";
+export type SetMappingResponseInput = {
+    mappingId: string;
+    response: AddResponseInput;
 };
-export type AddMappingInput = {
-    priority: number;
+export type AddResponseInput = {
+    body: AddResponseBodyInput;
 };
-export type MappingAddButton_addMappingMutationVariables = {
-    input: AddStateMappingInput;
+export type AddResponseBodyInput = {
+    template?: AddTemplateResponseBodyInput | null;
 };
-export type MappingAddButton_addMappingMutationResponse = {
-    readonly addStateMapping: {
-        readonly mappingEdge: {
-            readonly node: {
-                readonly id: string;
-                readonly priority: number;
-                readonly matchers: ReadonlyArray<{
-                    readonly kind: MatcherKind;
-                }>;
-            };
-            readonly cursor: string;
+export type AddTemplateResponseBodyInput = {
+    value: string;
+};
+export type MappingResponseEditWidget_setResponseMutationVariables = {
+    input: SetMappingResponseInput;
+};
+export type MappingResponseEditWidget_setResponseMutationResponse = {
+    readonly setMappingResponse: {
+        readonly mapping: {
+            readonly response: {
+                readonly body: {
+                    readonly kind: ResponseBodyKind;
+                    readonly value?: string;
+                };
+            } | null;
         };
     };
 };
-export type MappingAddButton_addMappingMutation = {
-    readonly response: MappingAddButton_addMappingMutationResponse;
-    readonly variables: MappingAddButton_addMappingMutationVariables;
+export type MappingResponseEditWidget_setResponseMutation = {
+    readonly response: MappingResponseEditWidget_setResponseMutationResponse;
+    readonly variables: MappingResponseEditWidget_setResponseMutationVariables;
 };
 
 
 
 /*
-mutation MappingAddButton_addMappingMutation(
-  $input: AddStateMappingInput!
+mutation MappingResponseEditWidget_setResponseMutation(
+  $input: SetMappingResponseInput!
 ) {
-  addStateMapping(input: $input) {
-    mappingEdge {
-      node {
-        id
-        priority
-        matchers {
+  setMappingResponse(input: $input) {
+    mapping {
+      response {
+        body {
           __typename
           kind
+          ... on TemplateResponseBody {
+            value
+          }
         }
       }
-      cursor
+      id
     }
   }
 }
@@ -60,7 +65,7 @@ const node: ConcreteRequest = (function () {
         ({
             "kind": "LocalArgument",
             "name": "input",
-            "type": "AddStateMappingInput!",
+            "type": "SetMappingResponseInput!",
             "defaultValue": null
         } as any)
     ], v1 = [
@@ -72,33 +77,27 @@ const node: ConcreteRequest = (function () {
     ], v2 = ({
         "kind": "ScalarField",
         "alias": null,
-        "name": "id",
-        "args": null,
-        "storageKey": null
-    } as any), v3 = ({
-        "kind": "ScalarField",
-        "alias": null,
-        "name": "priority",
-        "args": null,
-        "storageKey": null
-    } as any), v4 = ({
-        "kind": "ScalarField",
-        "alias": null,
         "name": "kind",
         "args": null,
         "storageKey": null
-    } as any), v5 = ({
-        "kind": "ScalarField",
-        "alias": null,
-        "name": "cursor",
-        "args": null,
-        "storageKey": null
+    } as any), v3 = ({
+        "kind": "InlineFragment",
+        "type": "TemplateResponseBody",
+        "selections": [
+            {
+                "kind": "ScalarField",
+                "alias": null,
+                "name": "value",
+                "args": null,
+                "storageKey": null
+            }
+        ]
     } as any);
     return {
         "kind": "Request",
         "fragment": {
             "kind": "Fragment",
-            "name": "MappingAddButton_addMappingMutation",
+            "name": "MappingResponseEditWidget_setResponseMutation",
             "type": "Mutation",
             "metadata": null,
             "argumentDefinitions": (v0 /*: any*/),
@@ -106,47 +105,45 @@ const node: ConcreteRequest = (function () {
                 {
                     "kind": "LinkedField",
                     "alias": null,
-                    "name": "addStateMapping",
+                    "name": "setMappingResponse",
                     "storageKey": null,
                     "args": (v1 /*: any*/),
-                    "concreteType": "AddStateMappingResult",
+                    "concreteType": "SetMappingResponseResult",
                     "plural": false,
                     "selections": [
                         {
                             "kind": "LinkedField",
                             "alias": null,
-                            "name": "mappingEdge",
+                            "name": "mapping",
                             "storageKey": null,
                             "args": null,
-                            "concreteType": "StateMappingEdge",
+                            "concreteType": "Mapping",
                             "plural": false,
                             "selections": [
                                 {
                                     "kind": "LinkedField",
                                     "alias": null,
-                                    "name": "node",
+                                    "name": "response",
                                     "storageKey": null,
                                     "args": null,
-                                    "concreteType": "Mapping",
+                                    "concreteType": "Response",
                                     "plural": false,
                                     "selections": [
-                                        (v2 /*: any*/),
-                                        (v3 /*: any*/),
                                         {
                                             "kind": "LinkedField",
                                             "alias": null,
-                                            "name": "matchers",
+                                            "name": "body",
                                             "storageKey": null,
                                             "args": null,
                                             "concreteType": null,
-                                            "plural": true,
+                                            "plural": false,
                                             "selections": [
-                                                (v4 /*: any*/)
+                                                (v2 /*: any*/),
+                                                (v3 /*: any*/)
                                             ]
                                         }
                                     ]
-                                },
-                                (v5 /*: any*/)
+                                }
                             ]
                         }
                     ]
@@ -155,46 +152,44 @@ const node: ConcreteRequest = (function () {
         },
         "operation": {
             "kind": "Operation",
-            "name": "MappingAddButton_addMappingMutation",
+            "name": "MappingResponseEditWidget_setResponseMutation",
             "argumentDefinitions": (v0 /*: any*/),
             "selections": [
                 {
                     "kind": "LinkedField",
                     "alias": null,
-                    "name": "addStateMapping",
+                    "name": "setMappingResponse",
                     "storageKey": null,
                     "args": (v1 /*: any*/),
-                    "concreteType": "AddStateMappingResult",
+                    "concreteType": "SetMappingResponseResult",
                     "plural": false,
                     "selections": [
                         {
                             "kind": "LinkedField",
                             "alias": null,
-                            "name": "mappingEdge",
+                            "name": "mapping",
                             "storageKey": null,
                             "args": null,
-                            "concreteType": "StateMappingEdge",
+                            "concreteType": "Mapping",
                             "plural": false,
                             "selections": [
                                 {
                                     "kind": "LinkedField",
                                     "alias": null,
-                                    "name": "node",
+                                    "name": "response",
                                     "storageKey": null,
                                     "args": null,
-                                    "concreteType": "Mapping",
+                                    "concreteType": "Response",
                                     "plural": false,
                                     "selections": [
-                                        (v2 /*: any*/),
-                                        (v3 /*: any*/),
                                         {
                                             "kind": "LinkedField",
                                             "alias": null,
-                                            "name": "matchers",
+                                            "name": "body",
                                             "storageKey": null,
                                             "args": null,
                                             "concreteType": null,
-                                            "plural": true,
+                                            "plural": false,
                                             "selections": [
                                                 {
                                                     "kind": "ScalarField",
@@ -203,12 +198,19 @@ const node: ConcreteRequest = (function () {
                                                     "args": null,
                                                     "storageKey": null
                                                 },
-                                                (v4 /*: any*/)
+                                                (v2 /*: any*/),
+                                                (v3 /*: any*/)
                                             ]
                                         }
                                     ]
                                 },
-                                (v5 /*: any*/)
+                                {
+                                    "kind": "ScalarField",
+                                    "alias": null,
+                                    "name": "id",
+                                    "args": null,
+                                    "storageKey": null
+                                }
                             ]
                         }
                     ]
@@ -217,12 +219,12 @@ const node: ConcreteRequest = (function () {
         },
         "params": {
             "operationKind": "mutation",
-            "name": "MappingAddButton_addMappingMutation",
+            "name": "MappingResponseEditWidget_setResponseMutation",
             "id": null,
-            "text": "mutation MappingAddButton_addMappingMutation(\n  $input: AddStateMappingInput!\n) {\n  addStateMapping(input: $input) {\n    mappingEdge {\n      node {\n        id\n        priority\n        matchers {\n          __typename\n          kind\n        }\n      }\n      cursor\n    }\n  }\n}\n",
+            "text": "mutation MappingResponseEditWidget_setResponseMutation(\n  $input: SetMappingResponseInput!\n) {\n  setMappingResponse(input: $input) {\n    mapping {\n      response {\n        body {\n          __typename\n          kind\n          ... on TemplateResponseBody {\n            value\n          }\n        }\n      }\n      id\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = '8a3f31649b2f9f26aeaa811dd82082b8';
+(node as any).hash = '9459ad03a34f9b7714b1fc74ef25d3d6';
 export default node;

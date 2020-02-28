@@ -1,6 +1,7 @@
 import React, { FC, useState, useCallback } from 'react';
 import { makeStyles, Theme, Button, Menu, MenuItem } from '@material-ui/core';
 import { graphql, useMutation, useFragment } from 'relay-hooks';
+import useError from '../hooks/useError';
 
 export enum MatcherKind {
   path = 'path',
@@ -71,7 +72,9 @@ const MatcherAddWidget: FC<MatcherAddWidgetProps> = props => {
     setAnchorEl(null);
   }, [setAnchorEl]);
 
-  const [mutate] = useMutation(addMatcherMutation, {});
+  const [mutate, { error }] = useMutation(addMatcherMutation, {});
+
+  useError(error);
 
   const makeMenuHandler = (kind: MatcherKind) => async () => {
     await mutate({
@@ -101,20 +104,30 @@ const getEmptyMatcher = (kind: MatcherKind) => {
   switch (kind) {
     case MatcherKind.path:
       return {
-        path: '/foo',
+        path: {
+          path: '/foo',
+          regex: false,
+        },
       };
     case MatcherKind.body:
       return {
-        body: '{ "foo": "bar" }',
-        ignoreWhitespace: true,
+        body: {
+          body: '{ "foo": "bar" }',
+          ignoreWhitespace: true,
+          regex: false,
+        },
       };
     case MatcherKind.methods:
       return {
-        methods: ['GET'],
+        methods: {
+          methods: ['GET'],
+        },
       };
     case MatcherKind.headers:
       return {
-        headers: [],
+        headers: {
+          headers: [],
+        },
       };
   }
 };

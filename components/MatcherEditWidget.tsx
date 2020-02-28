@@ -1,9 +1,12 @@
 import React, { FC } from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
 import { graphql, useFragment } from 'relay-hooks';
+import { MatcherEditWidget_matcher$key } from './__generated__/MatcherEditWidget_matcher.graphql';
+import PathMatcherEditWidget from './PathMatcherEditWidget';
 
 export interface MatcherEditWidgetProps {
-  matcher: any;
+  mappingId: string;
+  matcher: MatcherEditWidget_matcher$key;
 }
 
 const matcherFragment = graphql`
@@ -11,10 +14,6 @@ const matcherFragment = graphql`
     kind
     ... on MethodsMatcher {
       methods
-    }
-    ... on PathMatcher {
-      path
-      regex
     }
     ... on BodyMatcher {
       body
@@ -27,13 +26,15 @@ const matcherFragment = graphql`
         value
       }
     }
+
+    ...PathMatcherEditWidget_matcher
   }
 `;
 
 const useStyles = makeStyles<Theme, MatcherEditWidgetProps>(theme => ({}));
 
 const MatcherEditWidget: FC<MatcherEditWidgetProps> = props => {
-  const {} = props;
+  const { mappingId } = props;
   const classes = useStyles(props);
 
   const matcher = useFragment(matcherFragment, props.matcher);
@@ -41,7 +42,7 @@ const MatcherEditWidget: FC<MatcherEditWidgetProps> = props => {
   // TODO: edit
   switch (matcher.kind) {
     case 'path':
-      return <div>Path: {matcher.path}</div>;
+      return <PathMatcherEditWidget matcher={matcher} mappingId={mappingId} />;
     case 'methods':
       return <div>Methods: {matcher.methods}</div>;
     case 'body':

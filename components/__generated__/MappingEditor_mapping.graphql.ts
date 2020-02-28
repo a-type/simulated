@@ -3,18 +3,13 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type ResponseBodyKind = "template" | "%future added value";
+export type MatcherKind = "%future added value" | "%future added value" | "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
 export type MappingEditor_mapping = {
     readonly id: string;
     readonly matchers: ReadonlyArray<{
+        readonly kind: MatcherKind;
         readonly " $fragmentRefs": FragmentRefs<"MatcherEditWidget_matcher">;
     }>;
-    readonly response: {
-        readonly body: {
-            readonly kind: ResponseBodyKind;
-            readonly value?: string;
-        };
-    } | null;
     readonly trigger: {
         readonly targetState: {
             readonly name: string;
@@ -23,7 +18,7 @@ export type MappingEditor_mapping = {
     readonly priority: number;
     readonly createdAt: string;
     readonly updatedAt: string;
-    readonly " $fragmentRefs": FragmentRefs<"MatcherAddWidget_mapping">;
+    readonly " $fragmentRefs": FragmentRefs<"MatcherAddWidget_mapping" | "MappingPriorityField_mapping" | "MappingResponseEditWidget_mapping">;
     readonly " $refType": "MappingEditor_mapping";
 };
 export type MappingEditor_mapping$data = MappingEditor_mapping;
@@ -58,51 +53,16 @@ const node: ReaderFragment = ({
             "plural": true,
             "selections": [
                 {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "name": "kind",
+                    "args": null,
+                    "storageKey": null
+                },
+                {
                     "kind": "FragmentSpread",
                     "name": "MatcherEditWidget_matcher",
                     "args": null
-                }
-            ]
-        },
-        {
-            "kind": "LinkedField",
-            "alias": null,
-            "name": "response",
-            "storageKey": null,
-            "args": null,
-            "concreteType": "Response",
-            "plural": false,
-            "selections": [
-                {
-                    "kind": "LinkedField",
-                    "alias": null,
-                    "name": "body",
-                    "storageKey": null,
-                    "args": null,
-                    "concreteType": null,
-                    "plural": false,
-                    "selections": [
-                        {
-                            "kind": "ScalarField",
-                            "alias": null,
-                            "name": "kind",
-                            "args": null,
-                            "storageKey": null
-                        },
-                        {
-                            "kind": "InlineFragment",
-                            "type": "TemplateResponseBody",
-                            "selections": [
-                                {
-                                    "kind": "ScalarField",
-                                    "alias": null,
-                                    "name": "value",
-                                    "args": null,
-                                    "storageKey": null
-                                }
-                            ]
-                        }
-                    ]
                 }
             ]
         },
@@ -160,8 +120,18 @@ const node: ReaderFragment = ({
             "kind": "FragmentSpread",
             "name": "MatcherAddWidget_mapping",
             "args": null
+        },
+        {
+            "kind": "FragmentSpread",
+            "name": "MappingPriorityField_mapping",
+            "args": null
+        },
+        {
+            "kind": "FragmentSpread",
+            "name": "MappingResponseEditWidget_mapping",
+            "args": null
         }
     ]
 } as any);
-(node as any).hash = 'a6475eb7fc26f3362a95125c9cc0f292';
+(node as any).hash = '6013b63e35e904f876043f12508a84f7';
 export default node;

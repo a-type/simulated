@@ -523,25 +523,19 @@ export default class Storage {
     mappingId: string;
     matcher: StorageMatcher;
   }) {
-    const original = await this.getMapping({ mappingId });
-
-    const existingMatcherOfTypeIndex = original.matchers.findIndex(
-      m => m.kind === matcher.kind,
-    );
-
-    // copy memory to prevent mutation
-    const newMatchers = [...original.matchers];
-
-    if (existingMatcherOfTypeIndex !== -1) {
-      newMatchers.splice(existingMatcherOfTypeIndex, 1);
-    }
-
-    newMatchers.push(matcher);
-
     const mapping = await (await db)
-      .set<StorageMapping>(`mappings[${mappingId}]`, {
-        ...original,
-        matchers: newMatchers,
+      .get('mappings', [])
+      .find(m => m.id === mappingId)
+      .update('matchers', matchers => {
+        // remove existing matcher of same kind, if present
+        const filtered = matchers.filter(
+          ({ kind }: StorageMatcher) => kind !== matcher.kind,
+        );
+        filtered.push(matcher);
+        return filtered;
+      })
+      .assign({
+        updatedAt: timestamp(),
       })
       .write();
 
