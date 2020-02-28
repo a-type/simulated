@@ -11,20 +11,20 @@ import {
 } from '@material-ui/core';
 import { graphql, useFragment, useMutation } from 'relay-hooks';
 import { ConnectionHandler } from 'relay-runtime';
-import { DeleteScenarioButton_deleteScenarioMutation } from './__generated__/DeleteScenarioButton_deleteScenarioMutation.graphql';
-import { DeleteScenarioButton_viewer$key } from './__generated__/DeleteScenarioButton_viewer.graphql';
-import { DeleteScenarioButton_scenario$key } from './__generated__/DeleteScenarioButton_scenario.graphql';
+import { ScenarioDeleteButton_deleteScenarioMutation } from './__generated__/ScenarioDeleteButton_deleteScenarioMutation.graphql';
+import { ScenarioDeleteButton_viewer$key } from './__generated__/ScenarioDeleteButton_viewer.graphql';
+import { ScenarioDeleteButton_scenario$key } from './__generated__/ScenarioDeleteButton_scenario.graphql';
 
-export interface DeleteScenarioButtonProps extends ButtonProps {
-  viewer: DeleteScenarioButton_viewer$key;
-  scenario: DeleteScenarioButton_scenario$key;
+export interface ScenarioDeleteButtonProps extends ButtonProps {
+  viewer: ScenarioDeleteButton_viewer$key;
+  scenario: ScenarioDeleteButton_scenario$key;
   onDelete?: () => any;
 }
 
-const useStyles = makeStyles<Theme, DeleteScenarioButtonProps>(theme => ({}));
+const useStyles = makeStyles<Theme, ScenarioDeleteButtonProps>(theme => ({}));
 
 const deleteScenarioMutation = graphql`
-  mutation DeleteScenarioButton_deleteScenarioMutation(
+  mutation ScenarioDeleteButton_deleteScenarioMutation(
     $input: DeleteScenarioInput!
   ) {
     deleteScenario(input: $input) {
@@ -39,19 +39,19 @@ const deleteScenarioMutation = graphql`
 `;
 
 const viewerFragment = graphql`
-  fragment DeleteScenarioButton_viewer on Viewer {
+  fragment ScenarioDeleteButton_viewer on Viewer {
     id
   }
 `;
 
 const scenarioFragment = graphql`
-  fragment DeleteScenarioButton_scenario on Scenario {
+  fragment ScenarioDeleteButton_scenario on Scenario {
     id
     name
   }
 `;
 
-const DeleteScenarioButton: FC<DeleteScenarioButtonProps> = props => {
+const ScenarioDeleteButton: FC<ScenarioDeleteButtonProps> = props => {
   const {
     onDelete,
     scenario: scenarioProp,
@@ -69,7 +69,7 @@ const DeleteScenarioButton: FC<DeleteScenarioButtonProps> = props => {
   );
 
   const [mutate, { loading }] = useMutation<
-    DeleteScenarioButton_deleteScenarioMutation
+    ScenarioDeleteButton_deleteScenarioMutation
   >(deleteScenarioMutation, {
     onCompleted: () => {
       if (!onDelete) return;
@@ -126,4 +126,4 @@ const DeleteScenarioButton: FC<DeleteScenarioButtonProps> = props => {
   );
 };
 
-export default DeleteScenarioButton;
+export default ScenarioDeleteButton;

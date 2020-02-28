@@ -9,13 +9,13 @@ export enum MatcherKind {
   headers = 'headers',
 }
 
-export interface AddMatcherWidgetProps {
+export interface MatcherAddWidgetProps {
   availableKinds: MatcherKind[];
   mapping: any;
 }
 
 const addMatcherMutation = graphql`
-  mutation AddMatcherWidget_addMatcherMutation(
+  mutation MatcherAddWidget_addMatcherMutation(
     $input: AddMappingMatcherInput!
   ) {
     addMappingMatcher(input: $input) {
@@ -47,14 +47,14 @@ const addMatcherMutation = graphql`
 `;
 
 const mappingFragment = graphql`
-  fragment AddMatcherWidget_mapping on Mapping {
+  fragment MatcherAddWidget_mapping on Mapping {
     id
   }
 `;
 
-const useStyles = makeStyles<Theme, AddMatcherWidgetProps>(theme => ({}));
+const useStyles = makeStyles<Theme, MatcherAddWidgetProps>(theme => ({}));
 
-const AddMatcherWidget: FC<AddMatcherWidgetProps> = props => {
+const MatcherAddWidget: FC<MatcherAddWidgetProps> = props => {
   const { availableKinds, mapping: mappingKey } = props;
   const classes = useStyles(props);
 
@@ -119,4 +119,4 @@ const getEmptyMatcher = (kind: MatcherKind) => {
   }
 };
 
-export default AddMatcherWidget;
+export default MatcherAddWidget;

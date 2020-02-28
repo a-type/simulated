@@ -10,8 +10,8 @@ import {
 } from '@material-ui/core';
 import ScenarioDetails from '../../../components/ScenarioDetails';
 import ScenarioStates from '../../../components/ScenarioStates';
-import AddStateButton from '../../../components/AddStateButton';
-import DeleteScenarioButton from '../../../components/DeleteScenarioButton';
+import StateAddButton from '../../../components/StateAddButton';
+import ScenarioDeleteButton from '../../../components/ScenarioDeleteButton';
 import { useCallback } from 'react';
 import Router from 'next/router';
 import Navigation from '../../../components/Navigation';
@@ -22,13 +22,13 @@ import Link from '../../../components/Link';
 const query = graphql`
   query ScenarioIdQuery($scenarioId: ID!) {
     viewer {
-      ...DeleteScenarioButton_viewer
+      ...ScenarioDeleteButton_viewer
       scenario(id: $scenarioId) {
         ...ScenarioDetails_scenario
         ...ScenarioStatus_scenario
         ...ScenarioStates_scenario
-        ...AddStateButton_scenario
-        ...DeleteScenarioButton_scenario
+        ...StateAddButton_scenario
+        ...ScenarioDeleteButton_scenario
         ...ScenarioLink_scenario
       }
     }
@@ -90,23 +90,23 @@ function ScenarioPage() {
                 />
                 <ScenarioStatus scenario={props.viewer.scenario} />
               </Paper>
-              <DeleteScenarioButton
+              <ScenarioDeleteButton
                 scenario={props.viewer.scenario}
                 viewer={props.viewer}
                 onDelete={handleDeleteScenario}
               >
                 Delete this scenario
-              </DeleteScenarioButton>
+              </ScenarioDeleteButton>
               <ScenarioStates
                 scenario={props.viewer.scenario}
                 className={classes.states}
               />
-              <AddStateButton
+              <StateAddButton
                 scenario={props.viewer.scenario}
                 variant="contained"
               >
                 Add state
-              </AddStateButton>
+              </StateAddButton>
             </>
           ) : (
             <div>Scenario does not exist</div>

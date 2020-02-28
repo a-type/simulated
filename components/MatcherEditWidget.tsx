@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
 import { graphql, useFragment } from 'relay-hooks';
 
-export interface EditMatcherWidgetProps {
+export interface MatcherEditWidgetProps {
   matcher: any;
 }
 
 const matcherFragment = graphql`
-  fragment EditMatcherWidget_matcher on Matcher {
+  fragment MatcherEditWidget_matcher on Matcher {
     kind
     ... on MethodsMatcher {
       methods
@@ -30,9 +30,9 @@ const matcherFragment = graphql`
   }
 `;
 
-const useStyles = makeStyles<Theme, EditMatcherWidgetProps>(theme => ({}));
+const useStyles = makeStyles<Theme, MatcherEditWidgetProps>(theme => ({}));
 
-const EditMatcherWidget: FC<EditMatcherWidgetProps> = props => {
+const MatcherEditWidget: FC<MatcherEditWidgetProps> = props => {
   const {} = props;
   const classes = useStyles(props);
 
@@ -53,4 +53,4 @@ const EditMatcherWidget: FC<EditMatcherWidgetProps> = props => {
   }
 };
 
-export default EditMatcherWidget;
+export default MatcherEditWidget;

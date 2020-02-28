@@ -3,22 +3,22 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type AddMappingButton_state = {
+export type ScenarioAddButton_viewer = {
     readonly id: string;
-    readonly " $refType": "AddMappingButton_state";
+    readonly " $refType": "ScenarioAddButton_viewer";
 };
-export type AddMappingButton_state$data = AddMappingButton_state;
-export type AddMappingButton_state$key = {
-    readonly " $data"?: AddMappingButton_state$data;
-    readonly " $fragmentRefs": FragmentRefs<"AddMappingButton_state">;
+export type ScenarioAddButton_viewer$data = ScenarioAddButton_viewer;
+export type ScenarioAddButton_viewer$key = {
+    readonly " $data"?: ScenarioAddButton_viewer$data;
+    readonly " $fragmentRefs": FragmentRefs<"ScenarioAddButton_viewer">;
 };
 
 
 
 const node: ReaderFragment = ({
     "kind": "Fragment",
-    "name": "AddMappingButton_state",
-    "type": "State",
+    "name": "ScenarioAddButton_viewer",
+    "type": "Viewer",
     "metadata": null,
     "argumentDefinitions": [],
     "selections": [
@@ -31,5 +31,5 @@ const node: ReaderFragment = ({
         }
     ]
 } as any);
-(node as any).hash = '789d83534e6c0bb11308dcc8ae35bb23';
+(node as any).hash = 'f64928a13af5936938c2dd9e0a2ac537';
 export default node;

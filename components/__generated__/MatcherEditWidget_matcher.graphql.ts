@@ -4,7 +4,7 @@
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type MatcherKind = "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
-export type EditMatcherWidget_matcher = {
+export type MatcherEditWidget_matcher = {
     readonly kind: MatcherKind;
     readonly methods?: ReadonlyArray<string>;
     readonly path?: string;
@@ -15,12 +15,12 @@ export type EditMatcherWidget_matcher = {
         readonly name: string;
         readonly value: string | null;
     }>;
-    readonly " $refType": "EditMatcherWidget_matcher";
+    readonly " $refType": "MatcherEditWidget_matcher";
 };
-export type EditMatcherWidget_matcher$data = EditMatcherWidget_matcher;
-export type EditMatcherWidget_matcher$key = {
-    readonly " $data"?: EditMatcherWidget_matcher$data;
-    readonly " $fragmentRefs": FragmentRefs<"EditMatcherWidget_matcher">;
+export type MatcherEditWidget_matcher$data = MatcherEditWidget_matcher;
+export type MatcherEditWidget_matcher$key = {
+    readonly " $data"?: MatcherEditWidget_matcher$data;
+    readonly " $fragmentRefs": FragmentRefs<"MatcherEditWidget_matcher">;
 };
 
 
@@ -35,7 +35,7 @@ const node: ReaderFragment = (function () {
     } as any);
     return {
         "kind": "Fragment",
-        "name": "EditMatcherWidget_matcher",
+        "name": "MatcherEditWidget_matcher",
         "type": "Matcher",
         "metadata": null,
         "argumentDefinitions": [],
@@ -129,5 +129,5 @@ const node: ReaderFragment = (function () {
         ]
     } as any;
 })();
-(node as any).hash = '2b250a1b656fe42415da3d8b1a8df71c';
+(node as any).hash = '197e8e7ab3f68acfa111cd7e42d0a66a';
 export default node;

@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useCallback } from 'react';
+import React, { FC } from 'react';
 import {
   makeStyles,
   Theme,
@@ -10,8 +10,8 @@ import {
 } from '@material-ui/core';
 import { graphql, useFragment } from 'relay-hooks';
 import { MappingEditor_mapping$key } from './__generated__/MappingEditor_mapping.graphql';
-import AddMatcherWidget, { MatcherKind } from './AddMatcherWidget';
-import EditMatcherWidget from './EditMatcherWidget';
+import MatcherAddWidget, { MatcherKind } from './MatcherAddWidget';
+import MatcherEditWidget from './MatcherEditWidget';
 
 export interface MappingEditorProps {
   mapping?: MappingEditor_mapping$key;
@@ -28,7 +28,7 @@ const mappingFragment = graphql`
   fragment MappingEditor_mapping on Mapping {
     id
     matchers {
-      ...EditMatcherWidget_matcher
+      ...MatcherEditWidget_matcher
     }
     response {
       body {
@@ -46,7 +46,7 @@ const mappingFragment = graphql`
     priority
     createdAt
     updatedAt
-    ...AddMatcherWidget_mapping
+    ...MatcherAddWidget_mapping
   }
 `;
 
@@ -81,10 +81,10 @@ const MappingEditor: FC<MappingEditorProps> = props => {
         <Typography variant="h4">Request Matching</Typography>
         <Box mb={2}>
           {mapping.matchers.map(matcher => (
-            <EditMatcherWidget matcher={matcher as any} key={matcher.kind} />
+            <MatcherEditWidget matcher={matcher as any} key={matcher.kind} />
           ))}
         </Box>
-        <AddMatcherWidget
+        <MatcherAddWidget
           mapping={mapping}
           availableKinds={unusedMatcherKinds}
         />

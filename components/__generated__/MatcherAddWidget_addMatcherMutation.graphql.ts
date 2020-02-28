@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 1cbc1bc76c5d40bec40812b567765ca6 */
+/* @relayHash 80f2ba496c305646c60f26e24d6da562 */
 
 import { ConcreteRequest } from "relay-runtime";
 export type MatcherKind = "body" | "headers" | "methods" | "path" | "%future added value";
@@ -33,10 +33,10 @@ export type AddHeaderNameValuePairInput = {
     name: string;
     value?: string | null;
 };
-export type AddMatcherWidget_addMatcherMutationVariables = {
+export type MatcherAddWidget_addMatcherMutationVariables = {
     input: AddMappingMatcherInput;
 };
-export type AddMatcherWidget_addMatcherMutationResponse = {
+export type MatcherAddWidget_addMatcherMutationResponse = {
     readonly addMappingMatcher: {
         readonly mapping: {
             readonly matchers: ReadonlyArray<{
@@ -54,15 +54,15 @@ export type AddMatcherWidget_addMatcherMutationResponse = {
         };
     };
 };
-export type AddMatcherWidget_addMatcherMutation = {
-    readonly response: AddMatcherWidget_addMatcherMutationResponse;
-    readonly variables: AddMatcherWidget_addMatcherMutationVariables;
+export type MatcherAddWidget_addMatcherMutation = {
+    readonly response: MatcherAddWidget_addMatcherMutationResponse;
+    readonly variables: MatcherAddWidget_addMatcherMutationVariables;
 };
 
 
 
 /*
-mutation AddMatcherWidget_addMatcherMutation(
+mutation MatcherAddWidget_addMatcherMutation(
   $input: AddMappingMatcherInput!
 ) {
   addMappingMatcher(input: $input) {
@@ -201,7 +201,7 @@ const node: ConcreteRequest = (function () {
         "kind": "Request",
         "fragment": {
             "kind": "Fragment",
-            "name": "AddMatcherWidget_addMatcherMutation",
+            "name": "MatcherAddWidget_addMatcherMutation",
             "type": "Mutation",
             "metadata": null,
             "argumentDefinitions": (v0 /*: any*/),
@@ -248,7 +248,7 @@ const node: ConcreteRequest = (function () {
         },
         "operation": {
             "kind": "Operation",
-            "name": "AddMatcherWidget_addMatcherMutation",
+            "name": "MatcherAddWidget_addMatcherMutation",
             "argumentDefinitions": (v0 /*: any*/),
             "selections": [
                 {
@@ -307,12 +307,12 @@ const node: ConcreteRequest = (function () {
         },
         "params": {
             "operationKind": "mutation",
-            "name": "AddMatcherWidget_addMatcherMutation",
+            "name": "MatcherAddWidget_addMatcherMutation",
             "id": null,
-            "text": "mutation AddMatcherWidget_addMatcherMutation(\n  $input: AddMappingMatcherInput!\n) {\n  addMappingMatcher(input: $input) {\n    mapping {\n      matchers {\n        __typename\n        kind\n        ... on MethodsMatcher {\n          methods\n        }\n        ... on PathMatcher {\n          path\n          regex\n        }\n        ... on BodyMatcher {\n          body\n          ignoreWhitespace\n          regex\n        }\n        ... on HeadersMatcher {\n          headers {\n            name\n            value\n          }\n        }\n      }\n      id\n    }\n  }\n}\n",
+            "text": "mutation MatcherAddWidget_addMatcherMutation(\n  $input: AddMappingMatcherInput!\n) {\n  addMappingMatcher(input: $input) {\n    mapping {\n      matchers {\n        __typename\n        kind\n        ... on MethodsMatcher {\n          methods\n        }\n        ... on PathMatcher {\n          path\n          regex\n        }\n        ... on BodyMatcher {\n          body\n          ignoreWhitespace\n          regex\n        }\n        ... on HeadersMatcher {\n          headers {\n            name\n            value\n          }\n        }\n      }\n      id\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = 'cfc9d1acd03441b2fc07359b0c45f9aa';
+(node as any).hash = 'feda9e657a1c9c2b884dd3b4e1613a9f';
 export default node;

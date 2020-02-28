@@ -1,77 +1,83 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash f276f1559e3106c6857e910c5379cd06 */
+/* @relayHash b95fc070eb79957d7a6b4a5235aafb09 */
 
 import { ConcreteRequest } from "relay-runtime";
-export type AddScenarioButton_addScenarioMutationVariables = {};
-export type AddScenarioButton_addScenarioMutationResponse = {
-    readonly addScenario: {
-        readonly scenarioEdge: {
+export type AddScenarioStateInput = {
+    scenarioId: string;
+    state: AddStateInput;
+};
+export type AddStateInput = {
+    name: string;
+};
+export type StateAddButton_addStateMutationVariables = {
+    input: AddScenarioStateInput;
+};
+export type StateAddButton_addStateMutationResponse = {
+    readonly addScenarioState: {
+        readonly stateEdge: {
             readonly node: {
                 readonly id: string;
                 readonly name: string;
             };
             readonly cursor: string;
         };
-        readonly scenario: {
-            readonly id: string;
-        };
     };
 };
-export type AddScenarioButton_addScenarioMutation = {
-    readonly response: AddScenarioButton_addScenarioMutationResponse;
-    readonly variables: AddScenarioButton_addScenarioMutationVariables;
+export type StateAddButton_addStateMutation = {
+    readonly response: StateAddButton_addStateMutationResponse;
+    readonly variables: StateAddButton_addStateMutationVariables;
 };
 
 
 
 /*
-mutation AddScenarioButton_addScenarioMutation {
-  addScenario(input: {}) {
-    scenarioEdge {
+mutation StateAddButton_addStateMutation(
+  $input: AddScenarioStateInput!
+) {
+  addScenarioState(input: $input) {
+    stateEdge {
       node {
         id
         name
       }
       cursor
     }
-    scenario {
-      id
-    }
   }
 }
 */
 
 const node: ConcreteRequest = (function () {
-    var v0 = ({
-        "kind": "ScalarField",
-        "alias": null,
-        "name": "id",
-        "args": null,
-        "storageKey": null
-    } as any), v1 = [
+    var v0 = [
+        ({
+            "kind": "LocalArgument",
+            "name": "input",
+            "type": "AddScenarioStateInput!",
+            "defaultValue": null
+        } as any)
+    ], v1 = [
         ({
             "kind": "LinkedField",
             "alias": null,
-            "name": "addScenario",
-            "storageKey": "addScenario(input:{})",
+            "name": "addScenarioState",
+            "storageKey": null,
             "args": [
                 {
-                    "kind": "Literal",
+                    "kind": "Variable",
                     "name": "input",
-                    "value": {}
+                    "variableName": "input"
                 }
             ],
-            "concreteType": "AddScenarioResult",
+            "concreteType": "AddScenarioStateResult",
             "plural": false,
             "selections": [
                 {
                     "kind": "LinkedField",
                     "alias": null,
-                    "name": "scenarioEdge",
+                    "name": "stateEdge",
                     "storageKey": null,
                     "args": null,
-                    "concreteType": "ScenarioEdge",
+                    "concreteType": "ScenarioStateEdge",
                     "plural": false,
                     "selections": [
                         {
@@ -80,10 +86,16 @@ const node: ConcreteRequest = (function () {
                             "name": "node",
                             "storageKey": null,
                             "args": null,
-                            "concreteType": "Scenario",
+                            "concreteType": "State",
                             "plural": false,
                             "selections": [
-                                (v0 /*: any*/),
+                                {
+                                    "kind": "ScalarField",
+                                    "alias": null,
+                                    "name": "id",
+                                    "args": null,
+                                    "storageKey": null
+                                },
                                 {
                                     "kind": "ScalarField",
                                     "alias": null,
@@ -101,18 +113,6 @@ const node: ConcreteRequest = (function () {
                             "storageKey": null
                         }
                     ]
-                },
-                {
-                    "kind": "LinkedField",
-                    "alias": null,
-                    "name": "scenario",
-                    "storageKey": null,
-                    "args": null,
-                    "concreteType": "Scenario",
-                    "plural": false,
-                    "selections": [
-                        (v0 /*: any*/)
-                    ]
                 }
             ]
         } as any)
@@ -121,26 +121,26 @@ const node: ConcreteRequest = (function () {
         "kind": "Request",
         "fragment": {
             "kind": "Fragment",
-            "name": "AddScenarioButton_addScenarioMutation",
+            "name": "StateAddButton_addStateMutation",
             "type": "Mutation",
             "metadata": null,
-            "argumentDefinitions": [],
+            "argumentDefinitions": (v0 /*: any*/),
             "selections": (v1 /*: any*/)
         },
         "operation": {
             "kind": "Operation",
-            "name": "AddScenarioButton_addScenarioMutation",
-            "argumentDefinitions": [],
+            "name": "StateAddButton_addStateMutation",
+            "argumentDefinitions": (v0 /*: any*/),
             "selections": (v1 /*: any*/)
         },
         "params": {
             "operationKind": "mutation",
-            "name": "AddScenarioButton_addScenarioMutation",
+            "name": "StateAddButton_addStateMutation",
             "id": null,
-            "text": "mutation AddScenarioButton_addScenarioMutation {\n  addScenario(input: {}) {\n    scenarioEdge {\n      node {\n        id\n        name\n      }\n      cursor\n    }\n    scenario {\n      id\n    }\n  }\n}\n",
+            "text": "mutation StateAddButton_addStateMutation(\n  $input: AddScenarioStateInput!\n) {\n  addScenarioState(input: $input) {\n    stateEdge {\n      node {\n        id\n        name\n      }\n      cursor\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = 'f3dfa9b7125b50e166b252905f5fd9c9';
+(node as any).hash = '8dfd83263dc127baaf09a94b728673af';
 export default node;

@@ -7,7 +7,7 @@ export type ResponseBodyKind = "template" | "%future added value";
 export type MappingEditor_mapping = {
     readonly id: string;
     readonly matchers: ReadonlyArray<{
-        readonly " $fragmentRefs": FragmentRefs<"EditMatcherWidget_matcher">;
+        readonly " $fragmentRefs": FragmentRefs<"MatcherEditWidget_matcher">;
     }>;
     readonly response: {
         readonly body: {
@@ -23,7 +23,7 @@ export type MappingEditor_mapping = {
     readonly priority: number;
     readonly createdAt: string;
     readonly updatedAt: string;
-    readonly " $fragmentRefs": FragmentRefs<"AddMatcherWidget_mapping">;
+    readonly " $fragmentRefs": FragmentRefs<"MatcherAddWidget_mapping">;
     readonly " $refType": "MappingEditor_mapping";
 };
 export type MappingEditor_mapping$data = MappingEditor_mapping;
@@ -59,7 +59,7 @@ const node: ReaderFragment = ({
             "selections": [
                 {
                     "kind": "FragmentSpread",
-                    "name": "EditMatcherWidget_matcher",
+                    "name": "MatcherEditWidget_matcher",
                     "args": null
                 }
             ]
@@ -158,10 +158,10 @@ const node: ReaderFragment = ({
         },
         {
             "kind": "FragmentSpread",
-            "name": "AddMatcherWidget_mapping",
+            "name": "MatcherAddWidget_mapping",
             "args": null
         }
     ]
 } as any);
-(node as any).hash = '1a3ae4ffdf4964dcb9abc8a48d193d59';
+(node as any).hash = 'a6475eb7fc26f3362a95125c9cc0f292';
 export default node;

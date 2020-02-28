@@ -11,22 +11,22 @@ import {
   ButtonProps,
 } from '@material-ui/core';
 import { graphql, useFragment, useMutation } from 'relay-hooks';
-import { AddStateButton_addStateMutation } from './__generated__/AddStateButton_addStateMutation.graphql';
-import { AddStateButton_scenario$key } from './__generated__/AddStateButton_scenario.graphql';
+import { StateAddButton_addStateMutation } from './__generated__/StateAddButton_addStateMutation.graphql';
+import { StateAddButton_scenario$key } from './__generated__/StateAddButton_scenario.graphql';
 import { ConnectionHandler } from 'relay-runtime';
 import clsx from 'clsx';
 import { useForm, FielderProvider } from 'fielder';
 import TextField from './fields/TextField';
 
-export interface AddStateButtonProps extends ButtonProps {
-  scenario: AddStateButton_scenario$key;
+export interface StateAddButtonProps extends ButtonProps {
+  scenario: StateAddButton_scenario$key;
   onAdd?: (scenarioId: string, stateId: string) => any;
 }
 
-const useStyles = makeStyles<Theme, AddStateButtonProps>(theme => ({}));
+const useStyles = makeStyles<Theme, StateAddButtonProps>(theme => ({}));
 
 const addStateMutation = graphql`
-  mutation AddStateButton_addStateMutation($input: AddScenarioStateInput!) {
+  mutation StateAddButton_addStateMutation($input: AddScenarioStateInput!) {
     addScenarioState(input: $input) {
       stateEdge {
         node {
@@ -40,18 +40,18 @@ const addStateMutation = graphql`
 `;
 
 const scenarioFragment = graphql`
-  fragment AddStateButton_scenario on Scenario {
+  fragment StateAddButton_scenario on Scenario {
     id
   }
 `;
 
-const AddStateButton: FC<AddStateButtonProps> = props => {
+const StateAddButton: FC<StateAddButtonProps> = props => {
   const { onAdd, className, children, ...rest } = props;
   const classes = useStyles(props);
 
   const { id: scenarioId } = useFragment(scenarioFragment, props.scenario);
 
-  const [mutate, { loading }] = useMutation<AddStateButton_addStateMutation>(
+  const [mutate, { loading }] = useMutation<StateAddButton_addStateMutation>(
     addStateMutation,
     {
       onCompleted: ({ addScenarioState }) => {
@@ -124,4 +124,4 @@ const AddStateButton: FC<AddStateButtonProps> = props => {
   );
 };
 
-export default AddStateButton;
+export default StateAddButton;

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 99f714b5f24dcbb2afe6f9e16be7c272 */
+/* @relayHash 363671ac6bc38f562a50027668710252 */
 
 import { ConcreteRequest } from "relay-runtime";
 export type MatcherKind = "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
@@ -11,10 +11,10 @@ export type AddStateMappingInput = {
 export type AddMappingInput = {
     priority: number;
 };
-export type AddMappingButton_addMappingMutationVariables = {
+export type MappingAddButton_addMappingMutationVariables = {
     input: AddStateMappingInput;
 };
-export type AddMappingButton_addMappingMutationResponse = {
+export type MappingAddButton_addMappingMutationResponse = {
     readonly addStateMapping: {
         readonly mappingEdge: {
             readonly node: {
@@ -28,15 +28,15 @@ export type AddMappingButton_addMappingMutationResponse = {
         };
     };
 };
-export type AddMappingButton_addMappingMutation = {
-    readonly response: AddMappingButton_addMappingMutationResponse;
-    readonly variables: AddMappingButton_addMappingMutationVariables;
+export type MappingAddButton_addMappingMutation = {
+    readonly response: MappingAddButton_addMappingMutationResponse;
+    readonly variables: MappingAddButton_addMappingMutationVariables;
 };
 
 
 
 /*
-mutation AddMappingButton_addMappingMutation(
+mutation MappingAddButton_addMappingMutation(
   $input: AddStateMappingInput!
 ) {
   addStateMapping(input: $input) {
@@ -98,7 +98,7 @@ const node: ConcreteRequest = (function () {
         "kind": "Request",
         "fragment": {
             "kind": "Fragment",
-            "name": "AddMappingButton_addMappingMutation",
+            "name": "MappingAddButton_addMappingMutation",
             "type": "Mutation",
             "metadata": null,
             "argumentDefinitions": (v0 /*: any*/),
@@ -155,7 +155,7 @@ const node: ConcreteRequest = (function () {
         },
         "operation": {
             "kind": "Operation",
-            "name": "AddMappingButton_addMappingMutation",
+            "name": "MappingAddButton_addMappingMutation",
             "argumentDefinitions": (v0 /*: any*/),
             "selections": [
                 {
@@ -217,12 +217,12 @@ const node: ConcreteRequest = (function () {
         },
         "params": {
             "operationKind": "mutation",
-            "name": "AddMappingButton_addMappingMutation",
+            "name": "MappingAddButton_addMappingMutation",
             "id": null,
-            "text": "mutation AddMappingButton_addMappingMutation(\n  $input: AddStateMappingInput!\n) {\n  addStateMapping(input: $input) {\n    mappingEdge {\n      node {\n        id\n        priority\n        matchers {\n          __typename\n          kind\n        }\n      }\n      cursor\n    }\n  }\n}\n",
+            "text": "mutation MappingAddButton_addMappingMutation(\n  $input: AddStateMappingInput!\n) {\n  addStateMapping(input: $input) {\n    mappingEdge {\n      node {\n        id\n        priority\n        matchers {\n          __typename\n          kind\n        }\n      }\n      cursor\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = '15e9d1092246f300028bac7a19f7e0da';
+(node as any).hash = '8a3f31649b2f9f26aeaa811dd82082b8';
 export default node;

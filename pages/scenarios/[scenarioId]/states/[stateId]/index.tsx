@@ -3,7 +3,6 @@ import {
   makeStyles,
   Container,
   CircularProgress,
-  Button,
   Breadcrumbs,
   Typography,
   Paper,
@@ -17,7 +16,7 @@ import Link from '../../../../../components/Link';
 import singleQuery from '../../../../../lib/singleQuery';
 import ScenarioLink from '../../../../../components/ScenarioLink';
 import StateLink from '../../../../../components/StateLink';
-import AddMappingButton from '../../../../../components/AddMappingButton';
+import AddMappingButton from '../../../../../components/MappingAddButton';
 import { useCallback } from 'react';
 
 const query = graphql`
@@ -32,7 +31,7 @@ const query = graphql`
         ...StateDetails_state
         ...StateMappings_state
         ...StateLink_state
-        ...AddMappingButton_state
+        ...MappingAddButton_state
       }
     }
   }

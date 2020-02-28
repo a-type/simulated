@@ -3,22 +3,22 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type DeleteScenarioButton_viewer = {
+export type StateAddButton_scenario = {
     readonly id: string;
-    readonly " $refType": "DeleteScenarioButton_viewer";
+    readonly " $refType": "StateAddButton_scenario";
 };
-export type DeleteScenarioButton_viewer$data = DeleteScenarioButton_viewer;
-export type DeleteScenarioButton_viewer$key = {
-    readonly " $data"?: DeleteScenarioButton_viewer$data;
-    readonly " $fragmentRefs": FragmentRefs<"DeleteScenarioButton_viewer">;
+export type StateAddButton_scenario$data = StateAddButton_scenario;
+export type StateAddButton_scenario$key = {
+    readonly " $data"?: StateAddButton_scenario$data;
+    readonly " $fragmentRefs": FragmentRefs<"StateAddButton_scenario">;
 };
 
 
 
 const node: ReaderFragment = ({
     "kind": "Fragment",
-    "name": "DeleteScenarioButton_viewer",
-    "type": "Viewer",
+    "name": "StateAddButton_scenario",
+    "type": "Scenario",
     "metadata": null,
     "argumentDefinitions": [],
     "selections": [
@@ -31,5 +31,5 @@ const node: ReaderFragment = ({
         }
     ]
 } as any);
-(node as any).hash = 'bdfb838c9200c03112943e4605e53d6a';
+(node as any).hash = '67789737ac276804fb450335a948bf43';
 export default node;

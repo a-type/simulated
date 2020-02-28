@@ -1,15 +1,15 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash d38c2e6804da53b219c94e9b4b930bb7 */
+/* @relayHash 864e25a6f6c67f63ccfba02a27140251 */
 
 import { ConcreteRequest } from "relay-runtime";
 export type DeleteScenarioInput = {
     scenarioId: string;
 };
-export type DeleteScenarioButton_deleteScenarioMutationVariables = {
+export type ScenarioDeleteButton_deleteScenarioMutationVariables = {
     input: DeleteScenarioInput;
 };
-export type DeleteScenarioButton_deleteScenarioMutationResponse = {
+export type ScenarioDeleteButton_deleteScenarioMutationResponse = {
     readonly deleteScenario: {
         readonly scenarioEdge: {
             readonly node: {
@@ -19,15 +19,15 @@ export type DeleteScenarioButton_deleteScenarioMutationResponse = {
         };
     };
 };
-export type DeleteScenarioButton_deleteScenarioMutation = {
-    readonly response: DeleteScenarioButton_deleteScenarioMutationResponse;
-    readonly variables: DeleteScenarioButton_deleteScenarioMutationVariables;
+export type ScenarioDeleteButton_deleteScenarioMutation = {
+    readonly response: ScenarioDeleteButton_deleteScenarioMutationResponse;
+    readonly variables: ScenarioDeleteButton_deleteScenarioMutationVariables;
 };
 
 
 
 /*
-mutation DeleteScenarioButton_deleteScenarioMutation(
+mutation ScenarioDeleteButton_deleteScenarioMutation(
   $input: DeleteScenarioInput!
 ) {
   deleteScenario(input: $input) {
@@ -108,7 +108,7 @@ const node: ConcreteRequest = (function () {
         "kind": "Request",
         "fragment": {
             "kind": "Fragment",
-            "name": "DeleteScenarioButton_deleteScenarioMutation",
+            "name": "ScenarioDeleteButton_deleteScenarioMutation",
             "type": "Mutation",
             "metadata": null,
             "argumentDefinitions": (v0 /*: any*/),
@@ -116,18 +116,18 @@ const node: ConcreteRequest = (function () {
         },
         "operation": {
             "kind": "Operation",
-            "name": "DeleteScenarioButton_deleteScenarioMutation",
+            "name": "ScenarioDeleteButton_deleteScenarioMutation",
             "argumentDefinitions": (v0 /*: any*/),
             "selections": (v1 /*: any*/)
         },
         "params": {
             "operationKind": "mutation",
-            "name": "DeleteScenarioButton_deleteScenarioMutation",
+            "name": "ScenarioDeleteButton_deleteScenarioMutation",
             "id": null,
-            "text": "mutation DeleteScenarioButton_deleteScenarioMutation(\n  $input: DeleteScenarioInput!\n) {\n  deleteScenario(input: $input) {\n    scenarioEdge {\n      node {\n        id\n      }\n      cursor\n    }\n  }\n}\n",
+            "text": "mutation ScenarioDeleteButton_deleteScenarioMutation(\n  $input: DeleteScenarioInput!\n) {\n  deleteScenario(input: $input) {\n    scenarioEdge {\n      node {\n        id\n      }\n      cursor\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = '46efaa5c564facf0e0dffdfa193a524d';
+(node as any).hash = '1c3ea0472d61faa96d5389ce33663801';
 export default node;

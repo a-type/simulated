@@ -3,22 +3,22 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type AddScenarioButton_viewer = {
+export type MatcherAddWidget_mapping = {
     readonly id: string;
-    readonly " $refType": "AddScenarioButton_viewer";
+    readonly " $refType": "MatcherAddWidget_mapping";
 };
-export type AddScenarioButton_viewer$data = AddScenarioButton_viewer;
-export type AddScenarioButton_viewer$key = {
-    readonly " $data"?: AddScenarioButton_viewer$data;
-    readonly " $fragmentRefs": FragmentRefs<"AddScenarioButton_viewer">;
+export type MatcherAddWidget_mapping$data = MatcherAddWidget_mapping;
+export type MatcherAddWidget_mapping$key = {
+    readonly " $data"?: MatcherAddWidget_mapping$data;
+    readonly " $fragmentRefs": FragmentRefs<"MatcherAddWidget_mapping">;
 };
 
 
 
 const node: ReaderFragment = ({
     "kind": "Fragment",
-    "name": "AddScenarioButton_viewer",
-    "type": "Viewer",
+    "name": "MatcherAddWidget_mapping",
+    "type": "Mapping",
     "metadata": null,
     "argumentDefinitions": [],
     "selections": [
@@ -31,5 +31,5 @@ const node: ReaderFragment = ({
         }
     ]
 } as any);
-(node as any).hash = '24507bc5393663ec722f23af5883a2d7';
+(node as any).hash = '648a4fae46e938da865bdfa15e991a51';
 export default node;

@@ -2,25 +2,25 @@ import React, { FC } from 'react';
 import { makeStyles, Theme, Button, CircularProgress } from '@material-ui/core';
 import { graphql, useMutation, useFragment } from 'relay-hooks';
 import clsx from 'clsx';
-import { AddMappingButton_addMappingMutation } from './__generated__/AddMappingButton_addMappingMutation.graphql';
+import { MappingAddButton_addMappingMutation } from './__generated__/MappingAddButton_addMappingMutation.graphql';
 import { ConnectionHandler } from 'relay-runtime';
 import { useCallback } from 'react';
-import { AddMappingButton_state$key } from './__generated__/AddMappingButton_state.graphql';
+import { MappingAddButton_state$key } from './__generated__/MappingAddButton_state.graphql';
 
-export interface AddMappingButtonProps {
+export interface MappingAddButtonProps {
   onAdd?: (
-    mapping: AddMappingButton_addMappingMutation['response']['addStateMapping']['mappingEdge']['node'],
+    mapping: MappingAddButton_addMappingMutation['response']['addStateMapping']['mappingEdge']['node'],
   ) => any;
   className?: string;
-  state: AddMappingButton_state$key;
+  state: MappingAddButton_state$key;
 }
 
-const useStyles = makeStyles<Theme, AddMappingButtonProps>(theme => ({
+const useStyles = makeStyles<Theme, MappingAddButtonProps>(theme => ({
   root: {},
 }));
 
 const addMappingMutation = graphql`
-  mutation AddMappingButton_addMappingMutation($input: AddStateMappingInput!) {
+  mutation MappingAddButton_addMappingMutation($input: AddStateMappingInput!) {
     addStateMapping(input: $input) {
       mappingEdge {
         node {
@@ -37,19 +37,19 @@ const addMappingMutation = graphql`
 `;
 
 const stateFragment = graphql`
-  fragment AddMappingButton_state on State {
+  fragment MappingAddButton_state on State {
     id
   }
 `;
 
-const AddMappingButton: FC<AddMappingButtonProps> = props => {
+const MappingAddButton: FC<MappingAddButtonProps> = props => {
   const { children, className, onAdd } = props;
   const classes = useStyles(props);
 
   const { id: stateId } = useFragment(stateFragment, props.state);
 
   const [mutate, { loading }] = useMutation<
-    AddMappingButton_addMappingMutation
+    MappingAddButton_addMappingMutation
   >(addMappingMutation, {
     onCompleted: ({ addStateMapping }) => {
       if (!onAdd) return;
@@ -90,4 +90,4 @@ const AddMappingButton: FC<AddMappingButtonProps> = props => {
   );
 };
 
-export default AddMappingButton;
+export default MappingAddButton;

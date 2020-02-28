@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 084d750cfbdab341a66022318d5996b3 */
+/* @relayHash dd3f6ddaad32dd431963c4db209f7486 */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -56,37 +56,11 @@ query MappingIdQuery(
   }
 }
 
-fragment AddMatcherWidget_mapping on Mapping {
-  id
-}
-
-fragment EditMatcherWidget_matcher on Matcher {
-  kind
-  ... on MethodsMatcher {
-    methods
-  }
-  ... on PathMatcher {
-    path
-    regex
-  }
-  ... on BodyMatcher {
-    body
-    ignoreWhitespace
-    regex
-  }
-  ... on HeadersMatcher {
-    headers {
-      name
-      value
-    }
-  }
-}
-
 fragment MappingEditor_mapping on Mapping {
   id
   matchers {
     __typename
-    ...EditMatcherWidget_matcher
+    ...MatcherEditWidget_matcher
   }
   response {
     body {
@@ -106,7 +80,7 @@ fragment MappingEditor_mapping on Mapping {
   priority
   createdAt
   updatedAt
-  ...AddMatcherWidget_mapping
+  ...MatcherAddWidget_mapping
 }
 
 fragment MappingLink_mapping on Mapping {
@@ -120,6 +94,32 @@ fragment MappingLink_scenario on Scenario {
 fragment MappingLink_state on State {
   id
   name
+}
+
+fragment MatcherAddWidget_mapping on Mapping {
+  id
+}
+
+fragment MatcherEditWidget_matcher on Matcher {
+  kind
+  ... on MethodsMatcher {
+    methods
+  }
+  ... on PathMatcher {
+    path
+    regex
+  }
+  ... on BodyMatcher {
+    body
+    ignoreWhitespace
+    regex
+  }
+  ... on HeadersMatcher {
+    headers {
+      name
+      value
+    }
+  }
 }
 
 fragment ScenarioLink_scenario on Scenario {
@@ -516,7 +516,7 @@ const node: ConcreteRequest = (function () {
             "operationKind": "query",
             "name": "MappingIdQuery",
             "id": null,
-            "text": "query MappingIdQuery(\n  $scenarioId: ID!\n  $stateId: ID!\n  $mappingId: ID!\n) {\n  viewer {\n    scenario(id: $scenarioId) {\n      ...ScenarioLink_scenario\n      ...StateLink_scenario\n      ...MappingLink_scenario\n      id\n    }\n    state(id: $stateId) {\n      ...StateLink_state\n      ...MappingLink_state\n      id\n    }\n    mapping(id: $mappingId) {\n      ...MappingLink_mapping\n      ...MappingEditor_mapping\n      id\n    }\n    id\n  }\n}\n\nfragment AddMatcherWidget_mapping on Mapping {\n  id\n}\n\nfragment EditMatcherWidget_matcher on Matcher {\n  kind\n  ... on MethodsMatcher {\n    methods\n  }\n  ... on PathMatcher {\n    path\n    regex\n  }\n  ... on BodyMatcher {\n    body\n    ignoreWhitespace\n    regex\n  }\n  ... on HeadersMatcher {\n    headers {\n      name\n      value\n    }\n  }\n}\n\nfragment MappingEditor_mapping on Mapping {\n  id\n  matchers {\n    __typename\n    ...EditMatcherWidget_matcher\n  }\n  response {\n    body {\n      __typename\n      kind\n      ... on TemplateResponseBody {\n        value\n      }\n    }\n  }\n  trigger {\n    targetState {\n      name\n      id\n    }\n  }\n  priority\n  createdAt\n  updatedAt\n  ...AddMatcherWidget_mapping\n}\n\nfragment MappingLink_mapping on Mapping {\n  id\n}\n\nfragment MappingLink_scenario on Scenario {\n  id\n}\n\nfragment MappingLink_state on State {\n  id\n  name\n}\n\nfragment ScenarioLink_scenario on Scenario {\n  id\n  name\n}\n\nfragment StateLink_scenario on Scenario {\n  id\n}\n\nfragment StateLink_state on State {\n  id\n  name\n}\n",
+            "text": "query MappingIdQuery(\n  $scenarioId: ID!\n  $stateId: ID!\n  $mappingId: ID!\n) {\n  viewer {\n    scenario(id: $scenarioId) {\n      ...ScenarioLink_scenario\n      ...StateLink_scenario\n      ...MappingLink_scenario\n      id\n    }\n    state(id: $stateId) {\n      ...StateLink_state\n      ...MappingLink_state\n      id\n    }\n    mapping(id: $mappingId) {\n      ...MappingLink_mapping\n      ...MappingEditor_mapping\n      id\n    }\n    id\n  }\n}\n\nfragment MappingEditor_mapping on Mapping {\n  id\n  matchers {\n    __typename\n    ...MatcherEditWidget_matcher\n  }\n  response {\n    body {\n      __typename\n      kind\n      ... on TemplateResponseBody {\n        value\n      }\n    }\n  }\n  trigger {\n    targetState {\n      name\n      id\n    }\n  }\n  priority\n  createdAt\n  updatedAt\n  ...MatcherAddWidget_mapping\n}\n\nfragment MappingLink_mapping on Mapping {\n  id\n}\n\nfragment MappingLink_scenario on Scenario {\n  id\n}\n\nfragment MappingLink_state on State {\n  id\n  name\n}\n\nfragment MatcherAddWidget_mapping on Mapping {\n  id\n}\n\nfragment MatcherEditWidget_matcher on Matcher {\n  kind\n  ... on MethodsMatcher {\n    methods\n  }\n  ... on PathMatcher {\n    path\n    regex\n  }\n  ... on BodyMatcher {\n    body\n    ignoreWhitespace\n    regex\n  }\n  ... on HeadersMatcher {\n    headers {\n      name\n      value\n    }\n  }\n}\n\nfragment ScenarioLink_scenario on Scenario {\n  id\n  name\n}\n\nfragment StateLink_scenario on Scenario {\n  id\n}\n\nfragment StateLink_state on State {\n  id\n  name\n}\n",
             "metadata": {}
         }
     } as any;

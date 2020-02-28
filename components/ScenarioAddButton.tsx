@@ -2,23 +2,23 @@ import React, { FC } from 'react';
 import { makeStyles, Theme, Button, CircularProgress } from '@material-ui/core';
 import { graphql, useMutation, useFragment } from 'relay-hooks';
 import clsx from 'clsx';
-import { AddScenarioButton_addScenarioMutation } from './__generated__/AddScenarioButton_addScenarioMutation.graphql';
+import { ScenarioAddButton_addScenarioMutation } from './__generated__/ScenarioAddButton_addScenarioMutation.graphql';
 import { ConnectionHandler } from 'relay-runtime';
-import { AddScenarioButton_viewer$key } from './__generated__/AddScenarioButton_viewer.graphql';
+import { ScenarioAddButton_viewer$key } from './__generated__/ScenarioAddButton_viewer.graphql';
 import { useCallback } from 'react';
 
-export interface AddScenarioButtonProps {
+export interface ScenarioAddButtonProps {
   onAdd?: (scenario: any) => any;
   className?: string;
-  viewer: AddScenarioButton_viewer$key;
+  viewer: ScenarioAddButton_viewer$key;
 }
 
-const useStyles = makeStyles<Theme, AddScenarioButtonProps>(theme => ({
+const useStyles = makeStyles<Theme, ScenarioAddButtonProps>(theme => ({
   root: {},
 }));
 
 const addScenarioMutation = graphql`
-  mutation AddScenarioButton_addScenarioMutation {
+  mutation ScenarioAddButton_addScenarioMutation {
     addScenario(input: {}) {
       scenarioEdge {
         node {
@@ -35,22 +35,22 @@ const addScenarioMutation = graphql`
 `;
 
 const viewerFragment = graphql`
-  fragment AddScenarioButton_viewer on Viewer {
+  fragment ScenarioAddButton_viewer on Viewer {
     id
   }
 `;
 
-const AddScenarioButton: FC<AddScenarioButtonProps> = props => {
+const ScenarioAddButton: FC<ScenarioAddButtonProps> = props => {
   const { children, className, onAdd } = props;
   const classes = useStyles(props);
 
-  const { id: viewerId } = useFragment<AddScenarioButton_viewer$key>(
+  const { id: viewerId } = useFragment<ScenarioAddButton_viewer$key>(
     viewerFragment,
     props.viewer,
   );
 
   const [mutate, { loading }] = useMutation<
-    AddScenarioButton_addScenarioMutation
+    ScenarioAddButton_addScenarioMutation
   >(addScenarioMutation, {
     onCompleted: ({ addScenario }) => {
       if (!onAdd) return;
@@ -78,4 +78,4 @@ const AddScenarioButton: FC<AddScenarioButtonProps> = props => {
   );
 };
 
-export default AddScenarioButton;
+export default ScenarioAddButton;

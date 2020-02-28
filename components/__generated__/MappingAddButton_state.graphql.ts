@@ -3,22 +3,22 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type AddMatcherWidget_mapping = {
+export type MappingAddButton_state = {
     readonly id: string;
-    readonly " $refType": "AddMatcherWidget_mapping";
+    readonly " $refType": "MappingAddButton_state";
 };
-export type AddMatcherWidget_mapping$data = AddMatcherWidget_mapping;
-export type AddMatcherWidget_mapping$key = {
-    readonly " $data"?: AddMatcherWidget_mapping$data;
-    readonly " $fragmentRefs": FragmentRefs<"AddMatcherWidget_mapping">;
+export type MappingAddButton_state$data = MappingAddButton_state;
+export type MappingAddButton_state$key = {
+    readonly " $data"?: MappingAddButton_state$data;
+    readonly " $fragmentRefs": FragmentRefs<"MappingAddButton_state">;
 };
 
 
 
 const node: ReaderFragment = ({
     "kind": "Fragment",
-    "name": "AddMatcherWidget_mapping",
-    "type": "Mapping",
+    "name": "MappingAddButton_state",
+    "type": "State",
     "metadata": null,
     "argumentDefinitions": [],
     "selections": [
@@ -31,5 +31,5 @@ const node: ReaderFragment = ({
         }
     ]
 } as any);
-(node as any).hash = '2584072e254ff18ea7643a5583f906c1';
+(node as any).hash = '291d819ab3e709ce25e7b3c94bd15a8f';
 export default node;

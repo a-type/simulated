@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 705fa4109aad12fcf956f3553aaa4ea0 */
+/* @relayHash a54e3759a6ca456c2e5362b716a73d07 */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -14,7 +14,7 @@ export type StateIdQueryResponse = {
             readonly " $fragmentRefs": FragmentRefs<"ScenarioLink_scenario" | "StateLink_scenario" | "StateMappings_scenario">;
         } | null;
         readonly state: {
-            readonly " $fragmentRefs": FragmentRefs<"StateDetails_state" | "StateMappings_state" | "StateLink_state" | "AddMappingButton_state">;
+            readonly " $fragmentRefs": FragmentRefs<"StateDetails_state" | "StateMappings_state" | "StateLink_state" | "MappingAddButton_state">;
         } | null;
     };
 };
@@ -41,14 +41,14 @@ query StateIdQuery(
       ...StateDetails_state
       ...StateMappings_state
       ...StateLink_state
-      ...AddMappingButton_state
+      ...MappingAddButton_state
       id
     }
     id
   }
 }
 
-fragment AddMappingButton_state on State {
+fragment MappingAddButton_state on State {
   id
 }
 
@@ -292,7 +292,7 @@ const node: ConcreteRequest = (function () {
                                 },
                                 {
                                     "kind": "FragmentSpread",
-                                    "name": "AddMappingButton_state",
+                                    "name": "MappingAddButton_state",
                                     "args": null
                                 }
                             ]
@@ -571,10 +571,10 @@ const node: ConcreteRequest = (function () {
             "operationKind": "query",
             "name": "StateIdQuery",
             "id": null,
-            "text": "query StateIdQuery(\n  $stateId: ID!\n  $scenarioId: ID!\n) {\n  viewer {\n    scenario(id: $scenarioId) {\n      ...ScenarioLink_scenario\n      ...StateLink_scenario\n      ...StateMappings_scenario\n      id\n    }\n    state(id: $stateId) {\n      ...StateDetails_state\n      ...StateMappings_state\n      ...StateLink_state\n      ...AddMappingButton_state\n      id\n    }\n    id\n  }\n}\n\nfragment AddMappingButton_state on State {\n  id\n}\n\nfragment MappingLink_mapping on Mapping {\n  id\n}\n\nfragment MappingLink_scenario on Scenario {\n  id\n}\n\nfragment MappingLink_state on State {\n  id\n  name\n}\n\nfragment ScenarioLink_scenario on Scenario {\n  id\n  name\n}\n\nfragment StateDetails_state on State {\n  id\n  name\n  createdAt\n  updatedAt\n}\n\nfragment StateLink_scenario on Scenario {\n  id\n}\n\nfragment StateLink_state on State {\n  id\n  name\n}\n\nfragment StateMappings_scenario on Scenario {\n  ...MappingLink_scenario\n}\n\nfragment StateMappings_state on State {\n  id\n  mappings(first: 10) {\n    edges {\n      node {\n        id\n        matchers {\n          __typename\n          kind\n          ... on MethodsMatcher {\n            methods\n          }\n          ... on PathMatcher {\n            path\n            regex\n          }\n          ... on BodyMatcher {\n            body\n            ignoreWhitespace\n            regex\n          }\n          ... on HeadersMatcher {\n            headers {\n              name\n              value\n            }\n          }\n        }\n        response {\n          body {\n            __typename\n            kind\n          }\n        }\n        trigger {\n          targetState {\n            name\n            id\n          }\n        }\n        priority\n        createdAt\n        updatedAt\n        ...MappingLink_mapping\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  ...MappingLink_state\n}\n",
+            "text": "query StateIdQuery(\n  $stateId: ID!\n  $scenarioId: ID!\n) {\n  viewer {\n    scenario(id: $scenarioId) {\n      ...ScenarioLink_scenario\n      ...StateLink_scenario\n      ...StateMappings_scenario\n      id\n    }\n    state(id: $stateId) {\n      ...StateDetails_state\n      ...StateMappings_state\n      ...StateLink_state\n      ...MappingAddButton_state\n      id\n    }\n    id\n  }\n}\n\nfragment MappingAddButton_state on State {\n  id\n}\n\nfragment MappingLink_mapping on Mapping {\n  id\n}\n\nfragment MappingLink_scenario on Scenario {\n  id\n}\n\nfragment MappingLink_state on State {\n  id\n  name\n}\n\nfragment ScenarioLink_scenario on Scenario {\n  id\n  name\n}\n\nfragment StateDetails_state on State {\n  id\n  name\n  createdAt\n  updatedAt\n}\n\nfragment StateLink_scenario on Scenario {\n  id\n}\n\nfragment StateLink_state on State {\n  id\n  name\n}\n\nfragment StateMappings_scenario on Scenario {\n  ...MappingLink_scenario\n}\n\nfragment StateMappings_state on State {\n  id\n  mappings(first: 10) {\n    edges {\n      node {\n        id\n        matchers {\n          __typename\n          kind\n          ... on MethodsMatcher {\n            methods\n          }\n          ... on PathMatcher {\n            path\n            regex\n          }\n          ... on BodyMatcher {\n            body\n            ignoreWhitespace\n            regex\n          }\n          ... on HeadersMatcher {\n            headers {\n              name\n              value\n            }\n          }\n        }\n        response {\n          body {\n            __typename\n            kind\n          }\n        }\n        trigger {\n          targetState {\n            name\n            id\n          }\n        }\n        priority\n        createdAt\n        updatedAt\n        ...MappingLink_mapping\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  ...MappingLink_state\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = '93053ea7939503ab77477b2de7fc8e04';
+(node as any).hash = 'fd2fc98551ac4375217fb591fef58e25';
 export default node;

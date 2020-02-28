@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash edac8b6502222c3d027b9e5c1de9a705 */
+/* @relayHash 69c1a033efd2acc7301ac15a0233b89b */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -9,7 +9,7 @@ export type pages_indexQueryVariables = {
 };
 export type pages_indexQueryResponse = {
     readonly viewer: {
-        readonly " $fragmentRefs": FragmentRefs<"ScenarioList_viewer" | "AddScenarioButton_viewer">;
+        readonly " $fragmentRefs": FragmentRefs<"ScenarioList_viewer" | "ScenarioAddButton_viewer">;
     };
 };
 export type pages_indexQuery = {
@@ -25,12 +25,12 @@ query pages_indexQuery(
 ) {
   viewer {
     ...ScenarioList_viewer_3ASum4
-    ...AddScenarioButton_viewer
+    ...ScenarioAddButton_viewer
     id
   }
 }
 
-fragment AddScenarioButton_viewer on Viewer {
+fragment ScenarioAddButton_viewer on Viewer {
   id
 }
 
@@ -104,7 +104,7 @@ const node: ConcreteRequest = (function () {
                         },
                         {
                             "kind": "FragmentSpread",
-                            "name": "AddScenarioButton_viewer",
+                            "name": "ScenarioAddButton_viewer",
                             "args": null
                         }
                     ]
@@ -230,10 +230,10 @@ const node: ConcreteRequest = (function () {
             "operationKind": "query",
             "name": "pages_indexQuery",
             "id": null,
-            "text": "query pages_indexQuery(\n  $first: Int = 10\n) {\n  viewer {\n    ...ScenarioList_viewer_3ASum4\n    ...AddScenarioButton_viewer\n    id\n  }\n}\n\nfragment AddScenarioButton_viewer on Viewer {\n  id\n}\n\nfragment ScenarioCard_scenario on Scenario {\n  id\n  name\n  createdAt\n}\n\nfragment ScenarioList_viewer_3ASum4 on Viewer {\n  scenarios(first: $first) {\n    edges {\n      node {\n        id\n        ...ScenarioCard_scenario\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
+            "text": "query pages_indexQuery(\n  $first: Int = 10\n) {\n  viewer {\n    ...ScenarioList_viewer_3ASum4\n    ...ScenarioAddButton_viewer\n    id\n  }\n}\n\nfragment ScenarioAddButton_viewer on Viewer {\n  id\n}\n\nfragment ScenarioCard_scenario on Scenario {\n  id\n  name\n  createdAt\n}\n\nfragment ScenarioList_viewer_3ASum4 on Viewer {\n  scenarios(first: $first) {\n    edges {\n      node {\n        id\n        ...ScenarioCard_scenario\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = 'a8b8a701880cd44adba1709f00f4dcc0';
+(node as any).hash = '4a9e0eb56ed37831e00798e3cb185d90';
 export default node;
