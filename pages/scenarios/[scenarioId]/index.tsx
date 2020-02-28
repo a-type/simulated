@@ -18,6 +18,7 @@ import Navigation from '../../../components/Navigation';
 import ScenarioStatus from '../../../components/ScenarioStatus';
 import ScenarioLink from '../../../components/ScenarioLink';
 import Link from '../../../components/Link';
+import useError from '../../../hooks/useError';
 
 const query = graphql`
   query ScenarioIdQuery($scenarioId: ID!) {
@@ -60,7 +61,7 @@ function ScenarioPage() {
   const router = useRouter();
   const { scenarioId } = router.query;
 
-  const { props } = useQuery<ScenarioIdQuery>(
+  const { props, error } = useQuery<ScenarioIdQuery>(
     query,
     {
       scenarioId: scenarioId as string,
@@ -68,52 +69,52 @@ function ScenarioPage() {
     {},
   );
 
+  useError(error);
+
   const handleDeleteScenario = useCallback(() => {
     Router.push(`/`);
   }, []);
+
+  if (!props || !props.viewer) {
+    return (
+      <>
+        <Navigation />
+        <Container className={classes.container}>
+          <CircularProgress />
+        </Container>
+      </>
+    );
+  }
 
   return (
     <>
       <Navigation />
       <Container className={classes.container}>
-        {props ? (
-          props.viewer?.scenario ? (
-            <>
-              <Breadcrumbs className={classes.breadcrumbs}>
-                <Link href="/">Scenarios</Link>
-                <ScenarioLink disabled scenario={props.viewer.scenario} />
-              </Breadcrumbs>
-              <Paper className={classes.topSection}>
-                <ScenarioDetails
-                  className={classes.details}
-                  scenario={props.viewer.scenario}
-                />
-                <ScenarioStatus scenario={props.viewer.scenario} />
-              </Paper>
-              <ScenarioDeleteButton
-                scenario={props.viewer.scenario}
-                viewer={props.viewer}
-                onDelete={handleDeleteScenario}
-              >
-                Delete this scenario
-              </ScenarioDeleteButton>
-              <ScenarioStates
-                scenario={props.viewer.scenario}
-                className={classes.states}
-              />
-              <StateAddButton
-                scenario={props.viewer.scenario}
-                variant="contained"
-              >
-                Add state
-              </StateAddButton>
-            </>
-          ) : (
-            <div>Scenario does not exist</div>
-          )
-        ) : (
-          <CircularProgress />
-        )}
+        <Breadcrumbs className={classes.breadcrumbs}>
+          <Link href="/">Scenarios</Link>
+          <ScenarioLink disabled scenario={props.viewer.scenario} />
+        </Breadcrumbs>
+        <Paper className={classes.topSection}>
+          <ScenarioDetails
+            className={classes.details}
+            scenario={props.viewer.scenario}
+          />
+          <ScenarioStatus scenario={props.viewer.scenario} />
+        </Paper>
+        <ScenarioDeleteButton
+          scenario={props.viewer.scenario}
+          viewer={props.viewer}
+          onDelete={handleDeleteScenario}
+        >
+          Delete this scenario
+        </ScenarioDeleteButton>
+        <ScenarioStates
+          scenario={props.viewer.scenario}
+          className={classes.states}
+        />
+        <StateAddButton scenario={props.viewer.scenario} variant="contained">
+          Add state
+        </StateAddButton>
       </Container>
     </>
   );

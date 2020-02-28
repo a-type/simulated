@@ -17,6 +17,7 @@ import StateLink from '../../../../../../components/StateLink';
 import MappingLink from '../../../../../../components/MappingLink';
 import MappingEditor from '../../../../../../components/MappingEditor';
 import { MappingIdQuery } from './__generated__/MappingIdQuery.graphql';
+import useError from '../../../../../../hooks/useError';
 
 const query = graphql`
   query MappingIdQuery($scenarioId: ID!, $stateId: ID!, $mappingId: ID!) {
@@ -55,7 +56,7 @@ const MappingPage: FC<MappingPageProps> = () => {
   const router = useRouter();
   const { stateId, scenarioId, mappingId } = singleQuery(router.query);
 
-  const { props } = useQuery<MappingIdQuery>(
+  const { props, error } = useQuery<MappingIdQuery>(
     query,
     {
       stateId,
@@ -65,7 +66,9 @@ const MappingPage: FC<MappingPageProps> = () => {
     {},
   );
 
-  if (!props) {
+  useError(error);
+
+  if (!props || !props.viewer || !props.viewer.mapping) {
     return (
       <>
         <Navigation />

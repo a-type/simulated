@@ -18,6 +18,7 @@ import ScenarioLink from '../../../../../components/ScenarioLink';
 import StateLink from '../../../../../components/StateLink';
 import AddMappingButton from '../../../../../components/MappingAddButton';
 import { useCallback } from 'react';
+import useError from '../../../../../hooks/useError';
 
 const query = graphql`
   query StateIdQuery($stateId: ID!, $scenarioId: ID!) {
@@ -56,7 +57,7 @@ function StatePage() {
   const router = useRouter();
   const { stateId, scenarioId } = singleQuery(router.query);
 
-  const { props } = useQuery<StateIdQuery>(
+  const { props, error } = useQuery<StateIdQuery>(
     query,
     {
       stateId,
@@ -64,6 +65,8 @@ function StatePage() {
     },
     {},
   );
+
+  useError(error);
 
   const handleAddMapping = useCallback(
     (mapping: any) => {
