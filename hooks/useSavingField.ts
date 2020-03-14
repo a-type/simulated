@@ -7,11 +7,27 @@ import {
   useRef,
 } from 'react';
 
-export default <T extends string | boolean>(
+type FieldValueKind = 'string' | 'checkbox' | 'array';
+
+type PossibleFieldValue = string | boolean | string[] | readonly string[];
+
+type NonReadOnly<T extends PossibleFieldValue> = T extends readonly string[]
+  ? string[]
+  : T;
+
+const nonReadOnly = <T extends PossibleFieldValue>(val: T): NonReadOnly<T> =>
+  val as NonReadOnly<T>;
+
+export default <T extends PossibleFieldValue>(
   backendValue: T,
-  saveValue: (value: T) => void | Promise<void>,
+  saveValue: (value: NonReadOnly<T>) => void | Promise<void>,
 ) => {
-  const isCheckbox = typeof backendValue === 'boolean';
+  const fieldValueKind: FieldValueKind =
+    typeof backendValue === 'boolean'
+      ? 'checkbox'
+      : backendValue instanceof Array
+      ? 'array'
+      : 'string';
 
   const saveValueRef = useRef(saveValue);
   saveValueRef.current = saveValue;
@@ -33,14 +49,16 @@ export default <T extends string | boolean>(
   }, [justUpdated]);
 
   const handleFieldChange = useCallback(
-    (ev: ChangeEvent<HTMLInputElement>) => {
-      if (isCheckbox) {
+    (ev: ChangeEvent<HTMLInputElement>, newValue?: T) => {
+      if (fieldValueKind === 'checkbox') {
         setRawValue(ev.target.checked as T);
+      } else if (fieldValueKind === 'array') {
+        setRawValue(newValue as T);
       } else {
         setRawValue(ev.target.value as T);
       }
     },
-    [setRawValue, isCheckbox],
+    [setRawValue, fieldValueKind],
   );
 
   const [saving, setSaving] = useState(false);
@@ -51,7 +69,7 @@ export default <T extends string | boolean>(
 
       try {
         setSaving(true);
-        await saveValueRef.current(rawValue);
+        await saveValueRef.current(nonReadOnly(rawValue));
       } finally {
         setSaving(false);
       }
@@ -63,7 +81,7 @@ export default <T extends string | boolean>(
     {
       onChange: handleFieldChange,
       onBlur: handleFieldBlur,
-      value: rawValue,
+      value: nonReadOnly(rawValue),
     },
     {
       justUpdated,

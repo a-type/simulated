@@ -1,9 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 5e253e719e16aa829de6a59df0cc3c46 */
+/* @relayHash c1aebdfc424f916c1fc572ca0ee20842 */
 
 import { ConcreteRequest } from "relay-runtime";
-export type MatcherKind = "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
+export type MatcherKind = "%future added value" | "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
 export type AddStateMappingInput = {
     stateId: string;
     mapping: AddMappingInput;

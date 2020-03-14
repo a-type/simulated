@@ -3,6 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core';
 import { graphql, useFragment } from 'relay-hooks';
 import { MatcherEditWidget_matcher$key } from './__generated__/MatcherEditWidget_matcher.graphql';
 import PathMatcherEditWidget from './PathMatcherEditWidget';
+import MethodsMatcherEditWidget from './MethodsMatcherEditWidget';
 
 export interface MatcherEditWidgetProps {
   mappingId: string;
@@ -12,9 +13,6 @@ export interface MatcherEditWidgetProps {
 const matcherFragment = graphql`
   fragment MatcherEditWidget_matcher on Matcher {
     kind
-    ... on MethodsMatcher {
-      methods
-    }
     ... on BodyMatcher {
       body
       ignoreWhitespace
@@ -28,6 +26,7 @@ const matcherFragment = graphql`
     }
 
     ...PathMatcherEditWidget_matcher
+    ...MethodsMatcherEditWidget_matcher
   }
 `;
 
@@ -44,7 +43,9 @@ const MatcherEditWidget: FC<MatcherEditWidgetProps> = props => {
     case 'path':
       return <PathMatcherEditWidget matcher={matcher} mappingId={mappingId} />;
     case 'methods':
-      return <div>Methods: {matcher.methods}</div>;
+      return (
+        <MethodsMatcherEditWidget matcher={matcher} mappingId={mappingId} />
+      );
     case 'body':
       return <div>Body: {matcher.body}</div>;
     case 'headers':

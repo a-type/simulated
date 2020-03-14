@@ -5,15 +5,15 @@ import {
   Box,
   TextField,
   Checkbox,
-  FormGroup,
   FormControlLabel,
   Typography,
 } from '@material-ui/core';
 import { useFragment, graphql, useMutation } from 'relay-hooks';
 import useSavingField from '../hooks/useSavingField';
+import { PathMatcherEditWidget_matcher$key } from './__generated__/PathMatcherEditWidget_matcher.graphql';
 
 export interface PathMatcherEditWidgetProps {
-  matcher: any;
+  matcher: PathMatcherEditWidget_matcher$key;
   mappingId: string;
 }
 

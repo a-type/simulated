@@ -3,10 +3,9 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type MatcherKind = "%future added value" | "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
+export type MatcherKind = "%future added value" | "%future added value" | "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
 export type MatcherEditWidget_matcher = {
     readonly kind: MatcherKind;
-    readonly methods?: ReadonlyArray<string>;
     readonly body?: string;
     readonly ignoreWhitespace?: boolean;
     readonly regex?: boolean;
@@ -14,7 +13,7 @@ export type MatcherEditWidget_matcher = {
         readonly name: string;
         readonly value: string | null;
     }>;
-    readonly " $fragmentRefs": FragmentRefs<"PathMatcherEditWidget_matcher">;
+    readonly " $fragmentRefs": FragmentRefs<"PathMatcherEditWidget_matcher" | "MethodsMatcherEditWidget_matcher">;
     readonly " $refType": "MatcherEditWidget_matcher";
 };
 export type MatcherEditWidget_matcher$data = MatcherEditWidget_matcher;
@@ -38,19 +37,6 @@ const node: ReaderFragment = ({
             "name": "kind",
             "args": null,
             "storageKey": null
-        },
-        {
-            "kind": "InlineFragment",
-            "type": "MethodsMatcher",
-            "selections": [
-                {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "name": "methods",
-                    "args": null,
-                    "storageKey": null
-                }
-            ]
         },
         {
             "kind": "InlineFragment",
@@ -114,8 +100,13 @@ const node: ReaderFragment = ({
             "kind": "FragmentSpread",
             "name": "PathMatcherEditWidget_matcher",
             "args": null
+        },
+        {
+            "kind": "FragmentSpread",
+            "name": "MethodsMatcherEditWidget_matcher",
+            "args": null
         }
     ]
 } as any);
-(node as any).hash = '1d2afde775ab0d819c3dd968c00971ae';
+(node as any).hash = '885852d298e90ec6c6566b3240c2c907';
 export default node;

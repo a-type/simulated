@@ -1,9 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash eb86bcebb11497d81d667a5f3c457147 */
+/* @relayHash c8c569c0ec09f43f009cd9102e6a4c51 */
 
 import { ConcreteRequest } from "relay-runtime";
-export type MatcherKind = "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
+export type MatcherKind = "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
 export type AddMappingMatcherInput = {
     mappingId: string;
     matcher: AddMatcherInput;
@@ -33,29 +33,28 @@ export type AddHeaderNameValuePairInput = {
     name: string;
     value?: string | null;
 };
-export type PathMatcherEditWidget_setMatcherMutationVariables = {
+export type MethodsMatcherEditWidget_setMatcherMutationVariables = {
     input: AddMappingMatcherInput;
 };
-export type PathMatcherEditWidget_setMatcherMutationResponse = {
+export type MethodsMatcherEditWidget_setMatcherMutationResponse = {
     readonly addMappingMatcher: {
         readonly mapping: {
             readonly matchers: ReadonlyArray<{
                 readonly kind: MatcherKind;
-                readonly path?: string;
-                readonly regex?: boolean;
+                readonly methods?: ReadonlyArray<string>;
             }>;
         };
     };
 };
-export type PathMatcherEditWidget_setMatcherMutation = {
-    readonly response: PathMatcherEditWidget_setMatcherMutationResponse;
-    readonly variables: PathMatcherEditWidget_setMatcherMutationVariables;
+export type MethodsMatcherEditWidget_setMatcherMutation = {
+    readonly response: MethodsMatcherEditWidget_setMatcherMutationResponse;
+    readonly variables: MethodsMatcherEditWidget_setMatcherMutationVariables;
 };
 
 
 
 /*
-mutation PathMatcherEditWidget_setMatcherMutation(
+mutation MethodsMatcherEditWidget_setMatcherMutation(
   $input: AddMappingMatcherInput!
 ) {
   addMappingMatcher(input: $input) {
@@ -63,9 +62,8 @@ mutation PathMatcherEditWidget_setMatcherMutation(
       matchers {
         __typename
         kind
-        ... on PathMatcher {
-          path
-          regex
+        ... on MethodsMatcher {
+          methods
         }
       }
       id
@@ -96,19 +94,12 @@ const node: ConcreteRequest = (function () {
         "storageKey": null
     } as any), v3 = ({
         "kind": "InlineFragment",
-        "type": "PathMatcher",
+        "type": "MethodsMatcher",
         "selections": [
             {
                 "kind": "ScalarField",
                 "alias": null,
-                "name": "path",
-                "args": null,
-                "storageKey": null
-            },
-            {
-                "kind": "ScalarField",
-                "alias": null,
-                "name": "regex",
+                "name": "methods",
                 "args": null,
                 "storageKey": null
             }
@@ -118,7 +109,7 @@ const node: ConcreteRequest = (function () {
         "kind": "Request",
         "fragment": {
             "kind": "Fragment",
-            "name": "PathMatcherEditWidget_setMatcherMutation",
+            "name": "MethodsMatcherEditWidget_setMatcherMutation",
             "type": "Mutation",
             "metadata": null,
             "argumentDefinitions": (v0 /*: any*/),
@@ -162,7 +153,7 @@ const node: ConcreteRequest = (function () {
         },
         "operation": {
             "kind": "Operation",
-            "name": "PathMatcherEditWidget_setMatcherMutation",
+            "name": "MethodsMatcherEditWidget_setMatcherMutation",
             "argumentDefinitions": (v0 /*: any*/),
             "selections": [
                 {
@@ -218,12 +209,12 @@ const node: ConcreteRequest = (function () {
         },
         "params": {
             "operationKind": "mutation",
-            "name": "PathMatcherEditWidget_setMatcherMutation",
+            "name": "MethodsMatcherEditWidget_setMatcherMutation",
             "id": null,
-            "text": "mutation PathMatcherEditWidget_setMatcherMutation(\n  $input: AddMappingMatcherInput!\n) {\n  addMappingMatcher(input: $input) {\n    mapping {\n      matchers {\n        __typename\n        kind\n        ... on PathMatcher {\n          path\n          regex\n        }\n      }\n      id\n    }\n  }\n}\n",
+            "text": "mutation MethodsMatcherEditWidget_setMatcherMutation(\n  $input: AddMappingMatcherInput!\n) {\n  addMappingMatcher(input: $input) {\n    mapping {\n      matchers {\n        __typename\n        kind\n        ... on MethodsMatcher {\n          methods\n        }\n      }\n      id\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = '06d2c85982e5bf96a8870ef878e2a07a';
+(node as any).hash = '520c859d7920ffb8fa6a6d5016b2f966';
 export default node;

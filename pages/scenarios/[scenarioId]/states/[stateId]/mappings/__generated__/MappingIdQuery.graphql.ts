@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash bafc6cc37134aaf332cdc36487885f53 */
+/* @relayHash 77096e689b9dec74411d05aa192d0067 */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -114,9 +114,6 @@ fragment MatcherAddWidget_mapping on Mapping {
 
 fragment MatcherEditWidget_matcher on Matcher {
   kind
-  ... on MethodsMatcher {
-    methods
-  }
   ... on BodyMatcher {
     body
     ignoreWhitespace
@@ -129,6 +126,13 @@ fragment MatcherEditWidget_matcher on Matcher {
     }
   }
   ...PathMatcherEditWidget_matcher
+  ...MethodsMatcherEditWidget_matcher
+}
+
+fragment MethodsMatcherEditWidget_matcher on Matcher {
+  ... on MethodsMatcher {
+    methods
+  }
 }
 
 fragment PathMatcherEditWidget_matcher on Matcher {
@@ -378,19 +382,6 @@ const node: ConcreteRequest = (function () {
                                         (v8 /*: any*/),
                                         {
                                             "kind": "InlineFragment",
-                                            "type": "MethodsMatcher",
-                                            "selections": [
-                                                {
-                                                    "kind": "ScalarField",
-                                                    "alias": null,
-                                                    "name": "methods",
-                                                    "args": null,
-                                                    "storageKey": null
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "kind": "InlineFragment",
                                             "type": "BodyMatcher",
                                             "selections": [
                                                 {
@@ -441,6 +432,19 @@ const node: ConcreteRequest = (function () {
                                                     "storageKey": null
                                                 },
                                                 (v9 /*: any*/)
+                                            ]
+                                        },
+                                        {
+                                            "kind": "InlineFragment",
+                                            "type": "MethodsMatcher",
+                                            "selections": [
+                                                {
+                                                    "kind": "ScalarField",
+                                                    "alias": null,
+                                                    "name": "methods",
+                                                    "args": null,
+                                                    "storageKey": null
+                                                }
                                             ]
                                         }
                                     ]
@@ -532,7 +536,7 @@ const node: ConcreteRequest = (function () {
             "operationKind": "query",
             "name": "MappingIdQuery",
             "id": null,
-            "text": "query MappingIdQuery(\n  $scenarioId: ID!\n  $stateId: ID!\n  $mappingId: ID!\n) {\n  viewer {\n    scenario(id: $scenarioId) {\n      ...ScenarioLink_scenario\n      ...StateLink_scenario\n      ...MappingLink_scenario\n      id\n    }\n    state(id: $stateId) {\n      ...StateLink_state\n      ...MappingLink_state\n      id\n    }\n    mapping(id: $mappingId) {\n      ...MappingLink_mapping\n      ...MappingEditor_mapping\n      id\n    }\n    id\n  }\n}\n\nfragment MappingEditor_mapping on Mapping {\n  id\n  matchers {\n    __typename\n    kind\n    ...MatcherEditWidget_matcher\n  }\n  trigger {\n    targetState {\n      name\n      id\n    }\n  }\n  priority\n  createdAt\n  updatedAt\n  ...MatcherAddWidget_mapping\n  ...MappingPriorityField_mapping\n  ...MappingResponseEditWidget_mapping\n}\n\nfragment MappingLink_mapping on Mapping {\n  id\n}\n\nfragment MappingLink_scenario on Scenario {\n  id\n}\n\nfragment MappingLink_state on State {\n  id\n  name\n}\n\nfragment MappingPriorityField_mapping on Mapping {\n  id\n  priority\n}\n\nfragment MappingResponseEditWidget_mapping on Mapping {\n  id\n  response {\n    body {\n      __typename\n      kind\n      ... on TemplateResponseBody {\n        value\n      }\n    }\n  }\n}\n\nfragment MatcherAddWidget_mapping on Mapping {\n  id\n}\n\nfragment MatcherEditWidget_matcher on Matcher {\n  kind\n  ... on MethodsMatcher {\n    methods\n  }\n  ... on BodyMatcher {\n    body\n    ignoreWhitespace\n    regex\n  }\n  ... on HeadersMatcher {\n    headers {\n      name\n      value\n    }\n  }\n  ...PathMatcherEditWidget_matcher\n}\n\nfragment PathMatcherEditWidget_matcher on Matcher {\n  ... on PathMatcher {\n    path\n    regex\n  }\n}\n\nfragment ScenarioLink_scenario on Scenario {\n  id\n  name\n}\n\nfragment StateLink_scenario on Scenario {\n  id\n}\n\nfragment StateLink_state on State {\n  id\n  name\n}\n",
+            "text": "query MappingIdQuery(\n  $scenarioId: ID!\n  $stateId: ID!\n  $mappingId: ID!\n) {\n  viewer {\n    scenario(id: $scenarioId) {\n      ...ScenarioLink_scenario\n      ...StateLink_scenario\n      ...MappingLink_scenario\n      id\n    }\n    state(id: $stateId) {\n      ...StateLink_state\n      ...MappingLink_state\n      id\n    }\n    mapping(id: $mappingId) {\n      ...MappingLink_mapping\n      ...MappingEditor_mapping\n      id\n    }\n    id\n  }\n}\n\nfragment MappingEditor_mapping on Mapping {\n  id\n  matchers {\n    __typename\n    kind\n    ...MatcherEditWidget_matcher\n  }\n  trigger {\n    targetState {\n      name\n      id\n    }\n  }\n  priority\n  createdAt\n  updatedAt\n  ...MatcherAddWidget_mapping\n  ...MappingPriorityField_mapping\n  ...MappingResponseEditWidget_mapping\n}\n\nfragment MappingLink_mapping on Mapping {\n  id\n}\n\nfragment MappingLink_scenario on Scenario {\n  id\n}\n\nfragment MappingLink_state on State {\n  id\n  name\n}\n\nfragment MappingPriorityField_mapping on Mapping {\n  id\n  priority\n}\n\nfragment MappingResponseEditWidget_mapping on Mapping {\n  id\n  response {\n    body {\n      __typename\n      kind\n      ... on TemplateResponseBody {\n        value\n      }\n    }\n  }\n}\n\nfragment MatcherAddWidget_mapping on Mapping {\n  id\n}\n\nfragment MatcherEditWidget_matcher on Matcher {\n  kind\n  ... on BodyMatcher {\n    body\n    ignoreWhitespace\n    regex\n  }\n  ... on HeadersMatcher {\n    headers {\n      name\n      value\n    }\n  }\n  ...PathMatcherEditWidget_matcher\n  ...MethodsMatcherEditWidget_matcher\n}\n\nfragment MethodsMatcherEditWidget_matcher on Matcher {\n  ... on MethodsMatcher {\n    methods\n  }\n}\n\nfragment PathMatcherEditWidget_matcher on Matcher {\n  ... on PathMatcher {\n    path\n    regex\n  }\n}\n\nfragment ScenarioLink_scenario on Scenario {\n  id\n  name\n}\n\nfragment StateLink_scenario on Scenario {\n  id\n}\n\nfragment StateLink_state on State {\n  id\n  name\n}\n",
             "metadata": {}
         }
     } as any;
