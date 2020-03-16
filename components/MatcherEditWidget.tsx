@@ -5,6 +5,7 @@ import { MatcherEditWidget_matcher$key } from './__generated__/MatcherEditWidget
 import PathMatcherEditWidget from './PathMatcherEditWidget';
 import MethodsMatcherEditWidget from './MethodsMatcherEditWidget';
 import BodyMatcherEditWidget from './BodyMatcherEditWidget';
+import HeadersMatcherEditWidget from './HeadersMatcherEditWidget';
 
 export interface MatcherEditWidgetProps {
   mappingId: string;
@@ -14,16 +15,10 @@ export interface MatcherEditWidgetProps {
 const matcherFragment = graphql`
   fragment MatcherEditWidget_matcher on Matcher {
     kind
-    ... on HeadersMatcher {
-      headers {
-        name
-        value
-      }
-    }
-
     ...PathMatcherEditWidget_matcher
     ...MethodsMatcherEditWidget_matcher
     ...BodyMatcherEditWidget_matcher
+    ...HeadersMatcherEditWidget_matcher
   }
 `;
 
@@ -35,7 +30,6 @@ const MatcherEditWidget: FC<MatcherEditWidgetProps> = props => {
 
   const matcher = useFragment(matcherFragment, props.matcher);
 
-  // TODO: edit
   switch (matcher.kind) {
     case 'path':
       return <PathMatcherEditWidget matcher={matcher} mappingId={mappingId} />;
@@ -46,7 +40,9 @@ const MatcherEditWidget: FC<MatcherEditWidgetProps> = props => {
     case 'body':
       return <BodyMatcherEditWidget matcher={matcher} mappingId={mappingId} />;
     case 'headers':
-      return <div>Headers: {matcher.headers.length}</div>;
+      return (
+        <HeadersMatcherEditWidget matcher={matcher} mappingId={mappingId} />
+      );
     default:
       return <div>Unknown matcher</div>;
   }

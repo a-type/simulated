@@ -1,9 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 7304c2ae3d068ca4cfad762ee9541a06 */
+/* @relayHash 4e34299e99e3bb07fd91857857a368ed */
 
 import { ConcreteRequest } from "relay-runtime";
-export type MatcherKind = "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
+export type MatcherKind = "body" | "headers" | "methods" | "path" | "%future added value";
 export type AddMappingMatcherInput = {
     mappingId: string;
     matcher: AddMatcherInput;
@@ -33,28 +33,31 @@ export type AddHeaderNameValuePairInput = {
     name: string;
     value?: string | null;
 };
-export type MethodsMatcherEditWidget_setMatcherMutationVariables = {
+export type HeadersMatcherEditWidget_setMatcherMutationVariables = {
     input: AddMappingMatcherInput;
 };
-export type MethodsMatcherEditWidget_setMatcherMutationResponse = {
+export type HeadersMatcherEditWidget_setMatcherMutationResponse = {
     readonly addMappingMatcher: {
         readonly mapping: {
             readonly matchers: ReadonlyArray<{
                 readonly kind: MatcherKind;
-                readonly methods?: ReadonlyArray<string>;
+                readonly headers?: ReadonlyArray<{
+                    readonly name: string;
+                    readonly value: string | null;
+                }>;
             }>;
         };
     };
 };
-export type MethodsMatcherEditWidget_setMatcherMutation = {
-    readonly response: MethodsMatcherEditWidget_setMatcherMutationResponse;
-    readonly variables: MethodsMatcherEditWidget_setMatcherMutationVariables;
+export type HeadersMatcherEditWidget_setMatcherMutation = {
+    readonly response: HeadersMatcherEditWidget_setMatcherMutationResponse;
+    readonly variables: HeadersMatcherEditWidget_setMatcherMutationVariables;
 };
 
 
 
 /*
-mutation MethodsMatcherEditWidget_setMatcherMutation(
+mutation HeadersMatcherEditWidget_setMatcherMutation(
   $input: AddMappingMatcherInput!
 ) {
   addMappingMatcher(input: $input) {
@@ -62,8 +65,11 @@ mutation MethodsMatcherEditWidget_setMatcherMutation(
       matchers {
         __typename
         kind
-        ... on MethodsMatcher {
-          methods
+        ... on HeadersMatcher {
+          headers {
+            name
+            value
+          }
         }
       }
       id
@@ -94,14 +100,32 @@ const node: ConcreteRequest = (function () {
         "storageKey": null
     } as any), v3 = ({
         "kind": "InlineFragment",
-        "type": "MethodsMatcher",
+        "type": "HeadersMatcher",
         "selections": [
             {
-                "kind": "ScalarField",
+                "kind": "LinkedField",
                 "alias": null,
-                "name": "methods",
+                "name": "headers",
+                "storageKey": null,
                 "args": null,
-                "storageKey": null
+                "concreteType": "HeaderKeyValuePair",
+                "plural": true,
+                "selections": [
+                    {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "name",
+                        "args": null,
+                        "storageKey": null
+                    },
+                    {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "value",
+                        "args": null,
+                        "storageKey": null
+                    }
+                ]
             }
         ]
     } as any);
@@ -109,7 +133,7 @@ const node: ConcreteRequest = (function () {
         "kind": "Request",
         "fragment": {
             "kind": "Fragment",
-            "name": "MethodsMatcherEditWidget_setMatcherMutation",
+            "name": "HeadersMatcherEditWidget_setMatcherMutation",
             "type": "Mutation",
             "metadata": null,
             "argumentDefinitions": (v0 /*: any*/),
@@ -153,7 +177,7 @@ const node: ConcreteRequest = (function () {
         },
         "operation": {
             "kind": "Operation",
-            "name": "MethodsMatcherEditWidget_setMatcherMutation",
+            "name": "HeadersMatcherEditWidget_setMatcherMutation",
             "argumentDefinitions": (v0 /*: any*/),
             "selections": [
                 {
@@ -209,12 +233,12 @@ const node: ConcreteRequest = (function () {
         },
         "params": {
             "operationKind": "mutation",
-            "name": "MethodsMatcherEditWidget_setMatcherMutation",
+            "name": "HeadersMatcherEditWidget_setMatcherMutation",
             "id": null,
-            "text": "mutation MethodsMatcherEditWidget_setMatcherMutation(\n  $input: AddMappingMatcherInput!\n) {\n  addMappingMatcher(input: $input) {\n    mapping {\n      matchers {\n        __typename\n        kind\n        ... on MethodsMatcher {\n          methods\n        }\n      }\n      id\n    }\n  }\n}\n",
+            "text": "mutation HeadersMatcherEditWidget_setMatcherMutation(\n  $input: AddMappingMatcherInput!\n) {\n  addMappingMatcher(input: $input) {\n    mapping {\n      matchers {\n        __typename\n        kind\n        ... on HeadersMatcher {\n          headers {\n            name\n            value\n          }\n        }\n      }\n      id\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = '520c859d7920ffb8fa6a6d5016b2f966';
+(node as any).hash = 'b58df87e354649a896cd5fe837390206';
 export default node;

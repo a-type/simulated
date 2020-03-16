@@ -3,14 +3,10 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type MatcherKind = "%future added value" | "%future added value" | "%future added value" | "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
+export type MatcherKind = "%future added value" | "%future added value" | "%future added value" | "%future added value" | "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
 export type MatcherEditWidget_matcher = {
     readonly kind: MatcherKind;
-    readonly headers?: ReadonlyArray<{
-        readonly name: string;
-        readonly value: string | null;
-    }>;
-    readonly " $fragmentRefs": FragmentRefs<"PathMatcherEditWidget_matcher" | "MethodsMatcherEditWidget_matcher" | "BodyMatcherEditWidget_matcher">;
+    readonly " $fragmentRefs": FragmentRefs<"PathMatcherEditWidget_matcher" | "MethodsMatcherEditWidget_matcher" | "BodyMatcherEditWidget_matcher" | "HeadersMatcherEditWidget_matcher">;
     readonly " $refType": "MatcherEditWidget_matcher";
 };
 export type MatcherEditWidget_matcher$data = MatcherEditWidget_matcher;
@@ -36,37 +32,6 @@ const node: ReaderFragment = ({
             "storageKey": null
         },
         {
-            "kind": "InlineFragment",
-            "type": "HeadersMatcher",
-            "selections": [
-                {
-                    "kind": "LinkedField",
-                    "alias": null,
-                    "name": "headers",
-                    "storageKey": null,
-                    "args": null,
-                    "concreteType": "HeaderKeyValuePair",
-                    "plural": true,
-                    "selections": [
-                        {
-                            "kind": "ScalarField",
-                            "alias": null,
-                            "name": "name",
-                            "args": null,
-                            "storageKey": null
-                        },
-                        {
-                            "kind": "ScalarField",
-                            "alias": null,
-                            "name": "value",
-                            "args": null,
-                            "storageKey": null
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "kind": "FragmentSpread",
             "name": "PathMatcherEditWidget_matcher",
             "args": null
@@ -80,8 +45,13 @@ const node: ReaderFragment = ({
             "kind": "FragmentSpread",
             "name": "BodyMatcherEditWidget_matcher",
             "args": null
+        },
+        {
+            "kind": "FragmentSpread",
+            "name": "HeadersMatcherEditWidget_matcher",
+            "args": null
         }
     ]
 } as any);
-(node as any).hash = '84cc02c30bdd8d2672c89a8e3a8e6c3b';
+(node as any).hash = 'c5d6d9a9e15636a61e0a26e9c2fc97e7';
 export default node;

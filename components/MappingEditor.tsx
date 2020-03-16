@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import {
   makeStyles,
   Theme,
@@ -61,6 +61,11 @@ const MappingEditor: FC<MappingEditorProps> = props => {
     kind => !mapping.matchers.some(matcher => (matcher as any).kind === kind),
   ) as MatcherKind[];
 
+  const sortedMatchers = useMemo(
+    () => [...mapping.matchers].sort((a, b) => a.kind.localeCompare(b.kind)),
+    [mapping.matchers],
+  );
+
   return (
     <Box>
       <Box mb={2}>
@@ -71,7 +76,7 @@ const MappingEditor: FC<MappingEditorProps> = props => {
       <Box mb={2}>
         <Typography variant="h4">Request Matching</Typography>
         <Box mb={2}>
-          {mapping.matchers.map(matcher => (
+          {sortedMatchers.map(matcher => (
             <MatcherEditWidget
               matcher={matcher as any}
               key={(matcher as any).kind}

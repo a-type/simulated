@@ -84,6 +84,7 @@
     "react-dom": "^16.12.0",
     "react-relay": "^9.0.0",
     "relay-compiler-webpack-plugin": "^8.0.2",
+    "relay-experimental": "^0.10.0",
     "relay-hooks": "^3.0.0",
     "relay-runtime": "^9.0.0",
     "shortid": "^2.2.15",

@@ -91,7 +91,7 @@ const MatcherAddWidget: FC<MatcherAddWidgetProps> = props => {
   return (
     <>
       <Button onClick={handleButtonClick}>Add matcher...</Button>
-      <Menu open={!!anchorEl} onClose={handleClose}>
+      <Menu open={!!anchorEl} onClose={handleClose} anchorEl={anchorEl}>
         {availableKinds.map(kind => (
           <MenuItem key={kind} onClick={makeMenuHandler(kind)}>
             {kind}
