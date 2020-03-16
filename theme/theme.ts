@@ -39,7 +39,10 @@ const baseLightPalette: ThemeOptions['palette'] = {
 const { palette: lightPalette } = createMuiTheme({ palette: baseLightPalette });
 const { palette: darkPalette } = createMuiTheme({ palette: baseDarkPalette });
 
-const themeFactory = (palette, shadows) =>
+const themeFactory = (
+  palette: ThemeOptions['palette'],
+  shadows: ThemeOptions['shadows'],
+) =>
   createMuiTheme({
     palette,
     shape: {},

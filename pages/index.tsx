@@ -1,5 +1,5 @@
 import ScenarioList from '../components/ScenarioList';
-import { useQuery, graphql } from 'relay-hooks';
+import { useLazyLoadQuery, graphql } from 'react-relay/hooks';
 import { pages_indexQuery } from './__generated__/pages_indexQuery.graphql';
 import ScenarioAddButton from '../components/ScenarioAddButton';
 import { useCallback } from 'react';
@@ -8,9 +8,9 @@ import { Container, Box, makeStyles } from '@material-ui/core';
 import Navigation from '../components/Navigation';
 
 const query = graphql`
-  query pages_indexQuery($first: Int = 10) {
+  query pages_indexQuery {
     viewer {
-      ...ScenarioList_viewer @arguments(first: $first)
+      ...ScenarioList_viewer
       ...ScenarioAddButton_viewer
     }
   }
@@ -25,17 +25,11 @@ const useStyles = makeStyles(theme => ({
 function HomePage() {
   const classes = useStyles({});
 
-  const { props, error, retry, cached } = useQuery<pages_indexQuery>(
-    query,
-    {},
-    {},
-  );
+  const props = useLazyLoadQuery<pages_indexQuery>(query, {}, {});
 
   const handleAddScenario = useCallback((scenarioId: string) => {
     Router.push(`/scenarios/${scenarioId}`);
   }, []);
-
-  if (error) return error.message;
 
   if (!props) return null;
 

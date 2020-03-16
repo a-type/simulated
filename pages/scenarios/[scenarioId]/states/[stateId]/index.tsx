@@ -1,4 +1,4 @@
-import { graphql, useQuery } from 'relay-hooks';
+import { graphql, useLazyLoadQuery } from 'react-relay/hooks';
 import {
   makeStyles,
   Container,
@@ -18,7 +18,6 @@ import ScenarioLink from '../../../../../components/ScenarioLink';
 import StateLink from '../../../../../components/StateLink';
 import AddMappingButton from '../../../../../components/MappingAddButton';
 import { useCallback } from 'react';
-import useError from '../../../../../hooks/useError';
 
 const query = graphql`
   query StateIdQuery($stateId: ID!, $scenarioId: ID!) {
@@ -57,7 +56,7 @@ function StatePage() {
   const router = useRouter();
   const { stateId, scenarioId } = singleQuery(router.query);
 
-  const { props, error } = useQuery<StateIdQuery>(
+  const props = useLazyLoadQuery<StateIdQuery>(
     query,
     {
       stateId,
@@ -65,8 +64,6 @@ function StatePage() {
     },
     {},
   );
-
-  useError(error);
 
   const handleAddMapping = useCallback(
     (mapping: any) => {
@@ -82,9 +79,7 @@ function StatePage() {
     return (
       <>
         <Navigation />
-        <Container className={classes.container}>
-          <CircularProgress />
-        </Container>
+        <Container className={classes.container}>State not found</Container>
       </>
     );
   }

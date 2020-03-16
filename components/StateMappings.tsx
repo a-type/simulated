@@ -9,7 +9,7 @@ import {
   TableBody,
   Box,
 } from '@material-ui/core';
-import { graphql, usePagination, useFragment } from 'relay-hooks';
+import { graphql, usePaginationFragment, useFragment } from 'react-relay/hooks';
 import {
   StateMappings_state$key,
   StateMappings_state,
@@ -28,10 +28,15 @@ const useStyles = makeStyles<Theme, StateMappingsProps>(theme => ({}));
 
 const stateFragment = graphql`
   fragment StateMappings_state on State
-    @argumentDefinitions(first: { type: "Int", defaultValue: 10 }) {
+    @argumentDefinitions(
+      first: { type: "Int", defaultValue: 10 }
+      after: { type: "String" }
+    )
+    @refetchable(queryName: "StateMappingsPaginationQuery") {
     id
 
-    mappings(first: $first) @connection(key: "StateMappings_mappings") {
+    mappings(first: $first, after: $after)
+      @connection(key: "StateMappings_mappings") {
       edges {
         node {
           # TODO: find better way to synchronize this...
@@ -89,14 +94,14 @@ const scenarioFragment = graphql`
 const StateMappings: FC<StateMappingsProps> = props => {
   const classes = useStyles(props);
 
-  const [state] = usePagination(stateFragment, props.state);
+  const { data } = usePaginationFragment(stateFragment, props.state);
   const scenario = useFragment(scenarioFragment, props.scenario);
 
-  if (!state) {
+  if (!data) {
     return <Box my={2}>There was an error fetching this state</Box>;
   }
 
-  const { mappings } = state;
+  const { mappings } = data;
   if (!mappings.edges.length) {
     return <Box my={2}>There are no mappings for this state</Box>;
   }
@@ -116,11 +121,7 @@ const StateMappings: FC<StateMappingsProps> = props => {
         {mappings.edges.map(({ node }) => (
           <TableRow key={node.id}>
             <TableCell>
-              <MappingLink
-                scenario={scenario}
-                state={state as any}
-                mapping={node as any}
-              >
+              <MappingLink scenario={scenario} state={data} mapping={node}>
                 <MatcherSummary mapping={node} />
               </MappingLink>
             </TableCell>
@@ -138,7 +139,7 @@ const StateMappings: FC<StateMappingsProps> = props => {
 const MatcherSummary: FC<{ mapping: any }> = ({ mapping }) => {
   const summary = mapping.matchers.length
     ? mapping.matchers.reduce(
-        (sum, matcher) => sum + ' ' + summarizeMatcher(matcher),
+        (sum: string, matcher: any) => sum + ' ' + summarizeMatcher(matcher),
         '',
       )
     : '(no rules)';
@@ -146,7 +147,7 @@ const MatcherSummary: FC<{ mapping: any }> = ({ mapping }) => {
   return <>{summary}</>;
 };
 
-const summarizeMatcher = matcher => {
+const summarizeMatcher = (matcher: any) => {
   switch (matcher.kind) {
     case 'method':
       return summarizeMethodMatcher(matcher);
@@ -157,11 +158,11 @@ const summarizeMatcher = matcher => {
   }
 };
 
-const summarizeMethodMatcher = matcher => {
+const summarizeMethodMatcher = (matcher: any) => {
   return matcher.methods.join('/');
 };
 
-const summarizePathMatcher = matcher => {
+const summarizePathMatcher = (matcher: any) => {
   return matcher.path;
 };
 

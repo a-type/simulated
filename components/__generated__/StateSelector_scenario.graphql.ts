@@ -24,7 +24,9 @@ export type StateSelector_scenario$key = {
 
 
 const node: ReaderFragment = (function () {
-    var v0 = ({
+    var v0 = [
+        "possibleStates"
+    ], v1 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "id",
@@ -39,13 +41,25 @@ const node: ReaderFragment = (function () {
             "connection": [
                 {
                     "count": "first",
-                    "cursor": null,
+                    "cursor": "after",
                     "direction": "forward",
-                    "path": [
-                        "possibleStates"
-                    ]
+                    "path": (v0 /*: any*/)
                 }
-            ]
+            ],
+            "refetch": {
+                "connection": {
+                    "forward": {
+                        "count": "first",
+                        "cursor": "after"
+                    },
+                    "backward": null,
+                    "path": (v0 /*: any*/)
+                },
+                "operation": require('./StateSelectorPaginationQuery.graphql.ts'),
+                "fragmentPathInResult": [
+                    "node"
+                ]
+            }
         },
         "argumentDefinitions": [
             {
@@ -53,10 +67,16 @@ const node: ReaderFragment = (function () {
                 "name": "first",
                 "type": "Int",
                 "defaultValue": 10
+            },
+            {
+                "kind": "LocalArgument",
+                "name": "after",
+                "type": "String",
+                "defaultValue": null
             }
         ],
         "selections": [
-            (v0 /*: any*/),
+            (v1 /*: any*/),
             {
                 "kind": "LinkedField",
                 "alias": "possibleStates",
@@ -84,7 +104,7 @@ const node: ReaderFragment = (function () {
                                 "concreteType": "State",
                                 "plural": false,
                                 "selections": [
-                                    (v0 /*: any*/),
+                                    (v1 /*: any*/),
                                     {
                                         "kind": "ScalarField",
                                         "alias": null,
@@ -140,5 +160,5 @@ const node: ReaderFragment = (function () {
         ]
     } as any;
 })();
-(node as any).hash = '4518ab836dceb15f56542ca884f3b893';
+(node as any).hash = '46fdcb95c3d37d0186dac7f69ba4038a';
 export default node;

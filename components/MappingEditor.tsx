@@ -1,14 +1,6 @@
 import React, { FC, useMemo } from 'react';
-import {
-  makeStyles,
-  Theme,
-  Box,
-  Divider,
-  Typography,
-  MenuItem,
-  TextField,
-} from '@material-ui/core';
-import { graphql, useFragment } from 'relay-hooks';
+import { makeStyles, Theme, Box, Divider, Typography } from '@material-ui/core';
+import { graphql, useFragment } from 'react-relay/hooks';
 import { MappingEditor_mapping$key } from './__generated__/MappingEditor_mapping.graphql';
 import MatcherAddWidget, { MatcherKind } from './MatcherAddWidget';
 import MatcherEditWidget from './MatcherEditWidget';
@@ -16,7 +8,7 @@ import MappingPriorityField from './MappingPriorityField';
 import MappingResponseEditWidget from './MappingResponseEditWidget';
 
 export interface MappingEditorProps {
-  mapping?: MappingEditor_mapping$key;
+  mapping: MappingEditor_mapping$key;
 }
 
 const useStyles = makeStyles<Theme, MappingEditorProps>(theme => ({
@@ -58,12 +50,14 @@ const MappingEditor: FC<MappingEditorProps> = props => {
     MatcherKind.body,
     MatcherKind.headers,
   ].filter(
-    kind => !mapping.matchers.some(matcher => (matcher as any).kind === kind),
+    kind => !mapping?.matchers.some(matcher => (matcher as any).kind === kind),
   ) as MatcherKind[];
 
+  const matchers = mapping?.matchers || [];
+
   const sortedMatchers = useMemo(
-    () => [...mapping.matchers].sort((a, b) => a.kind.localeCompare(b.kind)),
-    [mapping.matchers],
+    () => [...matchers].sort((a, b) => a.kind.localeCompare(b.kind)),
+    [matchers],
   );
 
   return (
@@ -80,7 +74,7 @@ const MappingEditor: FC<MappingEditorProps> = props => {
             <MatcherEditWidget
               matcher={matcher as any}
               key={(matcher as any).kind}
-              mappingId={mapping.id}
+              mappingId={mapping?.id}
             />
           ))}
         </Box>

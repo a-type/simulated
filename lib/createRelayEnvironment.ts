@@ -1,14 +1,21 @@
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import fetch from 'isomorphic-unfetch';
 
-let relayEnvironment = null;
+let relayEnvironment: Environment | null = null;
 
 // Define a function that fetches the results of an operation (query/mutation/etc)
 // and returns its results as a Promise:
-function fetchQuery(operation, variables, cacheConfig, uploadables) {
+function fetchQuery(
+  operation: any,
+  variables: any,
+  cacheConfig: any,
+  uploadables: any,
+) {
   // Because we implement the graphql server, the client must to point to the same host
   const relayServer =
-    typeof window !== 'undefined' ? '' : process.env.RELAY_SERVER;
+    typeof window !== 'undefined'
+      ? window.location.origin
+      : process.env.RELAY_SERVER;
   return fetch(`${relayServer}/graphql`, {
     method: 'POST',
     headers: {

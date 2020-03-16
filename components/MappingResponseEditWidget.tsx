@@ -1,7 +1,8 @@
 import React, { FC, useState, useCallback, ChangeEvent } from 'react';
 import { TextField, MenuItem } from '@material-ui/core';
-import { graphql, useFragment, useMutation } from 'relay-hooks';
+import { graphql, useFragment } from 'react-relay/hooks';
 import { MappingResponseEditWidget_mapping$key } from './__generated__/MappingResponseEditWidget_mapping.graphql';
+import useMutation from '../hooks/useMutation';
 
 export interface MappingResponseEditWidgetProps {
   mapping: MappingResponseEditWidget_mapping$key;
@@ -50,7 +51,7 @@ const MappingResponseEditWidget: FC<MappingResponseEditWidgetProps> = props => {
     savedBodyValue,
   );
 
-  const [mutate, { loading }] = useMutation(setResponseMutation, {});
+  const [mutate, loading] = useMutation(setResponseMutation);
 
   const handleBodyChange = useCallback(
     (ev: ChangeEvent<HTMLTextAreaElement>) => {

@@ -17,44 +17,46 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Link(
-  {
-    as,
-    href,
-    shallow,
-    replace,
-    scroll,
-    passHref,
-    prefetch,
-    disabled,
-    children,
-    ...props
-  }: LinkProps,
-  ref,
-) {
-  const classes = useStyles({});
+const Link = forwardRef<NextLink, LinkProps>(
+  (
+    {
+      as,
+      href,
+      shallow,
+      replace,
+      scroll,
+      passHref,
+      prefetch,
+      disabled,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    const classes = useStyles({});
 
-  if (disabled) {
+    if (disabled) {
+      return (
+        <MuiLink component="span" className={classes.disabled} underline="none">
+          {children}
+        </MuiLink>
+      );
+    }
+
     return (
-      <MuiLink component="span" className={classes.disabled} underline="none">
-        {children}
-      </MuiLink>
+      <NextLink
+        as={as}
+        href={href}
+        shallow={shallow}
+        replace={replace}
+        scroll={scroll}
+        passHref
+        ref={ref}
+      >
+        <MuiLink {...props}>{children}</MuiLink>
+      </NextLink>
     );
-  }
+  },
+);
 
-  return (
-    <NextLink
-      as={as}
-      href={href}
-      shallow={shallow}
-      replace={replace}
-      scroll={scroll}
-      passHref
-      ref={ref}
-    >
-      <MuiLink {...props}>{children}</MuiLink>
-    </NextLink>
-  );
-}
-
-export default forwardRef(Link);
+export default Link;

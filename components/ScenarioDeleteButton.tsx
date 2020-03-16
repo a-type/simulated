@@ -9,11 +9,12 @@ import {
   DialogTitle,
   DialogActions,
 } from '@material-ui/core';
-import { graphql, useFragment, useMutation } from 'relay-hooks';
+import { graphql, useFragment } from 'react-relay/hooks';
 import { ConnectionHandler } from 'relay-runtime';
 import { ScenarioDeleteButton_deleteScenarioMutation } from './__generated__/ScenarioDeleteButton_deleteScenarioMutation.graphql';
 import { ScenarioDeleteButton_viewer$key } from './__generated__/ScenarioDeleteButton_viewer.graphql';
 import { ScenarioDeleteButton_scenario$key } from './__generated__/ScenarioDeleteButton_scenario.graphql';
+import useMutation from '../hooks/useMutation';
 
 export interface ScenarioDeleteButtonProps extends ButtonProps {
   viewer: ScenarioDeleteButton_viewer$key;
@@ -68,7 +69,7 @@ const ScenarioDeleteButton: FC<ScenarioDeleteButtonProps> = props => {
     scenarioProp,
   );
 
-  const [mutate, { loading }] = useMutation<
+  const [mutate, loading] = useMutation<
     ScenarioDeleteButton_deleteScenarioMutation
   >(deleteScenarioMutation, {
     onCompleted: () => {
@@ -78,10 +79,12 @@ const ScenarioDeleteButton: FC<ScenarioDeleteButtonProps> = props => {
     updater: store => {
       try {
         const viewerProxy = store.get(viewerId);
+        if (!viewerProxy) return;
         const connection = ConnectionHandler.getConnection(
           viewerProxy,
           'ScenarioList_scenarios',
         );
+        if (!connection) return;
         ConnectionHandler.deleteNode(connection, scenarioId);
       } catch (err) {
         console.error(err);

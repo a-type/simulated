@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
 import { makeStyles, Theme, Button, CircularProgress } from '@material-ui/core';
-import { graphql, useMutation, useFragment } from 'relay-hooks';
+import { graphql, useFragment } from 'react-relay/hooks';
 import clsx from 'clsx';
 import { ScenarioAddButton_addScenarioMutation } from './__generated__/ScenarioAddButton_addScenarioMutation.graphql';
 import { ConnectionHandler } from 'relay-runtime';
 import { ScenarioAddButton_viewer$key } from './__generated__/ScenarioAddButton_viewer.graphql';
 import { useCallback } from 'react';
+import useMutation from '../hooks/useMutation';
 
 export interface ScenarioAddButtonProps {
   onAdd?: (scenario: any) => any;
@@ -49,25 +50,28 @@ const ScenarioAddButton: FC<ScenarioAddButtonProps> = props => {
     props.viewer,
   );
 
-  const [mutate, { loading }] = useMutation<
-    ScenarioAddButton_addScenarioMutation
-  >(addScenarioMutation, {
-    onCompleted: ({ addScenario }) => {
-      if (!onAdd) return;
-      onAdd(addScenario.scenario.id);
+  const [mutate, loading] = useMutation<ScenarioAddButton_addScenarioMutation>(
+    addScenarioMutation,
+    {
+      onCompleted: ({ addScenario }) => {
+        if (!onAdd) return;
+        onAdd(addScenario.scenario.id);
+      },
+      updater: store => {
+        const edge = store
+          .getRootField('addScenario')
+          .getLinkedRecord('scenarioEdge');
+        const viewerProxy = store.get(viewerId);
+        if (!viewerProxy) return;
+        const connection = ConnectionHandler.getConnection(
+          viewerProxy,
+          'ScenarioList_scenarios',
+        );
+        if (!connection) return;
+        ConnectionHandler.insertEdgeAfter(connection, edge);
+      },
     },
-    updater: store => {
-      const edge = store
-        .getRootField('addScenario')
-        .getLinkedRecord('scenarioEdge');
-      const viewerProxy = store.get(viewerId);
-      const connection = ConnectionHandler.getConnection(
-        viewerProxy,
-        'ScenarioList_scenarios',
-      );
-      ConnectionHandler.insertEdgeAfter(connection, edge);
-    },
-  });
+  );
 
   const handleClick = useCallback(() => mutate({ variables: {} }), [mutate]);
 

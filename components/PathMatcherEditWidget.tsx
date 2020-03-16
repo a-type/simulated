@@ -8,9 +8,10 @@ import {
   FormControlLabel,
   Typography,
 } from '@material-ui/core';
-import { useFragment, graphql, useMutation } from 'relay-hooks';
+import { useFragment, graphql } from 'react-relay/hooks';
 import useSavingField from '../hooks/useSavingField';
 import { PathMatcherEditWidget_matcher$key } from './__generated__/PathMatcherEditWidget_matcher.graphql';
+import useMutation from '../hooks/useMutation';
 
 export interface PathMatcherEditWidgetProps {
   matcher: PathMatcherEditWidget_matcher$key;
@@ -53,24 +54,27 @@ const PathMatcherEditWidget: FC<PathMatcherEditWidgetProps> = props => {
   const matcher = useFragment(matcherFragment, props.matcher);
   const [mutate] = useMutation(setMatcherMutation, {});
 
-  const [pathField, pathFieldMeta] = useSavingField(matcher.path, async val => {
-    await mutate({
-      variables: {
-        input: {
-          mappingId,
-          matcher: {
-            path: {
-              ...matcher,
-              path: val,
+  const [pathField, pathFieldMeta] = useSavingField(
+    matcher?.path || '',
+    async val => {
+      await mutate({
+        variables: {
+          input: {
+            mappingId,
+            matcher: {
+              path: {
+                ...matcher,
+                path: val,
+              },
             },
           },
         },
-      },
-    });
-  });
+      });
+    },
+  );
 
   const [regexField, regexFieldMeta] = useSavingField(
-    matcher.regex,
+    !!matcher.regex,
     async val => {
       await mutate({
         variables: {

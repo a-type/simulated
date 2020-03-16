@@ -6,10 +6,11 @@ import {
   Box,
   TextField,
 } from '@material-ui/core';
-import { useFragment, useMutation, graphql } from 'relay-hooks';
+import { useFragment, graphql } from 'react-relay/hooks';
 import useSavingField from '../hooks/useSavingField';
 import { Autocomplete } from '@material-ui/lab';
 import { MethodsMatcherEditWidget_matcher$key } from './__generated__/MethodsMatcherEditWidget_matcher.graphql';
+import useMutation from '../hooks/useMutation';
 
 // TODO: actually look these up
 const METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
@@ -53,10 +54,10 @@ const MethodsMatcherEditWidget: FC<MethodsMatcherEditWidgetProps> = props => {
   const classes = useStyles(props);
 
   const matcher = useFragment(matcherFragment, props.matcher);
-  const [mutate] = useMutation(setMatcherMutation, {});
+  const [mutate] = useMutation(setMatcherMutation);
 
   const [methodsField, methodsFieldMeta] = useSavingField(
-    matcher.methods,
+    matcher?.methods || ([] as string[]),
     async val => {
       await mutate({
         variables: {
@@ -80,7 +81,7 @@ const MethodsMatcherEditWidget: FC<MethodsMatcherEditWidgetProps> = props => {
       <Autocomplete
         multiple
         options={METHODS}
-        {...methodsField}
+        {...(methodsField as any)}
         renderInput={params => (
           <TextField {...params} label="Methods" margin="normal" />
         )}

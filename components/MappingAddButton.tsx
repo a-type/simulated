@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
 import { makeStyles, Theme, Button, CircularProgress } from '@material-ui/core';
-import { graphql, useMutation, useFragment } from 'relay-hooks';
+import { graphql, useFragment } from 'react-relay/hooks';
 import clsx from 'clsx';
 import { MappingAddButton_addMappingMutation } from './__generated__/MappingAddButton_addMappingMutation.graphql';
 import { ConnectionHandler } from 'relay-runtime';
 import { useCallback } from 'react';
 import { MappingAddButton_state$key } from './__generated__/MappingAddButton_state.graphql';
+import useMutation from '../hooks/useMutation';
 
 export interface MappingAddButtonProps {
   onAdd?: (
@@ -48,25 +49,28 @@ const MappingAddButton: FC<MappingAddButtonProps> = props => {
 
   const { id: stateId } = useFragment(stateFragment, props.state);
 
-  const [mutate, { loading }] = useMutation<
-    MappingAddButton_addMappingMutation
-  >(addMappingMutation, {
-    onCompleted: ({ addStateMapping }) => {
-      if (!onAdd) return;
-      onAdd(addStateMapping.mappingEdge.node);
+  const [mutate, loading] = useMutation<MappingAddButton_addMappingMutation>(
+    addMappingMutation,
+    {
+      onCompleted: ({ addStateMapping }) => {
+        if (!onAdd) return;
+        onAdd(addStateMapping.mappingEdge.node);
+      },
+      updater: store => {
+        const edge = store
+          .getRootField('addStateMapping')
+          .getLinkedRecord('mappingEdge');
+        const viewerProxy = store.get(stateId);
+        if (!viewerProxy) return;
+        const connection = ConnectionHandler.getConnection(
+          viewerProxy,
+          'StateMappings_mappings',
+        );
+        if (!connection) return;
+        ConnectionHandler.insertEdgeAfter(connection, edge);
+      },
     },
-    updater: store => {
-      const edge = store
-        .getRootField('addStateMapping')
-        .getLinkedRecord('mappingEdge');
-      const viewerProxy = store.get(stateId);
-      const connection = ConnectionHandler.getConnection(
-        viewerProxy,
-        'StateMappings_mappings',
-      );
-      ConnectionHandler.insertEdgeAfter(connection, edge);
-    },
-  });
+  );
 
   const handleClick = useCallback(
     () =>

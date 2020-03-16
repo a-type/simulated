@@ -1,33 +1,34 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 47278c34f6be71cc6f5ba20f1ab52dd4 */
+/* @relayHash c22b7df42facb17b90ebb827379b1b2f */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type pages_indexQueryVariables = {};
-export type pages_indexQueryResponse = {
+export type ScenarioListPaginationQueryVariables = {
+    first?: number | null;
+    after?: string | null;
+};
+export type ScenarioListPaginationQueryResponse = {
     readonly viewer: {
-        readonly " $fragmentRefs": FragmentRefs<"ScenarioList_viewer" | "ScenarioAddButton_viewer">;
+        readonly " $fragmentRefs": FragmentRefs<"ScenarioList_viewer">;
     };
 };
-export type pages_indexQuery = {
-    readonly response: pages_indexQueryResponse;
-    readonly variables: pages_indexQueryVariables;
+export type ScenarioListPaginationQuery = {
+    readonly response: ScenarioListPaginationQueryResponse;
+    readonly variables: ScenarioListPaginationQueryVariables;
 };
 
 
 
 /*
-query pages_indexQuery {
+query ScenarioListPaginationQuery(
+  $first: Int = 10
+  $after: String
+) {
   viewer {
-    ...ScenarioList_viewer
-    ...ScenarioAddButton_viewer
+    ...ScenarioList_viewer_2HEEH6
     id
   }
-}
-
-fragment ScenarioAddButton_viewer on Viewer {
-  id
 }
 
 fragment ScenarioCard_scenario on Scenario {
@@ -36,8 +37,8 @@ fragment ScenarioCard_scenario on Scenario {
   createdAt
 }
 
-fragment ScenarioList_viewer on Viewer {
-  scenarios(first: 10) {
+fragment ScenarioList_viewer_2HEEH6 on Viewer {
+  scenarios(first: $first, after: $after) {
     edges {
       node {
         id
@@ -57,11 +58,29 @@ fragment ScenarioList_viewer on Viewer {
 const node: ConcreteRequest = (function () {
     var v0 = [
         ({
-            "kind": "Literal",
+            "kind": "LocalArgument",
             "name": "first",
-            "value": 10
+            "type": "Int",
+            "defaultValue": 10
+        } as any),
+        ({
+            "kind": "LocalArgument",
+            "name": "after",
+            "type": "String",
+            "defaultValue": null
         } as any)
-    ], v1 = ({
+    ], v1 = [
+        ({
+            "kind": "Variable",
+            "name": "after",
+            "variableName": "after"
+        } as any),
+        ({
+            "kind": "Variable",
+            "name": "first",
+            "variableName": "first"
+        } as any)
+    ], v2 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "id",
@@ -72,10 +91,10 @@ const node: ConcreteRequest = (function () {
         "kind": "Request",
         "fragment": {
             "kind": "Fragment",
-            "name": "pages_indexQuery",
+            "name": "ScenarioListPaginationQuery",
             "type": "Query",
             "metadata": null,
-            "argumentDefinitions": [],
+            "argumentDefinitions": (v0 /*: any*/),
             "selections": [
                 {
                     "kind": "LinkedField",
@@ -89,12 +108,7 @@ const node: ConcreteRequest = (function () {
                         {
                             "kind": "FragmentSpread",
                             "name": "ScenarioList_viewer",
-                            "args": null
-                        },
-                        {
-                            "kind": "FragmentSpread",
-                            "name": "ScenarioAddButton_viewer",
-                            "args": null
+                            "args": (v1 /*: any*/)
                         }
                     ]
                 }
@@ -102,8 +116,8 @@ const node: ConcreteRequest = (function () {
         },
         "operation": {
             "kind": "Operation",
-            "name": "pages_indexQuery",
-            "argumentDefinitions": [],
+            "name": "ScenarioListPaginationQuery",
+            "argumentDefinitions": (v0 /*: any*/),
             "selections": [
                 {
                     "kind": "LinkedField",
@@ -118,8 +132,8 @@ const node: ConcreteRequest = (function () {
                             "kind": "LinkedField",
                             "alias": null,
                             "name": "scenarios",
-                            "storageKey": "scenarios(first:10)",
-                            "args": (v0 /*: any*/),
+                            "storageKey": null,
+                            "args": (v1 /*: any*/),
                             "concreteType": "ScenarioConnection",
                             "plural": false,
                             "selections": [
@@ -141,7 +155,7 @@ const node: ConcreteRequest = (function () {
                                             "concreteType": "Scenario",
                                             "plural": false,
                                             "selections": [
-                                                (v1 /*: any*/),
+                                                (v2 /*: any*/),
                                                 {
                                                     "kind": "ScalarField",
                                                     "alias": null,
@@ -205,24 +219,27 @@ const node: ConcreteRequest = (function () {
                             "kind": "LinkedHandle",
                             "alias": null,
                             "name": "scenarios",
-                            "args": (v0 /*: any*/),
+                            "args": (v1 /*: any*/),
                             "handle": "connection",
                             "key": "ScenarioList_scenarios",
                             "filters": null
                         },
-                        (v1 /*: any*/)
+                        (v2 /*: any*/)
                     ]
                 }
             ]
         },
         "params": {
             "operationKind": "query",
-            "name": "pages_indexQuery",
+            "name": "ScenarioListPaginationQuery",
             "id": null,
-            "text": "query pages_indexQuery {\n  viewer {\n    ...ScenarioList_viewer\n    ...ScenarioAddButton_viewer\n    id\n  }\n}\n\nfragment ScenarioAddButton_viewer on Viewer {\n  id\n}\n\nfragment ScenarioCard_scenario on Scenario {\n  id\n  name\n  createdAt\n}\n\nfragment ScenarioList_viewer on Viewer {\n  scenarios(first: 10) {\n    edges {\n      node {\n        id\n        ...ScenarioCard_scenario\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
-            "metadata": {}
+            "text": "query ScenarioListPaginationQuery(\n  $first: Int = 10\n  $after: String\n) {\n  viewer {\n    ...ScenarioList_viewer_2HEEH6\n    id\n  }\n}\n\nfragment ScenarioCard_scenario on Scenario {\n  id\n  name\n  createdAt\n}\n\nfragment ScenarioList_viewer_2HEEH6 on Viewer {\n  scenarios(first: $first, after: $after) {\n    edges {\n      node {\n        id\n        ...ScenarioCard_scenario\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
+            "metadata": {
+                "derivedFrom": "ScenarioList_viewer",
+                "isRefetchableQuery": true
+            }
         }
     } as any;
 })();
-(node as any).hash = 'd5bcbc8398debdf1b5b9a792560454dd';
+(node as any).hash = '2ee062d0e212f15d97920fc9afa16c6b';
 export default node;

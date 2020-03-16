@@ -6,12 +6,13 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import { useFragment, graphql, useMutation } from 'relay-hooks';
+import { useFragment, graphql } from 'react-relay/hooks';
 import { StateDetails_state$key } from './__generated__/StateDetails_state.graphql';
 import useSavingField from '../hooks/useSavingField';
 import Timestamp from './Timestamp';
 import clsx from 'clsx';
 import { StateDetails_updateStateMutation } from './__generated__/StateDetails_updateStateMutation.graphql';
+import useMutation from '../hooks/useMutation';
 
 export interface StateDetailsProps {
   state: StateDetails_state$key;

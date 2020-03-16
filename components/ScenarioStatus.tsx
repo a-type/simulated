@@ -1,9 +1,10 @@
 import React, { FC, useCallback } from 'react';
 import { makeStyles, Theme, Box, Typography } from '@material-ui/core';
-import { graphql, useFragment, useMutation } from 'relay-hooks';
+import { graphql, useFragment } from 'react-relay/hooks';
 import Link from './Link';
 import { ScenarioStatus_scenario$key } from './__generated__/ScenarioStatus_scenario.graphql';
 import StateSelector from './StateSelector';
+import useMutation from '../hooks/useMutation';
 
 export interface ScenarioStatusProps {
   scenario: ScenarioStatus_scenario$key;
@@ -55,10 +56,12 @@ const ScenarioStatus: FC<ScenarioStatusProps> = props => {
   const classes = useStyles(props);
   const scenario = useFragment(scenarioFragment, scenarioKey);
 
-  const [mutate] = useMutation(setDefaultStateMutation, {});
+  const [mutate] = useMutation(setDefaultStateMutation);
 
   const handleDefaultStateChange = useCallback(
-    (_ev: any, state: { name: string; id: string }) => {
+    (_ev: any, state: { name: string; id: string } | null) => {
+      if (!state) return;
+
       mutate({
         variables: {
           input: {
@@ -93,6 +96,7 @@ const ScenarioStatus: FC<ScenarioStatusProps> = props => {
           value={scenario.currentState}
           onChange={handleDefaultStateChange}
           disableClearable
+          required
         />
       </Box>
     </Box>

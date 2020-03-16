@@ -1,7 +1,8 @@
 import React, { FC, useCallback, useState, ChangeEvent } from 'react';
 import { makeStyles, Theme, TextField } from '@material-ui/core';
-import { graphql, useFragment, useMutation } from 'relay-hooks';
+import { graphql, useFragment } from 'react-relay/hooks';
 import { MappingPriorityField_mapping$key } from './__generated__/MappingPriorityField_mapping.graphql';
+import useMutation from '../hooks/useMutation';
 
 export interface MappingPriorityFieldProps {
   mapping: MappingPriorityField_mapping$key;
@@ -51,7 +52,7 @@ const MappingPriorityField: FC<MappingPriorityFieldProps> = props => {
     [setInternalValue],
   );
 
-  const [mutate, { loading }] = useMutation(setMappingPriorityMutation, {});
+  const [mutate, loading] = useMutation(setMappingPriorityMutation);
 
   const onBlur = useCallback(() => {
     if (internalValue === savedValue) return;

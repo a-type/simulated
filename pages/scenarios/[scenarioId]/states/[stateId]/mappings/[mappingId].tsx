@@ -7,7 +7,7 @@ import {
   Breadcrumbs,
   Typography,
 } from '@material-ui/core';
-import { graphql, useQuery } from 'relay-hooks';
+import { graphql, useLazyLoadQuery } from 'react-relay/hooks';
 import { useRouter } from 'next/router';
 import singleQuery from '../../../../../../lib/singleQuery';
 import Navigation from '../../../../../../components/Navigation';
@@ -17,7 +17,6 @@ import StateLink from '../../../../../../components/StateLink';
 import MappingLink from '../../../../../../components/MappingLink';
 import MappingEditor from '../../../../../../components/MappingEditor';
 import { MappingIdQuery } from './__generated__/MappingIdQuery.graphql';
-import useError from '../../../../../../hooks/useError';
 
 const query = graphql`
   query MappingIdQuery($scenarioId: ID!, $stateId: ID!, $mappingId: ID!) {
@@ -56,7 +55,7 @@ const MappingPage: FC<MappingPageProps> = () => {
   const router = useRouter();
   const { stateId, scenarioId, mappingId } = singleQuery(router.query);
 
-  const { props, error } = useQuery<MappingIdQuery>(
+  const props = useLazyLoadQuery<MappingIdQuery>(
     query,
     {
       stateId,
@@ -66,13 +65,11 @@ const MappingPage: FC<MappingPageProps> = () => {
     {},
   );
 
-  useError(error);
-
-  if (!props || !props.viewer || !props.viewer.mapping) {
+  if (!props.viewer.scenario || !props.viewer.state || !props.viewer.mapping) {
     return (
       <>
         <Navigation />
-        <CircularProgress />
+        <Container className={classes.container}>Mapping not found</Container>
       </>
     );
   }

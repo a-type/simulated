@@ -52,25 +52,27 @@ export type StateMappings_state$key = {
 
 
 const node: ReaderFragment = (function () {
-    var v0 = ({
+    var v0 = [
+        "mappings"
+    ], v1 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "id",
         "args": null,
         "storageKey": null
-    } as any), v1 = ({
+    } as any), v2 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "kind",
         "args": null,
         "storageKey": null
-    } as any), v2 = ({
+    } as any), v3 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "regex",
         "args": null,
         "storageKey": null
-    } as any), v3 = ({
+    } as any), v4 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "name",
@@ -85,13 +87,25 @@ const node: ReaderFragment = (function () {
             "connection": [
                 {
                     "count": "first",
-                    "cursor": null,
+                    "cursor": "after",
                     "direction": "forward",
-                    "path": [
-                        "mappings"
-                    ]
+                    "path": (v0 /*: any*/)
                 }
-            ]
+            ],
+            "refetch": {
+                "connection": {
+                    "forward": {
+                        "count": "first",
+                        "cursor": "after"
+                    },
+                    "backward": null,
+                    "path": (v0 /*: any*/)
+                },
+                "operation": require('./StateMappingsPaginationQuery.graphql.ts'),
+                "fragmentPathInResult": [
+                    "node"
+                ]
+            }
         },
         "argumentDefinitions": [
             {
@@ -99,10 +113,16 @@ const node: ReaderFragment = (function () {
                 "name": "first",
                 "type": "Int",
                 "defaultValue": 10
+            },
+            {
+                "kind": "LocalArgument",
+                "name": "after",
+                "type": "String",
+                "defaultValue": null
             }
         ],
         "selections": [
-            (v0 /*: any*/),
+            (v1 /*: any*/),
             {
                 "kind": "LinkedField",
                 "alias": "mappings",
@@ -130,7 +150,7 @@ const node: ReaderFragment = (function () {
                                 "concreteType": "Mapping",
                                 "plural": false,
                                 "selections": [
-                                    (v0 /*: any*/),
+                                    (v1 /*: any*/),
                                     {
                                         "kind": "LinkedField",
                                         "alias": null,
@@ -140,7 +160,7 @@ const node: ReaderFragment = (function () {
                                         "concreteType": null,
                                         "plural": true,
                                         "selections": [
-                                            (v1 /*: any*/),
+                                            (v2 /*: any*/),
                                             {
                                                 "kind": "InlineFragment",
                                                 "type": "MethodsMatcher",
@@ -165,7 +185,7 @@ const node: ReaderFragment = (function () {
                                                         "args": null,
                                                         "storageKey": null
                                                     },
-                                                    (v2 /*: any*/)
+                                                    (v3 /*: any*/)
                                                 ]
                                             },
                                             {
@@ -186,7 +206,7 @@ const node: ReaderFragment = (function () {
                                                         "args": null,
                                                         "storageKey": null
                                                     },
-                                                    (v2 /*: any*/)
+                                                    (v3 /*: any*/)
                                                 ]
                                             },
                                             {
@@ -202,7 +222,7 @@ const node: ReaderFragment = (function () {
                                                         "concreteType": "HeaderKeyValuePair",
                                                         "plural": true,
                                                         "selections": [
-                                                            (v3 /*: any*/),
+                                                            (v4 /*: any*/),
                                                             {
                                                                 "kind": "ScalarField",
                                                                 "alias": null,
@@ -234,7 +254,7 @@ const node: ReaderFragment = (function () {
                                                 "concreteType": null,
                                                 "plural": false,
                                                 "selections": [
-                                                    (v1 /*: any*/)
+                                                    (v2 /*: any*/)
                                                 ]
                                             }
                                         ]
@@ -257,7 +277,7 @@ const node: ReaderFragment = (function () {
                                                 "concreteType": "State",
                                                 "plural": false,
                                                 "selections": [
-                                                    (v3 /*: any*/)
+                                                    (v4 /*: any*/)
                                                 ]
                                             }
                                         ]
@@ -341,5 +361,5 @@ const node: ReaderFragment = (function () {
         ]
     } as any;
 })();
-(node as any).hash = '5beae3f6476390beb2948f0b864423d2';
+(node as any).hash = 'b787c742be42d03af85aac3cfd17a666';
 export default node;

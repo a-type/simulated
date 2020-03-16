@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
-import { graphql, useFragment } from 'relay-hooks';
+import { graphql, useFragment } from 'react-relay/hooks';
 import Link from './Link';
 import { ScenarioLink_scenario$key } from './__generated__/ScenarioLink_scenario.graphql';
 import { LinkProps } from './Link';
 
-export interface ScenarioLinkProps extends Omit<LinkProps, 'href' | 'as'> {
+export interface ScenarioLinkProps
+  extends Omit<LinkProps, 'href' | 'as' | 'ref'> {
   scenario: ScenarioLink_scenario$key;
 }
 

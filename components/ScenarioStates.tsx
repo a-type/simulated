@@ -8,7 +8,7 @@ import {
   TableCell,
   TableBody,
 } from '@material-ui/core';
-import { graphql, usePagination } from 'relay-hooks';
+import { graphql, usePaginationFragment } from 'react-relay/hooks';
 import { ScenarioStates_scenario$key } from './__generated__/ScenarioStates_scenario.graphql';
 import Link from './Link';
 
@@ -21,7 +21,11 @@ const useStyles = makeStyles<Theme, ScenarioStatesProps>(theme => ({}));
 
 const scenarioFragment = graphql`
   fragment ScenarioStates_scenario on Scenario
-    @argumentDefinitions(first: { type: "Int", defaultValue: 10 }) {
+    @argumentDefinitions(
+      first: { type: "Int", defaultValue: 10 }
+      after: { type: "String" }
+    )
+    @refetchable(queryName: "ScenarioStatesPaginationQuery") {
     id
 
     defaultState {
@@ -29,7 +33,7 @@ const scenarioFragment = graphql`
       name
     }
 
-    possibleStates(first: $first)
+    possibleStates(first: $first, after: $after)
       @connection(key: "ScenarioStates_possibleStates") {
       edges {
         node {
@@ -45,10 +49,9 @@ const ScenarioStates: FC<ScenarioStatesProps> = props => {
   const { ...rest } = props;
   const classes = useStyles(props);
 
-  const [{ defaultState, possibleStates, id: scenarioId }] = usePagination(
-    scenarioFragment,
-    props.scenario,
-  );
+  const { data } = usePaginationFragment(scenarioFragment, props.scenario);
+
+  const { defaultState, possibleStates, id: scenarioId } = data || {};
 
   return (
     <Table {...rest}>
@@ -60,7 +63,7 @@ const ScenarioStates: FC<ScenarioStatesProps> = props => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {possibleStates.edges.map(({ node }) => (
+        {possibleStates?.edges.map(({ node }) => (
           <TableRow key={node.id}>
             <TableCell component="th" scope="row">
               <Link

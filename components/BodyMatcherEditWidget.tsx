@@ -8,9 +8,10 @@ import {
   FormControlLabel,
   Checkbox,
 } from '@material-ui/core';
-import { useFragment, useMutation, graphql } from 'relay-hooks';
+import { useFragment, graphql } from 'react-relay/hooks';
 import useSavingField from '../hooks/useSavingField';
 import { BodyMatcherEditWidget_matcher$key } from './__generated__/BodyMatcherEditWidget_matcher.graphql';
+import useMutation from '../hooks/useMutation';
 
 export interface BodyMatcherEditWidgetProps {
   matcher: BodyMatcherEditWidget_matcher$key;
@@ -53,26 +54,29 @@ const BodyMatcherEditWidget: FC<BodyMatcherEditWidgetProps> = props => {
   const classes = useStyles(props);
 
   const matcher = useFragment(matcherFragment, props.matcher);
-  const [mutate] = useMutation(setMatcherMutation, {});
+  const [mutate] = useMutation(setMatcherMutation);
 
-  const [bodyField, bodyFieldMeta] = useSavingField(matcher.body, async val => {
-    await mutate({
-      variables: {
-        input: {
-          mappingId,
-          matcher: {
-            body: {
-              ...matcher,
-              body: val,
+  const [bodyField, bodyFieldMeta] = useSavingField(
+    matcher.body || '',
+    async val => {
+      await mutate({
+        variables: {
+          input: {
+            mappingId,
+            matcher: {
+              body: {
+                ...matcher,
+                body: val,
+              },
             },
           },
         },
-      },
-    });
-  });
+      });
+    },
+  );
 
   const [ignoreWhitespaceField, ignoreWhitespaceFieldMeta] = useSavingField(
-    matcher.ignoreWhitespace,
+    !!matcher.ignoreWhitespace,
     async val => {
       await mutate({
         variables: {
@@ -91,7 +95,7 @@ const BodyMatcherEditWidget: FC<BodyMatcherEditWidgetProps> = props => {
   );
 
   const [regexField, regexFieldMeta] = useSavingField(
-    matcher.regex,
+    !!matcher.regex,
     async val => {
       await mutate({
         variables: {

@@ -10,13 +10,14 @@ import {
   DialogActions,
   ButtonProps,
 } from '@material-ui/core';
-import { graphql, useFragment, useMutation } from 'relay-hooks';
+import { graphql, useFragment } from 'react-relay/hooks';
 import { StateAddButton_addStateMutation } from './__generated__/StateAddButton_addStateMutation.graphql';
 import { StateAddButton_scenario$key } from './__generated__/StateAddButton_scenario.graphql';
 import { ConnectionHandler } from 'relay-runtime';
 import clsx from 'clsx';
 import { useForm, FielderProvider } from 'fielder';
 import TextField from './fields/TextField';
+import useMutation from '../hooks/useMutation';
 
 export interface StateAddButtonProps extends ButtonProps {
   scenario: StateAddButton_scenario$key;
@@ -51,7 +52,7 @@ const StateAddButton: FC<StateAddButtonProps> = props => {
 
   const { id: scenarioId } = useFragment(scenarioFragment, props.scenario);
 
-  const [mutate, { loading }] = useMutation<StateAddButton_addStateMutation>(
+  const [mutate, loading] = useMutation<StateAddButton_addStateMutation>(
     addStateMutation,
     {
       onCompleted: ({ addScenarioState }) => {
@@ -62,10 +63,12 @@ const StateAddButton: FC<StateAddButtonProps> = props => {
         const root = store.getRootField('addScenarioState');
         const edge = root.getLinkedRecord('stateEdge');
         const scenarioProxy = store.get(scenarioId);
+        if (!scenarioProxy) return;
         const connection = ConnectionHandler.getConnection(
           scenarioProxy,
           'ScenarioStates_possibleStates',
         );
+        if (!connection) return;
         ConnectionHandler.insertEdgeAfter(connection, edge);
       },
     },
@@ -86,7 +89,7 @@ const StateAddButton: FC<StateAddButtonProps> = props => {
           input: {
             scenarioId,
             state: {
-              name: form.fields.name.value,
+              name: form.fields.name.value || '',
             },
           },
         },

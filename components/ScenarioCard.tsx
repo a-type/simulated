@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardContent,
 } from '@material-ui/core';
-import { useFragment, graphql } from 'relay-hooks';
+import { useFragment, graphql } from 'react-relay/hooks';
 import { ScenarioCard_scenario$key } from './__generated__/ScenarioCard_scenario.graphql';
 import Link from './Link';
 import Timestamp from './Timestamp';

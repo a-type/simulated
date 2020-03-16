@@ -21,7 +21,17 @@ const nonReadOnly = <T extends PossibleFieldValue>(val: T): NonReadOnly<T> =>
 export default <T extends PossibleFieldValue>(
   backendValue: T,
   saveValue: (value: NonReadOnly<T>) => void | Promise<void>,
-) => {
+): [
+  {
+    onChange: (ev: any, value?: T) => any;
+    onBlur: () => any;
+    value: NonReadOnly<T>;
+  },
+  {
+    justUpdated: boolean;
+    saving: boolean;
+  },
+] => {
   const fieldValueKind: FieldValueKind =
     typeof backendValue === 'boolean'
       ? 'checkbox'
@@ -49,9 +59,9 @@ export default <T extends PossibleFieldValue>(
   }, [justUpdated]);
 
   const handleFieldChange = useCallback(
-    (ev: ChangeEvent<HTMLInputElement>, newValue?: T) => {
+    (ev: any, newValue?: T) => {
       if (fieldValueKind === 'checkbox') {
-        setRawValue(ev.target.checked as T);
+        setRawValue((ev as ChangeEvent<HTMLInputElement>).target.checked as T);
       } else if (fieldValueKind === 'array') {
         setRawValue(newValue as T);
       } else {
@@ -63,19 +73,16 @@ export default <T extends PossibleFieldValue>(
 
   const [saving, setSaving] = useState(false);
 
-  const handleFieldBlur = useCallback(
-    async (ev: FocusEvent<HTMLInputElement>) => {
-      if (backendValue === rawValue) return;
+  const handleFieldBlur = useCallback(async () => {
+    if (backendValue === rawValue) return;
 
-      try {
-        setSaving(true);
-        await saveValueRef.current(nonReadOnly(rawValue));
-      } finally {
-        setSaving(false);
-      }
-    },
-    [saveValueRef, rawValue, backendValue, setSaving],
-  );
+    try {
+      setSaving(true);
+      await saveValueRef.current(nonReadOnly(rawValue));
+    } finally {
+      setSaving(false);
+    }
+  }, [saveValueRef, rawValue, backendValue, setSaving]);
 
   return [
     {

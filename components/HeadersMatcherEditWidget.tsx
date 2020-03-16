@@ -8,10 +8,11 @@ import {
   Typography,
   Button,
 } from '@material-ui/core';
-import { useFragment, graphql, useMutation } from 'relay-hooks';
+import { useFragment, graphql } from 'react-relay/hooks';
 import useSavingField from '../hooks/useSavingField';
 import { DeleteTwoTone, AddTwoTone } from '@material-ui/icons';
 import { HeadersMatcherEditWidget_matcher$key } from './__generated__/HeadersMatcherEditWidget_matcher.graphql';
+import useMutation from '../hooks/useMutation';
 
 export interface HeadersMatcherEditWidgetProps {
   matcher: HeadersMatcherEditWidget_matcher$key;
@@ -57,11 +58,14 @@ const HeadersMatcherEditWidget: FC<HeadersMatcherEditWidgetProps> = props => {
   const { mappingId } = props;
   const classes = useStyles(props);
 
-  const { headers } = useFragment(matcherFragment, props.matcher);
-  const [mutate] = useMutation(setMatcherMutation, {});
+  const { headers = [] } = useFragment(matcherFragment, props.matcher);
+  const [mutate] = useMutation(setMatcherMutation);
 
   const handleHeaderChange = useCallback(
-    async (header: { name: string; value?: string }, index: number) => {
+    async (header: { name: string; value: string | null }, index: number) => {
+      if (!header.value) {
+        delete header.value;
+      }
       const headersCopy = [...headers];
       headersCopy[index] = header as any;
       await mutate({
@@ -112,7 +116,9 @@ const HeadersMatcherEditWidget: FC<HeadersMatcherEditWidgetProps> = props => {
         />
       ))}
       <Button
-        onClick={() => handleHeaderChange({ name: 'x-header' }, headers.length)}
+        onClick={() =>
+          handleHeaderChange({ name: 'x-header', value: null }, headers.length)
+        }
         variant="text"
         startIcon={<AddTwoTone />}
       >
@@ -128,15 +134,18 @@ const HeaderFields: FC<{
   index: number;
   header: {
     name: string;
-    value: string;
+    value: string | null;
   };
-  onChange: (header: { name: string; value: string }, index: number) => any;
+  onChange: (
+    header: { name: string; value: string | null },
+    index: number,
+  ) => any;
   onDelete: (index: number) => any;
 }> = props => {
   const [nameField] = useSavingField(props.header.name, newName => {
     props.onChange({ ...props.header, name: newName }, props.index);
   });
-  const [valueField] = useSavingField(props.header.value, newValue => {
+  const [valueField] = useSavingField(props.header.value || '', newValue => {
     props.onChange({ ...props.header, value: newValue }, props.index);
   });
 

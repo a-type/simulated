@@ -28,13 +28,15 @@ export type ScenarioStates_scenario$key = {
 
 
 const node: ReaderFragment = (function () {
-    var v0 = ({
+    var v0 = [
+        "possibleStates"
+    ], v1 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "id",
         "args": null,
         "storageKey": null
-    } as any), v1 = ({
+    } as any), v2 = ({
         "kind": "ScalarField",
         "alias": null,
         "name": "name",
@@ -49,13 +51,25 @@ const node: ReaderFragment = (function () {
             "connection": [
                 {
                     "count": "first",
-                    "cursor": null,
+                    "cursor": "after",
                     "direction": "forward",
-                    "path": [
-                        "possibleStates"
-                    ]
+                    "path": (v0 /*: any*/)
                 }
-            ]
+            ],
+            "refetch": {
+                "connection": {
+                    "forward": {
+                        "count": "first",
+                        "cursor": "after"
+                    },
+                    "backward": null,
+                    "path": (v0 /*: any*/)
+                },
+                "operation": require('./ScenarioStatesPaginationQuery.graphql.ts'),
+                "fragmentPathInResult": [
+                    "node"
+                ]
+            }
         },
         "argumentDefinitions": [
             {
@@ -63,10 +77,16 @@ const node: ReaderFragment = (function () {
                 "name": "first",
                 "type": "Int",
                 "defaultValue": 10
+            },
+            {
+                "kind": "LocalArgument",
+                "name": "after",
+                "type": "String",
+                "defaultValue": null
             }
         ],
         "selections": [
-            (v0 /*: any*/),
+            (v1 /*: any*/),
             {
                 "kind": "LinkedField",
                 "alias": null,
@@ -76,8 +96,8 @@ const node: ReaderFragment = (function () {
                 "concreteType": "State",
                 "plural": false,
                 "selections": [
-                    (v0 /*: any*/),
-                    (v1 /*: any*/)
+                    (v1 /*: any*/),
+                    (v2 /*: any*/)
                 ]
             },
             {
@@ -107,8 +127,8 @@ const node: ReaderFragment = (function () {
                                 "concreteType": "State",
                                 "plural": false,
                                 "selections": [
-                                    (v0 /*: any*/),
                                     (v1 /*: any*/),
+                                    (v2 /*: any*/),
                                     {
                                         "kind": "ScalarField",
                                         "alias": null,
@@ -157,5 +177,5 @@ const node: ReaderFragment = (function () {
         ]
     } as any;
 })();
-(node as any).hash = '10a2ecb5978e831e3021b73833cfd328';
+(node as any).hash = 'c755c80076f4a29e9e70b667b4f237a7';
 export default node;

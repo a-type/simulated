@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
-import { graphql, useFragment } from 'relay-hooks';
+import { graphql, useFragment } from 'react-relay/hooks';
 import { MatcherEditWidget_matcher$key } from './__generated__/MatcherEditWidget_matcher.graphql';
 import PathMatcherEditWidget from './PathMatcherEditWidget';
 import MethodsMatcherEditWidget from './MethodsMatcherEditWidget';

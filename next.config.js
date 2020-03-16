@@ -7,6 +7,10 @@ const RelayCompilerPlugin = require('relay-compiler-webpack-plugin');
 const relayConfig = require('./relay.config');
 
 module.exports = {
+  reactStrictMode: true,
+  experimental: {
+    reactMode: 'concurrent',
+  },
   webpack: config => {
     config.plugins = config.plugins || [];
 

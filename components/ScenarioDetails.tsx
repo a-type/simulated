@@ -6,12 +6,13 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import { graphql, useMutation, useFragment } from 'relay-hooks';
+import { graphql, useFragment } from 'react-relay/hooks';
 import { ScenarioDetails_scenario$key } from './__generated__/ScenarioDetails_scenario.graphql';
 import { ScenarioDetails_updateScenarioMutation } from './__generated__/ScenarioDetails_updateScenarioMutation.graphql';
 import clsx from 'clsx';
 import Timestamp from './Timestamp';
 import useSavingField from '../hooks/useSavingField';
+import useMutation from '../hooks/useMutation';
 
 export interface ScenarioDetailsProps {
   scenario: ScenarioDetails_scenario$key;
@@ -89,7 +90,7 @@ const ScenarioDetails: FC<ScenarioDetailsProps> = props => {
   );
 
   const [fieldProps, { justUpdated, saving }] = useSavingField(
-    scenario?.name,
+    scenario?.name || '',
     saveName,
   );
 

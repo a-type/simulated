@@ -1,4 +1,4 @@
-import { useQuery, graphql } from 'relay-hooks';
+import { useLazyLoadQuery, graphql } from 'react-relay/hooks';
 import { useRouter } from 'next/router';
 import { ScenarioIdQuery } from './__generated__/ScenarioIdQuery.graphql';
 import {
@@ -18,7 +18,6 @@ import Navigation from '../../../components/Navigation';
 import ScenarioStatus from '../../../components/ScenarioStatus';
 import ScenarioLink from '../../../components/ScenarioLink';
 import Link from '../../../components/Link';
-import useError from '../../../hooks/useError';
 
 const query = graphql`
   query ScenarioIdQuery($scenarioId: ID!) {
@@ -61,7 +60,7 @@ function ScenarioPage() {
   const router = useRouter();
   const { scenarioId } = router.query;
 
-  const { props, error } = useQuery<ScenarioIdQuery>(
+  const props = useLazyLoadQuery<ScenarioIdQuery>(
     query,
     {
       scenarioId: scenarioId as string,
@@ -69,19 +68,15 @@ function ScenarioPage() {
     {},
   );
 
-  useError(error);
-
   const handleDeleteScenario = useCallback(() => {
     Router.push(`/`);
   }, []);
 
-  if (!props || !props.viewer) {
+  if (!props || !props.viewer || !props.viewer.scenario) {
     return (
       <>
         <Navigation />
-        <Container className={classes.container}>
-          <CircularProgress />
-        </Container>
+        <Container className={classes.container}>Scenario not found</Container>
       </>
     );
   }

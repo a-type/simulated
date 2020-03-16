@@ -1,12 +1,13 @@
 import React, { FC } from 'react';
-import { graphql, useFragment } from 'relay-hooks';
+import { graphql, useFragment } from 'react-relay/hooks';
 import Link from './Link';
 import { MappingLink_scenario$key } from './__generated__/MappingLink_scenario.graphql';
 import { MappingLink_state$key } from './__generated__/MappingLink_state.graphql';
 import { MappingLink_mapping$key } from './__generated__/MappingLink_mapping.graphql';
 import { LinkProps } from './Link';
 
-export interface MappingLinkProps extends Omit<LinkProps, 'href' | 'as'> {
+export interface MappingLinkProps
+  extends Omit<LinkProps, 'href' | 'as' | 'ref'> {
   scenario: MappingLink_scenario$key;
   state: MappingLink_state$key;
   mapping: MappingLink_mapping$key;
