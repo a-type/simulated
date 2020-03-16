@@ -4,6 +4,7 @@ import { graphql, useFragment } from 'relay-hooks';
 import { MatcherEditWidget_matcher$key } from './__generated__/MatcherEditWidget_matcher.graphql';
 import PathMatcherEditWidget from './PathMatcherEditWidget';
 import MethodsMatcherEditWidget from './MethodsMatcherEditWidget';
+import BodyMatcherEditWidget from './BodyMatcherEditWidget';
 
 export interface MatcherEditWidgetProps {
   mappingId: string;
@@ -13,11 +14,6 @@ export interface MatcherEditWidgetProps {
 const matcherFragment = graphql`
   fragment MatcherEditWidget_matcher on Matcher {
     kind
-    ... on BodyMatcher {
-      body
-      ignoreWhitespace
-      regex
-    }
     ... on HeadersMatcher {
       headers {
         name
@@ -27,6 +23,7 @@ const matcherFragment = graphql`
 
     ...PathMatcherEditWidget_matcher
     ...MethodsMatcherEditWidget_matcher
+    ...BodyMatcherEditWidget_matcher
   }
 `;
 
@@ -47,7 +44,7 @@ const MatcherEditWidget: FC<MatcherEditWidgetProps> = props => {
         <MethodsMatcherEditWidget matcher={matcher} mappingId={mappingId} />
       );
     case 'body':
-      return <div>Body: {matcher.body}</div>;
+      return <BodyMatcherEditWidget matcher={matcher} mappingId={mappingId} />;
     case 'headers':
       return <div>Headers: {matcher.headers.length}</div>;
     default:
