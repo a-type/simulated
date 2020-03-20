@@ -6,7 +6,6 @@ import {
   TextField,
   Checkbox,
   FormControlLabel,
-  Typography,
 } from '@material-ui/core';
 import { useFragment, graphql } from 'react-relay/hooks';
 import useSavingField from '../hooks/useSavingField';
@@ -93,7 +92,6 @@ const PathMatcherEditWidget: FC<PathMatcherEditWidgetProps> = props => {
 
   return (
     <Box display="flex" flexDirection="column">
-      <Typography variant="h6">Path matcher</Typography>
       <TextField {...pathField} label="Path" margin="normal" />
       <FormControlLabel
         control={<Checkbox {...regexField} />}

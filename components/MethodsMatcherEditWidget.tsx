@@ -1,11 +1,5 @@
 import React, { FC } from 'react';
-import {
-  makeStyles,
-  Theme,
-  Typography,
-  Box,
-  TextField,
-} from '@material-ui/core';
+import { makeStyles, Theme, Box, TextField } from '@material-ui/core';
 import { useFragment, graphql } from 'react-relay/hooks';
 import useSavingField from '../hooks/useSavingField';
 import { Autocomplete } from '@material-ui/lab';
@@ -76,7 +70,6 @@ const MethodsMatcherEditWidget: FC<MethodsMatcherEditWidgetProps> = props => {
 
   return (
     <Box display="flex" flexDirection="column">
-      <Typography variant="h6">Methods matcher</Typography>
       <Autocomplete
         multiple
         options={METHODS}

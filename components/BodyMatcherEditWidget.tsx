@@ -3,7 +3,6 @@ import {
   makeStyles,
   Theme,
   Box,
-  Typography,
   TextField,
   FormControlLabel,
   Checkbox,
@@ -53,6 +52,7 @@ const BodyMatcherEditWidget: FC<BodyMatcherEditWidgetProps> = props => {
   const classes = useStyles(props);
 
   const matcher = useFragment(matcherFragment, props.matcher);
+  console.debug(matcher)
   const [mutate] = useMutation(setMatcherMutation);
 
   const [bodyField, bodyFieldMeta] = useSavingField(
@@ -114,7 +114,6 @@ const BodyMatcherEditWidget: FC<BodyMatcherEditWidgetProps> = props => {
 
   return (
     <Box display="flex" flexDirection="column">
-      <Typography variant="h6">Body matcher</Typography>
       <TextField {...bodyField} multiline label="Body" margin="normal" />
       <FormControlLabel
         control={<Checkbox {...ignoreWhitespaceField} />}

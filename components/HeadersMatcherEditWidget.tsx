@@ -5,7 +5,6 @@ import {
   Box,
   TextField,
   IconButton,
-  Typography,
   Button,
 } from '@material-ui/core';
 import { useFragment, graphql } from 'react-relay/hooks';
@@ -105,7 +104,6 @@ const HeadersMatcherEditWidget: FC<HeadersMatcherEditWidgetProps> = props => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="flex-start">
-      <Typography variant="h6">Headers matcher</Typography>
       {headers.map((header, index) => (
         <HeaderFields
           key={index}

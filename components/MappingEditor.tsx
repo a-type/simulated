@@ -1,5 +1,13 @@
-import React, { FC, useMemo } from 'react';
-import { makeStyles, Theme, Box, Divider, Typography } from '@material-ui/core';
+import React, { FC, useMemo, useState, useCallback } from 'react';
+import {
+  makeStyles,
+  Theme,
+  Box,
+  Divider,
+  Typography,
+  Tabs,
+  Tab,
+} from '@material-ui/core';
 import { graphql, useFragment } from 'react-relay/hooks';
 import { MappingEditor_mapping$key } from './__generated__/MappingEditor_mapping.graphql';
 import MatcherAddWidget, { MatcherKind } from './MatcherAddWidget';
@@ -60,6 +68,15 @@ const MappingEditor: FC<MappingEditorProps> = props => {
     [matchers],
   );
 
+  const [activeTab, setActiveTab] = useState<number>(0);
+
+  const handleTabChange = useCallback(
+    (ev: any, newTab: number) => {
+      setActiveTab(newTab);
+    },
+    [setActiveTab],
+  );
+
   return (
     <Box>
       <Box mb={2}>
@@ -70,13 +87,35 @@ const MappingEditor: FC<MappingEditorProps> = props => {
       <Box mb={2}>
         <Typography variant="h4">Request Matching</Typography>
         <Box mb={2}>
-          {sortedMatchers.map(matcher => (
-            <MatcherEditWidget
-              matcher={matcher as any}
-              key={(matcher as any).kind}
-              mappingId={mapping?.id}
-            />
-          ))}
+          <Tabs
+            value={activeTab}
+            onChange={handleTabChange}
+            aria-label="matcher options tabs"
+          >
+            {sortedMatchers.map(matcher => (
+              <Tab
+                label={matcher.kind}
+                id={`matcher-tab-${matcher.kind}`}
+                aria-controls={`matcher-tabpanel-${matcher.kind}`}
+              />
+            ))}
+          </Tabs>
+          <Box mt={2}>
+            {sortedMatchers.map((matcher, index) => (
+              <div
+                role="tabpanel"
+                id={`matcher-tabpanel-${matcher.kind}`}
+                aria-labelledby={`matcher-tab-${matcher.kind}`}
+                hidden={index !== activeTab}
+              >
+                <MatcherEditWidget
+                  matcher={matcher as any}
+                  key={(matcher as any).kind}
+                  mappingId={mapping?.id}
+                />
+              </div>
+            ))}
+          </Box>
         </Box>
         <MatcherAddWidget
           mapping={mapping}
