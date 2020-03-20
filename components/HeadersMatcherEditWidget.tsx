@@ -37,7 +37,6 @@ const setMatcherMutation = graphql`
     addMappingMatcher(input: $input) {
       mapping {
         matchers {
-          kind
           ... on HeadersMatcher {
             headers {
               name
@@ -109,6 +108,7 @@ const HeadersMatcherEditWidget: FC<HeadersMatcherEditWidgetProps> = props => {
       <Typography variant="h6">Headers matcher</Typography>
       {headers.map((header, index) => (
         <HeaderFields
+          key={index}
           header={header}
           index={index}
           onChange={handleHeaderChange}

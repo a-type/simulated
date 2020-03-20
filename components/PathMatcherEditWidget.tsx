@@ -34,7 +34,6 @@ const setMatcherMutation = graphql`
     addMappingMatcher(input: $input) {
       mapping {
         matchers {
-          kind
           ... on PathMatcher {
             path
             regex

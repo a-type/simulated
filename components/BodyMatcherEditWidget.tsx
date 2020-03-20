@@ -35,7 +35,6 @@ const setMatcherMutation = graphql`
     addMappingMatcher(input: $input) {
       mapping {
         matchers {
-          kind
           ... on BodyMatcher {
             body
             ignoreWhitespace

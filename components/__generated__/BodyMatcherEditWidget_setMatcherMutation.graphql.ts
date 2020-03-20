@@ -1,9 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 4df30f12a546b510374da91665051977 */
+/* @relayHash dae7ff2e02dc0af2bc0f8da43dd92b30 */
 
 import { ConcreteRequest } from "relay-runtime";
-export type MatcherKind = "%future added value" | "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
 export type AddMappingMatcherInput = {
     mappingId: string;
     matcher: AddMatcherInput;
@@ -40,7 +39,6 @@ export type BodyMatcherEditWidget_setMatcherMutationResponse = {
     readonly addMappingMatcher: {
         readonly mapping: {
             readonly matchers: ReadonlyArray<{
-                readonly kind: MatcherKind;
                 readonly body?: string;
                 readonly ignoreWhitespace?: boolean;
                 readonly regex?: boolean;
@@ -63,7 +61,6 @@ mutation BodyMatcherEditWidget_setMatcherMutation(
     mapping {
       matchers {
         __typename
-        kind
         ... on BodyMatcher {
           body
           ignoreWhitespace
@@ -91,12 +88,6 @@ const node: ConcreteRequest = (function () {
             "variableName": "input"
         } as any)
     ], v2 = ({
-        "kind": "ScalarField",
-        "alias": null,
-        "name": "kind",
-        "args": null,
-        "storageKey": null
-    } as any), v3 = ({
         "kind": "InlineFragment",
         "type": "BodyMatcher",
         "selections": [
@@ -159,8 +150,7 @@ const node: ConcreteRequest = (function () {
                                     "concreteType": null,
                                     "plural": true,
                                     "selections": [
-                                        (v2 /*: any*/),
-                                        (v3 /*: any*/)
+                                        (v2 /*: any*/)
                                     ]
                                 }
                             ]
@@ -208,8 +198,7 @@ const node: ConcreteRequest = (function () {
                                             "args": null,
                                             "storageKey": null
                                         },
-                                        (v2 /*: any*/),
-                                        (v3 /*: any*/)
+                                        (v2 /*: any*/)
                                     ]
                                 },
                                 {
@@ -229,10 +218,10 @@ const node: ConcreteRequest = (function () {
             "operationKind": "mutation",
             "name": "BodyMatcherEditWidget_setMatcherMutation",
             "id": null,
-            "text": "mutation BodyMatcherEditWidget_setMatcherMutation(\n  $input: AddMappingMatcherInput!\n) {\n  addMappingMatcher(input: $input) {\n    mapping {\n      matchers {\n        __typename\n        kind\n        ... on BodyMatcher {\n          body\n          ignoreWhitespace\n          regex\n        }\n      }\n      id\n    }\n  }\n}\n",
+            "text": "mutation BodyMatcherEditWidget_setMatcherMutation(\n  $input: AddMappingMatcherInput!\n) {\n  addMappingMatcher(input: $input) {\n    mapping {\n      matchers {\n        __typename\n        ... on BodyMatcher {\n          body\n          ignoreWhitespace\n          regex\n        }\n      }\n      id\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = '20af41ed7178bc312a2a6e054e32a894';
+(node as any).hash = 'bdf737b93cb808ab1322ef0d071987ee';
 export default node;

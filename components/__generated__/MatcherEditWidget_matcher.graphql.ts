@@ -3,7 +3,7 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type MatcherKind = "%future added value" | "%future added value" | "%future added value" | "%future added value" | "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
+export type MatcherKind = "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
 export type MatcherEditWidget_matcher = {
     readonly kind: MatcherKind;
     readonly " $fragmentRefs": FragmentRefs<"PathMatcherEditWidget_matcher" | "MethodsMatcherEditWidget_matcher" | "BodyMatcherEditWidget_matcher" | "HeadersMatcherEditWidget_matcher">;

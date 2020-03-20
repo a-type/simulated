@@ -1,9 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 7304c2ae3d068ca4cfad762ee9541a06 */
+/* @relayHash 40f97cc078eaa1aed6ca14bfbcff4c1b */
 
 import { ConcreteRequest } from "relay-runtime";
-export type MatcherKind = "%future added value" | "%future added value" | "body" | "headers" | "methods" | "path" | "%future added value";
 export type AddMappingMatcherInput = {
     mappingId: string;
     matcher: AddMatcherInput;
@@ -40,7 +39,6 @@ export type MethodsMatcherEditWidget_setMatcherMutationResponse = {
     readonly addMappingMatcher: {
         readonly mapping: {
             readonly matchers: ReadonlyArray<{
-                readonly kind: MatcherKind;
                 readonly methods?: ReadonlyArray<string>;
             }>;
         };
@@ -61,7 +59,6 @@ mutation MethodsMatcherEditWidget_setMatcherMutation(
     mapping {
       matchers {
         __typename
-        kind
         ... on MethodsMatcher {
           methods
         }
@@ -87,12 +84,6 @@ const node: ConcreteRequest = (function () {
             "variableName": "input"
         } as any)
     ], v2 = ({
-        "kind": "ScalarField",
-        "alias": null,
-        "name": "kind",
-        "args": null,
-        "storageKey": null
-    } as any), v3 = ({
         "kind": "InlineFragment",
         "type": "MethodsMatcher",
         "selections": [
@@ -141,8 +132,7 @@ const node: ConcreteRequest = (function () {
                                     "concreteType": null,
                                     "plural": true,
                                     "selections": [
-                                        (v2 /*: any*/),
-                                        (v3 /*: any*/)
+                                        (v2 /*: any*/)
                                     ]
                                 }
                             ]
@@ -190,8 +180,7 @@ const node: ConcreteRequest = (function () {
                                             "args": null,
                                             "storageKey": null
                                         },
-                                        (v2 /*: any*/),
-                                        (v3 /*: any*/)
+                                        (v2 /*: any*/)
                                     ]
                                 },
                                 {
@@ -211,10 +200,10 @@ const node: ConcreteRequest = (function () {
             "operationKind": "mutation",
             "name": "MethodsMatcherEditWidget_setMatcherMutation",
             "id": null,
-            "text": "mutation MethodsMatcherEditWidget_setMatcherMutation(\n  $input: AddMappingMatcherInput!\n) {\n  addMappingMatcher(input: $input) {\n    mapping {\n      matchers {\n        __typename\n        kind\n        ... on MethodsMatcher {\n          methods\n        }\n      }\n      id\n    }\n  }\n}\n",
+            "text": "mutation MethodsMatcherEditWidget_setMatcherMutation(\n  $input: AddMappingMatcherInput!\n) {\n  addMappingMatcher(input: $input) {\n    mapping {\n      matchers {\n        __typename\n        ... on MethodsMatcher {\n          methods\n        }\n      }\n      id\n    }\n  }\n}\n",
             "metadata": {}
         }
     } as any;
 })();
-(node as any).hash = '520c859d7920ffb8fa6a6d5016b2f966';
+(node as any).hash = '7ab5717eb38d407f1d87da82f10a1617';
 export default node;
